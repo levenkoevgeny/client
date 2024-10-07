@@ -1,5 +1,26 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
+import { createApp } from "vue"
+import App from "./App.vue"
+import router from "./router"
+import { library } from "@fortawesome/fontawesome-svg-core"
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 
-createApp(App).use(router).mount('#app')
+import { faUserGraduate } from "@fortawesome/free-solid-svg-icons"
+import { faPersonBreastfeeding } from "@fortawesome/free-solid-svg-icons"
+import { faHandHoldingDollar } from "@fortawesome/free-solid-svg-icons"
+import { faCreditCardAlt } from "@fortawesome/free-solid-svg-icons"
+import { faPlus } from "@fortawesome/free-solid-svg-icons"
+import { faTrash } from "@fortawesome/free-solid-svg-icons"
+import { faStar } from "@fortawesome/free-regular-svg-icons"
+
+library.add(faUserGraduate)
+library.add(faPersonBreastfeeding)
+library.add(faHandHoldingDollar)
+library.add(faCreditCardAlt)
+library.add(faStar)
+library.add(faPlus)
+library.add(faTrash)
+
+createApp(App)
+  .component("font-awesome-icon", FontAwesomeIcon)
+  .use(router)
+  .mount("#app")
