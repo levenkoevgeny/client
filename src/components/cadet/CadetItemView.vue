@@ -458,11 +458,12 @@
 <script>
 import cadetAPIInstance from "@/api/cadet/cadetAPI"
 import encouragementAPIInstance from "@/api/cadet/encouragementAPI"
-import { punishmentAPI } from "@/api/cadet/punishmentAPI"
-import { rankHistoryAPI } from "@/api/cadet/rankHistoryAPI"
-import { encouragementKindAPI } from "@/api/cadet/encouragementKindAPI"
-import { punishmentKindAPI } from "@/api/cadet/punishmentKindAPI"
-import { rankAPI } from "@/api/cadet/rankAPI"
+import encouragementKindAPIInstance from "@/api/cadet/encouragementKindAPI"
+import punishmentAPIInstance from "@/api/cadet/punishmentAPI"
+import punishmentKindAPIInstance from "@/api/cadet/punishmentKindAPI"
+import rankAPIInstance from "@/api/cadet/rankAPI"
+import rankHistoryAPIInstance from "@/api/cadet/rankHistoryAPI"
+
 
 export default {
   name: "CadetItemView",
@@ -521,7 +522,7 @@ export default {
           })
         this.encouragementList = await currentCadetEncouragementResponse.data
 
-        const currentCadetPunishmentResponse = await punishmentAPI.getItemsList(
+        const currentCadetPunishmentResponse = await punishmentAPIInstance.getItemsList(
           "this.userToken",
           {
             punishment_cadet: this.$route.params.id,
@@ -530,20 +531,20 @@ export default {
         this.punishmentList = await currentCadetPunishmentResponse.data
 
         const currentCadetRankHistoryResponse =
-          await rankHistoryAPI.getItemsList("this.userToken", {
+          await rankHistoryAPIInstance.getItemsList("this.userToken", {
             cadet: this.$route.params.id,
           })
         this.rankHistoryList = await currentCadetRankHistoryResponse.data
 
         const encouragementKindResponse =
-          await encouragementKindAPI.getItemsList("this.userToken")
+          await encouragementKindAPIInstance.getItemsList("this.userToken")
         this.encouragementKindList = await encouragementKindResponse.data
 
         const punishmentKindResponse =
-          await punishmentKindAPI.getItemsList("this.userToken")
+          await punishmentKindAPIInstance.getItemsList("this.userToken")
         this.punishmentKindList = await punishmentKindResponse.data
 
-        const rankResponse = await rankAPI.getItemsList("this.userToken")
+        const rankResponse = await rankAPIInstance.getItemsList("this.userToken")
         this.rankList = await rankResponse.data
       } catch (e) {
         this.isError = true
@@ -589,7 +590,7 @@ export default {
 
     async addNewPunishment() {
       try {
-        const response = await punishmentAPI.addItem("this.token", {
+        const response = await punishmentAPIInstance.addItem("this.token", {
           ...this.newPunishment,
           punishment_cadet: this.currentCadet.id,
         })
