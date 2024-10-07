@@ -456,8 +456,8 @@
 </template>
 
 <script>
-import { cadetAPI } from "@/api/cadet/cadetAPI"
-import { encouragementAPI } from "@/api/cadet/encouragementAPI"
+import cadetAPIInstance from "@/api/cadet/cadetAPI"
+import encouragementAPIInstance from "@/api/cadet/encouragementAPI"
 import { punishmentAPI } from "@/api/cadet/punishmentAPI"
 import { rankHistoryAPI } from "@/api/cadet/rankHistoryAPI"
 import { encouragementKindAPI } from "@/api/cadet/encouragementKindAPI"
@@ -509,14 +509,14 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const currentCadetResponse = await cadetAPI.getItemData(
+        const currentCadetResponse = await cadetAPIInstance.getItemData(
           "this.userToken",
           this.$route.params.id,
         )
         this.currentCadet = await currentCadetResponse.data
 
         const currentCadetEncouragementResponse =
-          await encouragementAPI.getItemsList("this.userToken", {
+          await encouragementAPIInstance.getItemsList("this.userToken", {
             encouragement_cadet: this.$route.params.id,
           })
         this.encouragementList = await currentCadetEncouragementResponse.data
@@ -567,7 +567,7 @@ export default {
     },
     async addNewEncouragement() {
       try {
-        const response = await encouragementAPI.addItem("this.token", {
+        const response = await encouragementAPIInstance.addItem("this.token", {
           ...this.newEncouragement,
           encouragement_cadet: this.currentCadet.id,
         })

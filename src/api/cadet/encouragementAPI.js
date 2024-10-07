@@ -1,43 +1,13 @@
-import axios from "axios"
-import { authHeaders } from "@/api/auth/authAPI"
+import BaseAPI from "@/api/baseAPIClass"
 
-let base_url = "encouragement"
+class EncouragementAPI extends BaseAPI {}
 
-export const encouragementAPI = {
-  async getItemsList(token, query = { encouragement_cadet: "" }) {
-    let { encouragement_cadet } = query
-    return axios.get(
-      `${process.env.VUE_APP_BACKEND_PROTOCOL}://${process.env.VUE_APP_BACKEND_HOST}:${process.env.VUE_APP_BACKEND_PORT}/api/${base_url}/?encouragement_cadet=${encouragement_cadet}`,
-      authHeaders(token),
-    )
-  },
-  async updateList(url, token) {
-    return axios.get(url, authHeaders(token))
-  },
-  async getItemData(token, itemId) {
-    return axios.get(
-      `${process.env.VUE_APP_BACKEND_PROTOCOL}://${process.env.VUE_APP_BACKEND_HOST}:${process.env.VUE_APP_BACKEND_PORT}/api/${base_url}/${itemId}/`,
-      authHeaders(token),
-    )
-  },
-  async addItem(token, itemData) {
-    return axios.post(
-      `${process.env.VUE_APP_BACKEND_PROTOCOL}://${process.env.VUE_APP_BACKEND_HOST}:${process.env.VUE_APP_BACKEND_PORT}/api/${base_url}/`,
-      itemData,
-      authHeaders(token),
-    )
-  },
-  async updateItem(token, itemData) {
-    return axios.put(
-      `${process.env.VUE_APP_BACKEND_PROTOCOL}://${process.env.VUE_APP_BACKEND_HOST}:${process.env.VUE_APP_BACKEND_PORT}/api/${base_url}/${itemData.id}/`,
-      itemData,
-      authHeaders(token),
-    )
-  },
-  async deleteItem(token, itemId) {
-    return axios.delete(
-      `${process.env.VUE_APP_BACKEND_PROTOCOL}://${process.env.VUE_APP_BACKEND_HOST}:${process.env.VUE_APP_BACKEND_PORT}/api/${base_url}/${itemId}/`,
-      authHeaders(token),
-    )
-  },
-}
+let encouragementAPIInstance = new EncouragementAPI("encouragement", {
+  encouragement_cadet: "",
+  encouragement_kind: "",
+  encouragement_date__gte: "",
+  encouragement_date__lte: "",
+  encouragement_extra_data__icontains: "",
+})
+
+export default encouragementAPIInstance

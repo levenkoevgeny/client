@@ -176,7 +176,7 @@
 </template>
 
 <script>
-import { cadetAPI } from "@/api/cadet/cadetAPI"
+import cadetAPIInstance from "@/api/cadet/cadetAPI"
 import { PaginatorView } from "@/components/common"
 
 export default {
@@ -203,11 +203,11 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const cadetsRespoonse = await cadetAPI.getItemsList(
+        const cadetsResponse = await cadetAPIInstance.getItemsList(
           "this.userToken",
           this.searchForm.dictionary,
         )
-        this.cadetList = await cadetsRespoonse.data
+        this.cadetList = await cadetsResponse.data
       } catch (e) {
         this.isError = true
       } finally {
@@ -217,7 +217,7 @@ export default {
     async updatePaginator(url) {
       this.isLoading = true
       try {
-        const response = await cadetAPI.updateList(url, "this.userToken")
+        const response = await cadetAPIInstance.updateList(url, "this.userToken")
         this.cadetList = await response.data
       } catch (error) {
         this.isError = true

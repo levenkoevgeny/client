@@ -1,8 +1,12 @@
 <template>
-  <div>EncouragementListView</div>
+  <div>EncouragementListView
+    {{orderedEncouragements}}
+  </div>
 </template>
 
 <script>
+import encouragementAPIInstance from "@/api/cadet/encouragementAPI"
+
 export default {
   name: "EncouragementListView",
   components: {},
@@ -17,13 +21,16 @@ export default {
       searchForm: {
         encouragement_cadet: "",
         encouragement_kind: "",
-        encouragement_date_start: "",
-        encouragement_date_end: "",
-        encouragement_extra_data: "",
+        encouragement_date__gte: "",
+        encouragement_date__lte: "",
+        encouragement_extra_data__icontains: "",
       },
     }
   },
-  async created() {},
+  async created() {
+    const response = await encouragementAPIInstance.getItemsList('token is here!!!')
+    this.encouragementList = await response.data
+  },
   methods: {},
   computed: {
     orderedEncouragements() {
