@@ -226,6 +226,7 @@ export default {
       }
     },
   },
+
   computed: {
     orderedCadets() {
       return this.cadetList.results
