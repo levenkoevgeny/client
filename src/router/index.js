@@ -6,7 +6,11 @@ import { PositionListView } from "@/components/cadet/position"
 import { RankHistoryListView } from "@/components/cadet/rank"
 import { EntranceMainView } from "@/components/entrance_campaign"
 
-import { NotFoundView } from "@/components/errors"
+import {
+  NotFoundView,
+  NetworkErrorView,
+  ServerErrorView,
+} from "@/components/errors"
 
 const routes = [
   { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFoundView },
@@ -52,6 +56,16 @@ const routes = [
     path: "/entrance",
     component: EntranceMainView,
     name: "entrance",
+  },
+  {
+    path: "/network-error",
+    component: NetworkErrorView,
+    name: "network-error",
+  },
+  {
+    path: "/server-error",
+    component: ServerErrorView,
+    name: "server-error",
   },
 ]
 

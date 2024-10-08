@@ -1,4 +1,4 @@
-<template><div></div></template>
+<template><div>500 Server error</div></template>
 
 <script>
 export default {
