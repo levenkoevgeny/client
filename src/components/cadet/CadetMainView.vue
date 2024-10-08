@@ -36,6 +36,21 @@
                 Взыскания
               </router-link>
             </li>
+            <li class="nav-item">
+              <router-link class="nav-link" :to="{ name: 'positions' }">
+                Должности
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" :to="{ name: 'rank-histories' }">
+                Звания
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" :to="{ name: 'entrance' }">
+                Вступительная кампания
+              </router-link>
+            </li>
           </ul>
         </div>
       </div>

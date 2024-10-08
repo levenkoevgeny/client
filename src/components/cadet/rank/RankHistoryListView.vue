@@ -10,12 +10,11 @@
 </template>
 
 <script>
-import BaseLayout from "@/components/cadet/BaseListLayout.vue"
 import BaseListLayout from "@/components/cadet/BaseListLayout.vue"
 
 export default {
-  name: "PunishmentListView",
-  components: { BaseListLayout, BaseLayout },
+  name: "RankHistoryListView",
+  components: { BaseListLayout },
   data() {
     return {}
   },

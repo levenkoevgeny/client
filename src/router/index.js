@@ -2,6 +2,10 @@ import { createRouter, createWebHistory } from "vue-router"
 import { CadetMainView, CadetListView, CadetItemView } from "@/components/cadet"
 import { PunishmentListView } from "@/components/cadet/punishment"
 import { EncouragementListView } from "@/components/cadet/encouragement"
+import { PositionListView } from "@/components/cadet/position"
+import { RankHistoryListView } from "@/components/cadet/rank"
+import { EntranceMainView } from "@/components/entrance_campaign"
+
 import { NotFoundView } from "@/components/errors"
 
 const routes = [
@@ -32,7 +36,22 @@ const routes = [
         component: PunishmentListView,
         name: "punishment",
       },
+      {
+        path: "positions",
+        component: PositionListView,
+        name: "positions",
+      },
+      {
+        path: "rank-histories",
+        component: RankHistoryListView,
+        name: "rank-histories",
+      },
     ],
+  },
+  {
+    path: "/entrance",
+    component: EntranceMainView,
+    name: "entrance",
   },
 ]
 
