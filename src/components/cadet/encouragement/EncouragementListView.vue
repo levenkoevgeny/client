@@ -1,5 +1,5 @@
 <template>
-  <base-list-layout>
+  <base-list-layout :is-loading="isLoading">
     <template v-slot:extra>
       <ul class="nav nav-links my-3 mb-lg-2 mx-n3">
         <li class="nav-item">
@@ -145,7 +145,7 @@
 </template>
 
 <script>
-import encouragementAPIInstance from "@/api/cadet/encouragementAPI"
+import getEncouragementAPIInstance from "@/api/cadet/encouragementAPI"
 import cadetAPIInstance from "@/api/cadet/cadetAPI"
 import encouragementKindAPIInstance from "@/api/cadet/encouragementKindAPI"
 import { PaginatorView } from "@/components/common"
@@ -165,16 +165,13 @@ export default {
       BACKEND_PROTOCOL: process.env.VUE_APP_BACKEND_PROTOCOL,
       BACKEND_HOST: process.env.VUE_APP_BACKEND_HOST,
       BACKEND_PORT: process.env.VUE_APP_BACKEND_PORT,
-      searchForm: {
-        encouragement_cadet: "",
-        encouragement_kind: "",
-        encouragement_date__gte: "",
-        encouragement_date__lte: "",
-        encouragement_extra_data__icontains: "",
-      },
+      encouragementAPIInstance: null,
+      searchForm: {},
     }
   },
   async created() {
+    this.encouragementAPIInstance = getEncouragementAPIInstance()
+    this.searchForm = Object.assign({}, this.encouragementAPIInstance.searchObj)
     await this.loadData()
   },
   methods: {
@@ -183,7 +180,7 @@ export default {
       this.isError = false
       try {
         const encouragementResponse =
-          await encouragementAPIInstance.getItemsList("token is here!!!")
+          await this.encouragementAPIInstance.getItemsList("token is here!!!")
         this.encouragementList = await encouragementResponse.data
 
         const encouragementKindResponse =
@@ -202,7 +199,7 @@ export default {
     async updatePaginator(url) {
       this.isLoading = true
       try {
-        const response = await encouragementAPIInstance.updateList(
+        const response = await this.encouragementAPIInstance.updateList(
           url,
           "this.userToken",
         )
@@ -214,19 +211,26 @@ export default {
       }
     },
     debouncedSearch: debounce(async function () {
-      encouragementAPIInstance.searchObj = this.searchForm
-      const encouragementResponse =
-        await encouragementAPIInstance.getItemsList("token is here!!!")
-      this.encouragementList = await encouragementResponse.data
+      this.isLoading = true
+      this.encouragementAPIInstance.searchObj = Object.assign(
+        {},
+        this.searchForm,
+      )
+      try {
+        const encouragementResponse =
+          await this.encouragementAPIInstance.getItemsList("token is here!!!")
+        this.encouragementList = await encouragementResponse.data
+      } catch (e) {
+        this.isError = true
+      } finally {
+        this.isLoading = false
+      }
     }, 500),
     clearFilter() {
-      this.searchForm = {
-        encouragement_cadet: "",
-        encouragement_kind: "",
-        encouragement_date__gte: "",
-        encouragement_date__lte: "",
-        encouragement_extra_data__icontains: "",
-      }
+      this.searchForm = Object.assign(
+        {},
+        this.encouragementAPIInstance.searchObjDefault,
+      )
     },
   },
   computed: {

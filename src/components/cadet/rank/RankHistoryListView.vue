@@ -1,5 +1,5 @@
 <template>
-  <base-list-layout>
+  <base-list-layout :is-loading="isLoading">
     <template v-slot:extra></template>
     <template v-slot:add-button></template>
     <template v-slot:thead></template>
@@ -11,12 +11,29 @@
 
 <script>
 import BaseListLayout from "@/components/cadet/BaseListLayout.vue"
+import { PaginatorView } from "@/components/common"
 
 export default {
   name: "RankHistoryListView",
-  components: { BaseListLayout },
+  components: { BaseListLayout, PaginatorView },
   data() {
-    return {}
+    return {
+      rankHistoryList: { results: [], previous: null, next: null },
+      rankList: { results: [], previous: null, next: null },
+      cadetList: { results: [], previous: null, next: null },
+      isLoading: true,
+      isError: false,
+      BACKEND_PROTOCOL: process.env.VUE_APP_BACKEND_PROTOCOL,
+      BACKEND_HOST: process.env.VUE_APP_BACKEND_HOST,
+      BACKEND_PORT: process.env.VUE_APP_BACKEND_PORT,
+      searchForm: {
+        cadet: "",
+        rank: "",
+        rank_date__gte: "",
+        rank_date__lte: "",
+        extra_data__icontains: "",
+      },
+    }
   },
   async created() {},
   methods: {},

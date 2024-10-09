@@ -457,13 +457,12 @@
 
 <script>
 import cadetAPIInstance from "@/api/cadet/cadetAPI"
-import encouragementAPIInstance from "@/api/cadet/encouragementAPI"
+import getEncouragementAPIInstance from "@/api/cadet/encouragementAPI"
 import encouragementKindAPIInstance from "@/api/cadet/encouragementKindAPI"
 import punishmentAPIInstance from "@/api/cadet/punishmentAPI"
 import punishmentKindAPIInstance from "@/api/cadet/punishmentKindAPI"
 import rankAPIInstance from "@/api/cadet/rankAPI"
 import rankHistoryAPIInstance from "@/api/cadet/rankHistoryAPI"
-
 
 export default {
   name: "CadetItemView",
@@ -494,6 +493,7 @@ export default {
       BACKEND_PROTOCOL: process.env.VUE_APP_BACKEND_PROTOCOL,
       BACKEND_HOST: process.env.VUE_APP_BACKEND_HOST,
       BACKEND_PORT: process.env.VUE_APP_BACKEND_PORT,
+      encouragementAPIInstance: null,
     }
   },
   async created() {
@@ -503,12 +503,18 @@ export default {
         await this.loadData()
       },
     )
+
     await this.loadData()
   },
   methods: {
     async loadData() {
       this.isLoading = true
       this.isError = false
+      let encouragementAPIInstance = getEncouragementAPIInstance()
+      encouragementAPIInstance.searchObj.encouragement_cadet =
+        this.$route.params.id
+      this.encouragementAPIInstance = encouragementAPIInstance
+
       try {
         const currentCadetResponse = await cadetAPIInstance.getItemData(
           "this.userToken",
@@ -517,17 +523,15 @@ export default {
         this.currentCadet = await currentCadetResponse.data
 
         const currentCadetEncouragementResponse =
-          await encouragementAPIInstance.getItemsList("this.userToken", {
+          await this.encouragementAPIInstance.getItemsList("this.userToken", {
             encouragement_cadet: this.$route.params.id,
           })
         this.encouragementList = await currentCadetEncouragementResponse.data
 
-        const currentCadetPunishmentResponse = await punishmentAPIInstance.getItemsList(
-          "this.userToken",
-          {
+        const currentCadetPunishmentResponse =
+          await punishmentAPIInstance.getItemsList("this.userToken", {
             punishment_cadet: this.$route.params.id,
-          },
-        )
+          })
         this.punishmentList = await currentCadetPunishmentResponse.data
 
         const currentCadetRankHistoryResponse =
@@ -544,7 +548,8 @@ export default {
           await punishmentKindAPIInstance.getItemsList("this.userToken")
         this.punishmentKindList = await punishmentKindResponse.data
 
-        const rankResponse = await rankAPIInstance.getItemsList("this.userToken")
+        const rankResponse =
+          await rankAPIInstance.getItemsList("this.userToken")
         this.rankList = await rankResponse.data
       } catch (e) {
         this.isError = true

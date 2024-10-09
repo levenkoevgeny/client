@@ -1,5 +1,5 @@
 <template>
-  <base-list-layout>
+  <base-list-layout :is-loading="isLoading">
     <template v-slot:extra></template>
     <template v-slot:add-button></template>
     <template v-slot:thead></template>

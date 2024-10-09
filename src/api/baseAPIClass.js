@@ -5,6 +5,7 @@ export default class BaseAPI {
   constructor(baseURL, searchObj) {
     this.baseURL = baseURL
     this.searchObj = searchObj
+    this.searchObjDefault = Object.assign({}, searchObj)
   }
 
   getQueryStringFromSearchObj() {
@@ -56,5 +57,4 @@ export default class BaseAPI {
       authHeaders(token),
     )
   }
-
 }

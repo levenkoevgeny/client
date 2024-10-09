@@ -1,5 +1,5 @@
 <template>
-  <base-list-layout>
+  <base-list-layout :is-loading="isLoading">
     <template v-slot:extra>
       <ul class="nav nav-links my-3 mb-lg-2 mx-n3">
         <li class="nav-item">
