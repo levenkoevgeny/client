@@ -67,7 +67,15 @@ export default {
     return {}
   },
   async created() {},
-  methods: {},
+  methods: {
+    showAddNewEncouragementModal() {
+      let addModal = this.$refs.myModal
+      let myModal = new bootstrap.Modal(addModal, {
+        keyboard: false,
+      })
+      myModal.show()
+    },
+  },
   computed: {},
 }
 </script>

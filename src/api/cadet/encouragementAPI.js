@@ -8,6 +8,10 @@ export default function getEncouragementAPIInstance() {
     encouragement_kind: "",
     encouragement_date__gte: "",
     encouragement_date__lte: "",
+    encouragement_order_date__gte: "",
+    encouragement_order_date__lte: "",
+    encouragement_order_number__icontains: "",
+    encouragement_order_owner: "",
     encouragement_extra_data__icontains: "",
   })
 }

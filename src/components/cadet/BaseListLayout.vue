@@ -4,16 +4,16 @@
     <slot name="title"></slot>
     <div class="row">
       <div class="col-8">
+        <slot name="extra"></slot>
+        <div class="my-4 d-flex">
+          <slot name="add-button">
+            <button class="btn btn-warning" :disabled="isLoading">
+              <span class="fas fa-plus me-2"></span>Добавить запись
+            </button>
+          </slot>
+        </div>
         <div v-if="isLoading">Loading</div>
         <div v-else>
-          <slot name="extra"></slot>
-          <div class="my-4 d-flex">
-            <slot name="add-button">
-              <button class="btn btn-primary">
-                <span class="fas fa-plus me-2"></span>Добавить запись
-              </button>
-            </slot>
-          </div>
           <div class="table-responsive">
             <table class="table table-hover fw-light">
               <thead>
