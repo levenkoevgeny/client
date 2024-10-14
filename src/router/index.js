@@ -5,6 +5,8 @@ import { EncouragementListView } from "@/components/cadet/encouragement"
 import { PositionListView } from "@/components/cadet/position"
 import { RankHistoryListView } from "@/components/cadet/rank"
 import { EntranceMainView } from "@/components/entrance_campaign"
+import { SpecialityHistoryView } from "@/components/cadet/speciality"
+import { CadetAddView } from "@/components/cadet"
 
 import {
   NotFoundView,
@@ -31,6 +33,11 @@ const routes = [
         name: "cadet-view",
       },
       {
+        path: "cadet/add",
+        component: CadetAddView,
+        name: "cadet-add",
+      },
+      {
         path: "encouragement",
         component: EncouragementListView,
         name: "encouragement",
@@ -49,6 +56,11 @@ const routes = [
         path: "rank-histories",
         component: RankHistoryListView,
         name: "rank-histories",
+      },
+      {
+        path: "specialities",
+        component: SpecialityHistoryView,
+        name: "specialities",
       },
     ],
   },

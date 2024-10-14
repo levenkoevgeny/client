@@ -30,7 +30,15 @@
         <!--            </li>-->
       </ul>
     </template>
-    <template v-slot:add-button></template>
+    <template v-slot:add-button>
+      <router-link
+        class="btn btn-warning"
+        :to="{ name: 'cadet-add' }"
+        :disabled="!isLoading"
+      >
+        Добавить запись
+      </router-link>
+    </template>
     <template v-slot:thead>
       <tr>
         <th scope="col">
@@ -46,6 +54,7 @@
         <th scope="col">Фамилия, имя, отчество</th>
         <th scope="col">Адрес</th>
         <th scope="col">Специальность</th>
+        <th scope="col">Начало обучения</th>
         <th scope="col">Начало обучения</th>
         <th scope="col">Окончание обучения</th>
       </tr>
@@ -211,7 +220,7 @@
         <div class="col-6">
           <div class="mb-3">
             <label for="passport_validity_period__gte" class="form-label"
-            >Окончание действия паспорта (с)</label
+              >Окончание действия паспорта (с)</label
             >
             <input
               type="date"
@@ -224,7 +233,7 @@
         <div class="col-6">
           <div class="mb-3">
             <label for="passport_validity_period__lte" class="form-label"
-            >Окончание действия паспорта (по)</label
+              >Окончание действия паспорта (по)</label
             >
             <input
               type="date"
@@ -239,7 +248,7 @@
         <div class="col-6">
           <div class="mb-3">
             <label for="academy_start_year__gte" class="form-label"
-            >Год поступления (с)</label
+              >Год поступления (с)</label
             >
             <input
               type="number"
@@ -254,7 +263,7 @@
         <div class="col-6">
           <div class="mb-3">
             <label for="passport_validity_period__lte" class="form-label"
-            >Год поступления (по)</label
+              >Год поступления (по)</label
             >
             <input
               type="number"
@@ -307,9 +316,10 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [cadets, subdivisions] = await Promise.all([this.getCadets(), this.getSubdivisions()]).catch(
-          () => (this.isError = true),
-        )
+        const [cadets, subdivisions] = await Promise.all([
+          this.getCadets(),
+          this.getSubdivisions(),
+        ]).catch(() => (this.isError = true))
         this.cadetList = cadets
         this.subdivisionList = subdivisions
       } catch (e) {
@@ -358,7 +368,8 @@ export default {
     },
 
     async getSubdivisions() {
-      const res = await this.subdivisionAPIInstance.getItemsList("token is here!!!")
+      const res =
+        await this.subdivisionAPIInstance.getItemsList("token is here!!!")
       return res.data
     },
   },

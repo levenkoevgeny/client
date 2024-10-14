@@ -21,30 +21,52 @@
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/">Home</a>
             </li>
+
             <li class="nav-item">
               <router-link class="nav-link" :to="{ name: 'cadet' }">
                 Курсанты
               </router-link>
             </li>
-            <li class="nav-item">
-              <router-link class="nav-link" :to="{ name: 'encouragement' }">
-                Поощрения
-              </router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" :to="{ name: 'punishment' }">
-                Взыскания
-              </router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" :to="{ name: 'positions' }">
-                Должности
-              </router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" :to="{ name: 'rank-histories' }">
-                Звания
-              </router-link>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Кадры
+              </a>
+              <ul class="dropdown-menu">
+                <li class="nav-item">
+                  <router-link class="nav-link" :to="{ name: 'encouragement' }">
+                    Поощрения
+                  </router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link class="nav-link" :to="{ name: 'punishment' }">
+                    Взыскания
+                  </router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link class="nav-link" :to="{ name: 'positions' }">
+                    Назначения на должности
+                  </router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link
+                    class="nav-link"
+                    :to="{ name: 'rank-histories' }"
+                  >
+                    Присвоение званий
+                  </router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link class="nav-link" :to="{ name: 'specialities' }">
+                    Перевод на специальности
+                  </router-link>
+                </li>
+              </ul>
             </li>
             <li class="nav-item">
               <router-link class="nav-link" :to="{ name: 'entrance' }">
