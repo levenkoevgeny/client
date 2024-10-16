@@ -4,7 +4,7 @@ class EncouragementAPI extends BaseAPI {}
 
 export default function getEncouragementAPIInstance() {
   return new EncouragementAPI("encouragement", {
-    encouragement_cadet: "",
+    cadet: "",
     encouragement_kind: "",
     encouragement_date__gte: "",
     encouragement_date__lte: "",

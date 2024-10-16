@@ -4,7 +4,7 @@ class PunishmentAPI extends BaseAPI {}
 
 export default function getPunishmentAPIInstance() {
   return new PunishmentAPI("punishment", {
-    punishment_cadet: "",
+    cadet: "",
     punishment_kind: "",
     punishment_start_date__gte: "",
     punishment_start_date__lte: "",

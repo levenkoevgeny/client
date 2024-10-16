@@ -124,6 +124,21 @@
           <li class="nav-item" role="presentation">
             <button
               class="nav-link active"
+              id="education-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#education-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="education-tab-pane"
+              aria-selected="true"
+            >
+              <font-awesome-icon :icon="['fas', 'hand-holding-dollar']" />&nbsp;
+              Образование
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
               id="punishment-tab"
               data-bs-toggle="tab"
               data-bs-target="#punishment-tab-pane"
@@ -180,26 +195,73 @@
               <font-awesome-icon :icon="['far', 'star']" />&nbsp;Должности
             </button>
           </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="speciality-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#speciality-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="speciality-tab-pane"
-              aria-selected="false"
-            >
-              <font-awesome-icon
-                :icon="['fas', 'user-graduate']"
-              />&nbsp;Специальности
-            </button>
-          </li>
         </ul>
         <div class="tab-content" id="myTabContent">
           <div
             class="tab-pane fade show active"
+            id="education-tab-pane"
+            role="tabpanel"
+            aria-labelledby="education-tab"
+            tabindex="0"
+          >
+            <div class="card shadow-sm p-3 mb-3 bg-body-tertiary rounded">
+              <div class="card-body">
+                <div
+                  style="max-height: 200px; overflow: auto"
+                  v-if="orderedEducationHistory.length > 0"
+                >
+                  <table class="table table-hover">
+                    <thead style="position: sticky; top: 0">
+                      <tr>
+                        <th>Уровень</th>
+                        <th>Наименование учебного учреждения</th>
+                        <th>Начало обучения</th>
+                        <th>Окончание обучекния</th>
+                        <th>Средний бал</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="education in orderedEducationHistory"
+                        :key="education.id"
+                        class="align-baseline"
+                      >
+                        <td>
+                          {{
+                            education.get_education_level_str || "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{ education.education_graduated || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{
+                            education.education_graduating_start_year ||
+                            "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{ education.education_graduating_start_year }}
+                        </td>
+                        <td>
+                          {{ education.education_average_score }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <PaginatorView
+                    :update-paginator="getPaginatorUpdateFunction('punishment')"
+                    :list-next="punishmentList.next"
+                    :list-previous="punishmentList.previous"
+                    v-if="punishmentList.previous || punishmentList.next"
+                  />
+                </div>
+                <div class="fs-5" v-else>Записей нет</div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade show"
             id="punishment-tab-pane"
             role="tabpanel"
             aria-labelledby="punishment-tab"
@@ -247,7 +309,7 @@
                     </tbody>
                   </table>
                   <PaginatorView
-                    :update-paginator="updatePunishmentsPaginator"
+                    :update-paginator="getPaginatorUpdateFunction('punishment')"
                     :list-next="punishmentList.next"
                     :list-previous="punishmentList.previous"
                     v-if="punishmentList.previous || punishmentList.next"
@@ -303,7 +365,9 @@
                     </tbody>
                   </table>
                   <PaginatorView
-                    :update-paginator="updateEncouragementsPaginator"
+                    :update-paginator="
+                      getPaginatorUpdateFunction('encouragement')
+                    "
                     :list-next="encouragementList.next"
                     :list-previous="encouragementList.previous"
                     v-if="encouragementList.previous || encouragementList.next"
@@ -349,7 +413,7 @@
                 </div>
                 <div class="fs-5" v-else>Записей нет</div>
                 <PaginatorView
-                  :update-paginator="updateRanksPaginator"
+                  :update-paginator="getPaginatorUpdateFunction('rankHistory')"
                   :list-next="rankHistoryList.next"
                   :list-previous="rankHistoryList.previous"
                   v-if="rankHistoryList.previous || rankHistoryList.next"
@@ -410,22 +474,104 @@
                 </div>
                 <div class="fs-5" v-else>Записей нет</div>
                 <PaginatorView
-                  :update-paginator="updatePositionsPaginator"
-                  :list-next="orderedPositionHistory.next"
-                  :list-previous="orderedPositionHistory.previous"
+                  :update-paginator="
+                    getPaginatorUpdateFunction('positionHistory')
+                  "
+                  :list-next="positionHistoryList.next"
+                  :list-previous="positionHistoryList.previous"
                   v-if="
-                    orderedPositionHistory.previous ||
-                    orderedPositionHistory.next
+                    positionHistoryList.previous || positionHistoryList.next
                   "
                 />
               </div>
             </div>
           </div>
+        </div>
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="speciality-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#speciality-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="speciality-tab-pane"
+              aria-selected="false"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'user-graduate']"
+              />&nbsp;Специальности
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="job-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#job-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="job-tab-pane"
+              aria-selected="false"
+            >
+              <font-awesome-icon :icon="['fas', 'user-graduate']" />&nbsp;Работа
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="army-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#army-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="army-tab-pane"
+              aria-selected="false"
+            >
+              <font-awesome-icon :icon="['fas', 'user-graduate']" />&nbsp;Служба
+              в армии
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="mvd-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#mvd-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="mvd-tab-pane"
+              aria-selected="false"
+            >
+              <font-awesome-icon :icon="['fas', 'user-graduate']" />&nbsp;Служба
+              в МВД
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="rewards-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#rewards-tab-pane"
+              type="button"
+              role="tab"
+              aria-controls="rewards-tab-pane"
+              aria-selected="false"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'user-graduate']"
+              />&nbsp;Награды
+            </button>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
           <div
-            class="tab-pane fade"
+            class="tab-pane fade show active"
             id="speciality-tab-pane"
             role="tabpanel"
-            aria-labelledby="position-tab"
+            aria-labelledby="speciality-tab"
             tabindex="0"
           >
             <div class="card shadow-sm p-3 mb-3 bg-body-tertiary rounded">
@@ -437,7 +583,6 @@
                   <table class="table table-hover">
                     <thead>
                       <tr>
-                        <th scope="col">Фамилия, имя, отчество</th>
                         <th scope="col">Специальность</th>
                         <th scope="col">Дата приказа</th>
                         <th scope="col">Номер приказа</th>
@@ -451,9 +596,6 @@
                         :key="specialityHistory.id"
                         class="align-baseline"
                       >
-                        <td>
-                          {{ specialityHistory.get_cadet_str || "Нет данных" }}
-                        </td>
                         <td>
                           {{
                             specialityHistory.get_speciality_str || "Нет данных"
@@ -489,13 +631,238 @@
                 </div>
                 <div class="fs-5" v-else>Записей нет</div>
                 <PaginatorView
-                  :update-paginator="updatePositionsPaginator"
-                  :list-next="orderedPositionHistory.next"
-                  :list-previous="orderedPositionHistory.previous"
-                  v-if="
-                    orderedPositionHistory.previous ||
-                    orderedPositionHistory.next
+                  :update-paginator="
+                    getPaginatorUpdateFunction('specialityHistory')
                   "
+                  :list-next="specialityHistoryList.next"
+                  :list-previous="specialityHistoryList.previous"
+                  v-if="
+                    specialityHistoryList.previous || specialityHistoryList.next
+                  "
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="job-tab-pane"
+            role="tabpanel"
+            aria-labelledby="job-tab"
+            tabindex="0"
+          >
+            <div class="card shadow-sm p-3 mb-3 bg-body-tertiary rounded">
+              <div class="card-body">
+                <div
+                  style="max-height: 200px; overflow: auto"
+                  v-if="orderedJobHistory.length > 0"
+                >
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Должность</th>
+                        <th scope="col">Начало работы</th>
+                        <th scope="col">Окончание работы</th>
+                        <th scope="col">Организация</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="jobHistory in orderedJobHistory"
+                        :key="jobHistory.id"
+                        class="align-baseline"
+                      >
+                        <td>
+                          {{ jobHistory.job_position || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ jobHistory.job_start_year || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ jobHistory.job_end_year || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ jobHistory.organisation_name || "Нет данных" }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="fs-5" v-else>Записей нет</div>
+                <PaginatorView
+                  :update-paginator="getPaginatorUpdateFunction('jobHistory')"
+                  :list-next="jobHistoryList.next"
+                  :list-previous="jobHistoryList.previous"
+                  v-if="jobHistoryList.previous || jobHistoryList.next"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="army-tab-pane"
+            role="tabpanel"
+            aria-labelledby="army-tab"
+            tabindex="0"
+          >
+            <div class="card shadow-sm p-3 mb-3 bg-body-tertiary rounded">
+              <div class="card-body">
+                <div
+                  style="max-height: 200px; overflow: auto"
+                  v-if="orderedArmyHistory.length > 0"
+                >
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Место прохождения службы</th>
+                        <th scope="col">Начало</th>
+                        <th scope="col">Окончание</th>
+                        <th scope="col">Должность</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="armyHistory in orderedArmyHistory"
+                        :key="armyHistory.id"
+                        class="align-baseline"
+                      >
+                        <td>
+                          {{
+                            armyHistory.military_organization || "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            armyHistory.military_service_start || "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{ armyHistory.military_service_end || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ armyHistory.position || "Нет данных" }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="fs-5" v-else>Записей нет</div>
+                <PaginatorView
+                  :update-paginator="getPaginatorUpdateFunction('armyHistory')"
+                  :list-next="armyHistoryList.next"
+                  :list-previous="armyHistoryList.previous"
+                  v-if="armyHistoryList.previous || armyHistoryList.next"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="mvd-tab-pane"
+            role="tabpanel"
+            aria-labelledby="mvd-tab"
+            tabindex="0"
+          >
+            <div class="card shadow-sm p-3 mb-3 bg-body-tertiary rounded">
+              <div class="card-body">
+                <div
+                  style="max-height: 200px; overflow: auto"
+                  v-if="orderedMVDHistory.length > 0"
+                >
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Место прохождения службы</th>
+                        <th scope="col">Начало</th>
+                        <th scope="col">Окончание</th>
+                        <th scope="col">Должность</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="mvdHistory in orderedMVDHistory"
+                        :key="mvdHistory.id"
+                        class="align-baseline"
+                      >
+                        <td>
+                          {{ mvdHistory.mvd_organization || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ mvdHistory.mvd_service_start || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ mvdHistory.mvd_service_end || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ mvdHistory.position || "Нет данных" }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="fs-5" v-else>Записей нет</div>
+                <PaginatorView
+                  :update-paginator="
+                    getPaginatorUpdateFunction('jobHistoryList')
+                  "
+                  :list-next="jobHistoryList.next"
+                  :list-previous="jobHistoryList.previous"
+                  v-if="jobHistoryList.previous || jobHistoryList.next"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="rewards-tab-pane"
+            role="tabpanel"
+            aria-labelledby="rewards-tab"
+            tabindex="0"
+          >
+            <div class="card shadow-sm p-3 mb-3 bg-body-tertiary rounded">
+              <div class="card-body">
+                <div
+                  style="max-height: 200px; overflow: auto"
+                  v-if="orderedRewardHistory.length > 0"
+                >
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Награда</th>
+                        <th scope="col">Дата присвоения</th>
+                        <th scope="col">За что награжден</th>
+                        <th scope="col">Основание</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="reward in orderedRewardHistory"
+                        :key="reward.id"
+                        class="align-baseline"
+                      >
+                        <td>
+                          {{ reward.get_reward_str || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ reward.reward_date || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ reward.reason || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ reward.order_number || "Нет данных" }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="fs-5" v-else>Записей нет</div>
+                <PaginatorView
+                  :update-paginator="
+                    getPaginatorUpdateFunction('jobHistoryList')
+                  "
+                  :list-next="jobHistoryList.next"
+                  :list-previous="jobHistoryList.previous"
+                  v-if="jobHistoryList.previous || jobHistoryList.next"
                 />
               </div>
             </div>
@@ -603,6 +970,11 @@ import getPunishmentAPIInstance from "@/api/cadet/punishmentAPI"
 import getRankHistoryAPIInstance from "@/api/cadet/rankHistoryAPI"
 import getPositionHistoryAPIInstance from "@/api/cadet/positionHistoryAPI"
 import getSpecialityHistoryAPIInstance from "@/api/cadet/specialityHistoryAPI"
+import getEducationHistoryAPIInstance from "@/api/cadet/educationHistoryAPI"
+import getJobHistoryAPIInstance from "@/api/cadet/jobHistoryAPI"
+import getRewardHistoryAPIInstance from "@/api/cadet/rewardHistoryAPI"
+import getArmyHistoryAPIInstance from "@/api/cadet/armyHistoryAPI"
+import getMVDHistoryAPIInstance from "@/api/cadet/mvdHistoryAPI"
 
 import { PaginatorView } from "@/components/common"
 
@@ -637,6 +1009,38 @@ export default {
         previous: null,
         next: null,
       },
+      educationHistoryList: {
+        count: "",
+        results: [],
+        previous: null,
+        next: null,
+      },
+      jobHistoryList: {
+        count: "",
+        results: [],
+        previous: null,
+        next: null,
+      },
+
+      rewardHistoryList: {
+        count: "",
+        results: [],
+        previous: null,
+        next: null,
+      },
+      armyHistoryList: {
+        count: "",
+        results: [],
+        previous: null,
+        next: null,
+      },
+      mvdHistoryList: {
+        count: "",
+        results: [],
+        previous: null,
+        next: null,
+      },
+
       isLoading: true,
       isError: false,
       BACKEND_PROTOCOL: process.env.VUE_APP_BACKEND_PROTOCOL,
@@ -648,6 +1052,11 @@ export default {
       rankHistoryAPIInstance: getRankHistoryAPIInstance(),
       positionHistoryAPIInstance: getPositionHistoryAPIInstance(),
       specialityHistoryAPIInstance: getSpecialityHistoryAPIInstance(),
+      educationHistoryAPIInstance: getEducationHistoryAPIInstance(),
+      jobHistoryAPIInstance: getJobHistoryAPIInstance(),
+      rewardHistoryAPIInstance: getRewardHistoryAPIInstance(),
+      armyHistoryAPIInstance: getArmyHistoryAPIInstance(),
+      mvdHistoryAPIInstance: getMVDHistoryAPIInstance(),
     }
   },
   async created() {
@@ -665,13 +1074,23 @@ export default {
           ranks,
           positions,
           specialities,
+          educations,
+          jobs,
+          rewards,
+          armyServices,
+          mvdServices,
         ] = await Promise.all([
           this.getCadetData(cadetId),
-          this.getEncouragements(cadetId),
-          this.getPunishments(cadetId),
-          this.getRanks(cadetId),
-          this.getPositions(cadetId),
-          this.getSpecialities(cadetId),
+          this.getLoadListFunction("encouragement")(cadetId),
+          this.getLoadListFunction("punishment")(cadetId),
+          this.getLoadListFunction("rankHistory")(cadetId),
+          this.getLoadListFunction("positionHistory")(cadetId),
+          this.getLoadListFunction("specialityHistory")(cadetId),
+          this.getLoadListFunction("educationHistory")(cadetId),
+          this.getLoadListFunction("jobHistory")(cadetId),
+          this.getLoadListFunction("rewardHistory")(cadetId),
+          this.getLoadListFunction("armyHistory")(cadetId),
+          this.getLoadListFunction("mvdHistory")(cadetId),
         ]).catch(() => (this.isError = true))
         this.currentCadet = cadet
         this.encouragementList = encouragements
@@ -679,6 +1098,11 @@ export default {
         this.rankHistoryList = ranks
         this.positionHistoryList = positions
         this.specialityHistoryList = specialities
+        this.educationHistoryList = educations
+        this.jobHistoryList = jobs
+        this.rewardHistoryList = rewards
+        this.armyHistoryList = armyServices
+        this.mvdHistoryList = mvdServices
       } catch (e) {
         this.isError = true
       } finally {
@@ -692,80 +1116,27 @@ export default {
       )
       return res.data
     },
-    async getEncouragements(cadetId) {
-      this.encouragementAPIInstance.searchObj.encouragement_cadet = cadetId
-      const res =
-        await this.encouragementAPIInstance.getItemsList("token is here!!!")
-      return res.data
-    },
-    async getPunishments(cadetId) {
-      this.punishmentAPIInstance.searchObj.punishment_cadet = cadetId
-      const res =
-        await this.punishmentAPIInstance.getItemsList("token is here!!!")
-      return res.data
-    },
-    async getRanks(cadetId) {
-      this.rankHistoryAPIInstance.searchObj.cadet = cadetId
-      const res =
-        await this.rankHistoryAPIInstance.getItemsList("token is here!!!")
-      return res.data
-    },
-    async getPositions(cadetId) {
-      this.positionHistoryAPIInstance.searchObj.cadet = cadetId
-      const res =
-        await this.positionHistoryAPIInstance.getItemsList("token is here!!!")
-      return res.data
+
+    getLoadListFunction(modelName) {
+      return async (cadetId) => {
+        this[`${modelName}APIInstance`].searchObj.cadet = cadetId
+        const res =
+          await this[`${modelName}APIInstance`].getItemsList("token is here!!!")
+        return res.data
+      }
     },
 
-    async getSpecialities(cadetId) {
-      this.specialityHistoryAPIInstance.searchObj.cadet = cadetId
-      const res =
-        await this.specialityHistoryAPIInstance.getItemsList("token is here!!!")
-      return res.data
-    },
-
-    async updateEncouragementsPaginator(url) {
-      try {
-        const response = await this.encouragementAPIInstance.updateList(
-          url,
-          "this.userToken",
-        )
-        this.encouragementList = await response.data
-      } catch (error) {
-        this.isError = true
-      }
-    },
-    async updatePunishmentsPaginator(url) {
-      try {
-        const response = await this.punishmentAPIInstance.updateList(
-          url,
-          "this.userToken",
-        )
-        this.punishmentList = await response.data
-      } catch (error) {
-        this.isError = true
-      }
-    },
-    async updateRanksPaginator(url) {
-      try {
-        const response = await this.rankHistoryAPIInstance.updateList(
-          url,
-          "this.userToken",
-        )
-        this.rankHistoryList = await response.data
-      } catch (error) {
-        this.isError = true
-      }
-    },
-    async updatePositionsPaginator(url) {
-      try {
-        const response = await this.positionHistoryAPIInstance.updateList(
-          url,
-          "this.userToken",
-        )
-        this.positionHistoryList = await response.data
-      } catch (error) {
-        this.isError = true
+    getPaginatorUpdateFunction(modelName) {
+      return async (url) => {
+        try {
+          const response = await this[`${modelName}APIInstance`].updateList(
+            url,
+            "this.userToken",
+          )
+          this[`${modelName}List`] = await response.data
+        } catch (error) {
+          this.isError = true
+        }
       }
     },
   },
@@ -784,6 +1155,21 @@ export default {
     },
     orderedSpecialityHistory() {
       return this.specialityHistoryList.results
+    },
+    orderedEducationHistory() {
+      return this.educationHistoryList.results
+    },
+    orderedJobHistory() {
+      return this.jobHistoryList.results
+    },
+    orderedRewardHistory() {
+      return this.rewardHistoryList.results
+    },
+    orderedArmyHistory() {
+      return this.armyHistoryList.results
+    },
+    orderedMVDHistory() {
+      return this.mvdHistoryList.results
     },
   },
 }

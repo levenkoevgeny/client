@@ -1,6 +1,6 @@
 <template>
   <div>Network error</div>
-  <h3><a href="/">Try again!</a></h3>
+  <h3><a href="/">На главную</a></h3>
 </template>
 
 <script>
