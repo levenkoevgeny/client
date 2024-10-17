@@ -51,52 +51,52 @@
       <!--      add modals-->
 
       <!--      update modals-->
-<!--      <div-->
-<!--        class="modal fade"-->
-<!--        id="encouragementAddModal"-->
-<!--        tabindex="-1"-->
-<!--        aria-labelledby="exampleModalLabel"-->
-<!--        aria-hidden="true"-->
-<!--        ref="encouragementUpdateModal"-->
-<!--      >-->
-<!--        <div class="modal-dialog">-->
-<!--          <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--              <h1 class="modal-title fs-5" id="exampleModalLabel">-->
-<!--                Редактирование записи-->
-<!--              </h1>-->
-<!--              <button-->
-<!--                type="button"-->
-<!--                class="btn-close"-->
-<!--                data-bs-dismiss="modal"-->
-<!--                aria-label="Close"-->
-<!--              ></button>-->
-<!--            </div>-->
+      <!--      <div-->
+      <!--        class="modal fade"-->
+      <!--        id="encouragementAddModal"-->
+      <!--        tabindex="-1"-->
+      <!--        aria-labelledby="exampleModalLabel"-->
+      <!--        aria-hidden="true"-->
+      <!--        ref="encouragementUpdateModal"-->
+      <!--      >-->
+      <!--        <div class="modal-dialog">-->
+      <!--          <div class="modal-content">-->
+      <!--            <div class="modal-header">-->
+      <!--              <h1 class="modal-title fs-5" id="exampleModalLabel">-->
+      <!--                Редактирование записи-->
+      <!--              </h1>-->
+      <!--              <button-->
+      <!--                type="button"-->
+      <!--                class="btn-close"-->
+      <!--                data-bs-dismiss="modal"-->
+      <!--                aria-label="Close"-->
+      <!--              ></button>-->
+      <!--            </div>-->
 
-<!--            <form @submit.prevent="updateEncouragement">-->
-<!--              <div class="modal-body">-->
-<!--                <encouragement-form-view-->
-<!--                  :order-owners="orderedOrderOwners"-->
-<!--                  :encouragement-kinds="orderedEncouragementKinds"-->
-<!--                  :cadets="orderedCadets"-->
-<!--                  :enc-data="updateEncouragementObjForm"-->
-<!--                />-->
-<!--              </div>-->
-<!--              <div class="modal-footer">-->
-<!--                <button-->
-<!--                  type="button"-->
-<!--                  class="btn btn-secondary"-->
-<!--                  data-bs-dismiss="modal"-->
-<!--                  ref="encouragementUpdateModalCloseButton"-->
-<!--                >-->
-<!--                  Закрыть без сохранения-->
-<!--                </button>-->
-<!--                <button type="submit" class="btn btn-primary">Сохранить</button>-->
-<!--              </div>-->
-<!--            </form>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
+      <!--            <form @submit.prevent="updateEncouragement">-->
+      <!--              <div class="modal-body">-->
+      <!--                <encouragement-form-view-->
+      <!--                  :order-owners="orderedOrderOwners"-->
+      <!--                  :encouragement-kinds="orderedEncouragementKinds"-->
+      <!--                  :cadets="orderedCadets"-->
+      <!--                  :enc-data="updateEncouragementObjForm"-->
+      <!--                />-->
+      <!--              </div>-->
+      <!--              <div class="modal-footer">-->
+      <!--                <button-->
+      <!--                  type="button"-->
+      <!--                  class="btn btn-secondary"-->
+      <!--                  data-bs-dismiss="modal"-->
+      <!--                  ref="encouragementUpdateModalCloseButton"-->
+      <!--                >-->
+      <!--                  Закрыть без сохранения-->
+      <!--                </button>-->
+      <!--                <button type="submit" class="btn btn-primary">Сохранить</button>-->
+      <!--              </div>-->
+      <!--            </form>-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      </div>-->
       <!--      update modals-->
     </template>
     <template v-slot:extra>
@@ -163,7 +163,7 @@
             />
           </div>
         </th>
-        <td class="text-nowrap">{{ punishment.get_punishment_cadet_str }}</td>
+        <td class="text-nowrap">{{ punishment.get_cadet_str }}</td>
         <td class="text-nowrap">{{ punishment.get_punishment_kind_str }}</td>
         <td class="text-nowrap">{{ punishment.punishment_start_date }}</td>
         <td class="text-nowrap">
@@ -203,7 +203,7 @@
         <select
           class="form-select"
           aria-label="Default select example"
-          v-model="searchForm.punishment_cadet"
+          v-model="searchForm.cadet"
         >
           <option selected value="">--------</option>
           <option

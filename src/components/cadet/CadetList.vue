@@ -55,7 +55,6 @@
         <th scope="col">Адрес</th>
         <th scope="col">Специальность</th>
         <th scope="col">Начало обучения</th>
-        <th scope="col">Начало обучения</th>
         <th scope="col">Окончание обучения</th>
       </tr>
     </template>
