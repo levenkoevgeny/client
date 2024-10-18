@@ -1,5 +1,80 @@
 <template>
   <base-list-layout :is-loading="isLoading">
+    <template v-slot:modals>
+      <div
+        class="modal fade"
+        id="cadetAddModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+        ref="cadetAddModal"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Добавление записи
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <form @submit.prevent="addNewCadet">
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="last_name_rus" class="form-label">Фамилия</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="last_name_rus"
+                    v-model="cadetNewForm.last_name_rus"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="first_name_rus" class="form-label">Имя</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="first_name_rus"
+                    v-model="cadetNewForm.first_name_rus"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="date_of_birth" class="form-label"
+                    >Дата рождения</label
+                  >
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="date_of_birth"
+                    v-model="cadetNewForm.date_of_birth"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                  ref="cadetAddModalCloseButton"
+                >
+                  Закрыть без сохранения
+                </button>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </template>
+
     <template v-slot:extra>
       <ul class="nav nav-links my-3 mb-lg-2 mx-n3">
         <li class="nav-item">
@@ -10,34 +85,12 @@
             ></a
           >
         </li>
-        <!--            <li class="nav-item">-->
-        <!--              <a class="nav-link" href="#"-->
-        <!--                ><span>Абитуриенты </span-->
-        <!--                ><span class="text-body-tertiary fw-semibold">(70348)</span></a-->
-        <!--              >-->
-        <!--            </li>-->
-        <!--            <li class="nav-item">-->
-        <!--              <a class="nav-link" href="#"-->
-        <!--                ><span>Обучаются </span-->
-        <!--                ><span class="text-body-tertiary fw-semibold">(17)</span></a-->
-        <!--              >-->
-        <!--            </li>-->
-        <!--            <li class="nav-item">-->
-        <!--              <a class="nav-link" href="#"-->
-        <!--                ><span>Выпустились </span-->
-        <!--                ><span class="text-body-tertiary fw-semibold">(810)</span></a-->
-        <!--              >-->
-        <!--            </li>-->
       </ul>
     </template>
     <template v-slot:add-button>
-      <router-link
-        class="btn btn-warning"
-        :to="{ name: 'cadet-add' }"
-        :disabled="!isLoading"
-      >
+      <button class="btn btn-warning" @click="showCadetAddModal">
         Добавить запись
-      </router-link>
+      </button>
     </template>
     <template v-slot:thead>
       <tr>
@@ -59,7 +112,14 @@
       </tr>
     </template>
     <template v-slot:tbody>
-      <tr class="align-middle" v-for="cadet in orderedCadets" :key="cadet.id">
+      <tr
+        class="align-middle"
+        v-for="cadet in orderedCadets"
+        :key="cadet.id"
+        @dblclick="
+          $router.push({ name: 'cadet-update', params: { id: cadet.id } })
+        "
+      >
         <th scope="row" class="text-center align-middle">
           <div class="form-check">
             <input
@@ -289,10 +349,11 @@ import getSubdivisionAPIInstance from "@/api/cadet/subdivisionAPI"
 import BaseListLayout from "@/components/cadet/BaseListLayout.vue"
 import { PaginatorView } from "@/components/common"
 import { debounce } from "lodash/function"
+import EncouragementFormView from "@/components/cadet/encouragement/modals/FormView.vue"
 
 export default {
   name: "CadetList",
-  components: { BaseListLayout, PaginatorView },
+  components: { EncouragementFormView, BaseListLayout, PaginatorView },
   data() {
     return {
       cadetList: { count: "", results: [], previous: null, next: null },
@@ -305,6 +366,11 @@ export default {
       cadetAPIInstance: getCadetAPIInstance(),
       subdivisionAPIInstance: getSubdivisionAPIInstance(),
       searchForm: Object.assign({}, getCadetAPIInstance().searchObj),
+      cadetNewForm: {
+        last_name_rus: "",
+        first_name_rus: "",
+        date_of_birth: null,
+      },
     }
   },
   async created() {
@@ -360,7 +426,13 @@ export default {
         this.cadetAPIInstance.searchObjDefault,
       )
     },
-
+    showCadetAddModal() {
+      let addModal = this.$refs.cadetAddModal
+      let myModal = new bootstrap.Modal(addModal, {
+        keyboard: false,
+      })
+      myModal.show()
+    },
     async getCadets() {
       const res = await this.cadetAPIInstance.getItemsList("token is here!!!")
       return res.data
@@ -371,6 +443,30 @@ export default {
         await this.subdivisionAPIInstance.getItemsList("token is here!!!")
       return res.data
     },
+
+    async addNewCadet() {
+      try {
+        const response = await this.cadetAPIInstance.addItem(
+          "this.token",
+          this.cadetNewForm,
+        )
+        const newItem = await response.data
+        this.cadetList.results.unshift(newItem)
+        this.$refs.cadetAddModalCloseButton.click()
+        this.cadetNewForm = {
+          last_name_rus: "",
+          first_name_rus: "",
+          date_of_birth: null,
+        }
+      } catch (e) {
+        console.log(e)
+        this.isError = true
+      } finally {
+        this.isLoading = false
+      }
+    },
+
+    updateCadetView(cadetId) {},
   },
 
   computed: {

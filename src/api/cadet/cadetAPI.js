@@ -2,9 +2,9 @@ import BaseAPI from "@/api/baseAPIClass"
 
 class CadetAPI extends BaseAPI {}
 
-
 export default function getCadetAPIInstance() {
   return new CadetAPI("cadet", {
+    category: "",
     last_name_rus__icontains: "",
     first_name_rus__icontains: "",
     last_name_bel__icontains: "",
@@ -43,6 +43,6 @@ export default function getCadetAPIInstance() {
     social_status: "",
     region_for_medical_examination: "",
     military_office: "",
-    extra_data__icontains: ""
+    extra_data__icontains: "",
   })
 }

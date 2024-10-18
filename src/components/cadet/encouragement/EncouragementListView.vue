@@ -53,7 +53,7 @@
       <!--      update modals-->
       <div
         class="modal fade"
-        id="encouragementAddModal"
+        id="encouragementUpdateModal"
         tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"

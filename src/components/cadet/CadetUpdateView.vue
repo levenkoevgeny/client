@@ -1,5 +1,6 @@
 <template>
   <div class="container-fluid">
+    {{ currentCadetData }}
     <div>
       <h1 class="my-2 text-decoration-underline">Личное дело</h1>
       <div class="mb-3"></div>
@@ -32,13 +33,20 @@
                             class="form-select"
                             name="category"
                             id="id_category"
+                            v-model="currentCadetData.category"
                           >
-                            <option value="" selected>---------</option>
+                            <option value="null" selected>---------</option>
+                            <option
+                              v-for="category in orderedCadetCategories"
+                              :value="category.id"
+                              :key="category.id"
+                            >
+                              {{ category.category }}
+                            </option>
                           </select>
                         </div>
                       </div>
                     </div>
-
                     <div class="row">
                       <div class="col-lg-2">
                         <div class="mb-3">
@@ -52,6 +60,7 @@
                             maxlength="30"
                             required
                             id="id_last_name_rus"
+                            v-model="currentCadetData.last_name_rus"
                           />
                         </div>
                         <div class="mb-3">
@@ -65,6 +74,7 @@
                             maxlength="30"
                             required
                             id="id_first_name_rus"
+                            v-model="currentCadetData.first_name_rus"
                           />
                         </div>
                         <div class="mb-3">
@@ -77,6 +87,7 @@
                             name="patronymic_rus"
                             maxlength="30"
                             id="id_patronymic_rus"
+                            v-model="currentCadetData.patronymic_rus"
                           />
                         </div>
                       </div>
@@ -91,6 +102,7 @@
                             name="last_name_bel"
                             maxlength="30"
                             id="id_last_name_bel"
+                            v-model="currentCadetData.last_name_bel"
                           />
                         </div>
 
@@ -104,6 +116,7 @@
                             name="first_name_bel"
                             maxlength="30"
                             id="id_first_name_bel"
+                            v-model="currentCadetData.first_name_bel"
                           />
                         </div>
 
@@ -117,6 +130,7 @@
                             name="patronymic_bel"
                             maxlength="30"
                             id="id_patronymic_bel"
+                            v-model="currentCadetData.patronymic_bel"
                           />
                         </div>
                       </div>
@@ -131,6 +145,7 @@
                             name="last_name_en"
                             maxlength="30"
                             id="id_last_name_en"
+                            v-model="currentCadetData.last_name_en"
                           />
                         </div>
                         <div class="mb-3">
@@ -143,6 +158,7 @@
                             name="first_name_en"
                             maxlength="30"
                             id="id_first_name_en"
+                            v-model="currentCadetData.first_name_en"
                           />
                         </div>
                         <div class="mb-3">
@@ -155,6 +171,7 @@
                             name="patronymic_en"
                             maxlength="30"
                             id="id_patronymic_en"
+                            v-model="currentCadetData.patronymic_en"
                           />
                         </div>
                       </div>
@@ -180,6 +197,7 @@
                             name="phone_number"
                             maxlength="30"
                             id="id_phone_number"
+                            v-model="currentCadetData.phone_number"
                           />
                         </div>
 
@@ -192,6 +210,7 @@
                             class="form-control"
                             name="personal_number_mvd"
                             id="id_personal_number_mvd"
+                            v-model="currentCadetData.personal_number_mvd"
                           />
                         </div>
                       </div>
@@ -205,6 +224,7 @@
                             class="form-control"
                             name="place_of_birth"
                             id="id_place_of_birth"
+                            v-model="currentCadetData.place_of_birth"
                           />
                         </div>
                         <div class="mb-3">
@@ -216,6 +236,7 @@
                             class="form-control"
                             name="address_residence"
                             id="id_address_residence"
+                            v-model="currentCadetData.address_residence"
                           />
                         </div>
                         <div class="mb-3">
@@ -229,6 +250,7 @@
                             class="form-control"
                             name="address_registration"
                             id="id_address_registration"
+                            v-model="currentCadetData.address_registration"
                           />
                         </div>
                       </div>
@@ -247,6 +269,7 @@
                             name="passport_number"
                             maxlength="100"
                             id="id_passport_number"
+                            v-model="currentCadetData.passport_number"
                           />
                         </div>
                       </div>
@@ -260,6 +283,7 @@
                             class="form-control"
                             name="passport_issue_date"
                             id="id_passport_issue_date"
+                            v-model="currentCadetData.passport_issue_date"
                           />
                         </div>
                       </div>
@@ -275,6 +299,7 @@
                             class="form-control"
                             name="passport_validity_period"
                             id="id_passport_validity_period"
+                            v-model="currentCadetData.passport_validity_period"
                           />
                         </div>
                       </div>
@@ -289,6 +314,7 @@
                             class="form-select"
                             name="passport_issue_authority"
                             id="id_passport_issue_authority"
+                            v-model="currentCadetData.passport_issue_authority"
                           >
                             <option value="" selected>---------</option>
                             <option value="25">Ленинский РУВД г.Минска</option>
@@ -1046,26 +1072,164 @@
 </template>
 
 <script>
+import getCadetAPIInstance from "@/api/cadet/cadetAPI"
+import { debounce } from "lodash/function"
+import getCadetCategoryAPIAPIInstance from "@/api/cadet/cadetCategoryAPI"
+
 export default {
-  name: "CadetAddView",
+  name: "CadetUpdateView",
   components: {},
   data() {
-    return {}
+    return {
+      isLoading: true,
+      isError: false,
+      currentCadetData: {
+        category: null,
+        last_name_rus: "",
+        first_name_rus: "",
+        patronymic_rus: "",
+        last_name_bel: "",
+        first_name_bel: "",
+        patronymic_bel: "",
+        last_name_en: "",
+        first_name_en: "",
+        patronymic_en: "",
+        date_of_birth: "",
+        place_of_birth: "",
+        photo: "",
+        address_residence: "",
+        address_registration: "",
+        phone_number: "",
+        personal_number_mvd: "",
+        marital_status: "",
+        passport_number: "",
+        passport_issue_date: "",
+        passport_validity_period: "",
+        passport_issue_authority: "",
+        identification_number: "",
+        father_last_name: "",
+        father_first_name: "",
+        father_patronymic: "",
+        father_date_of_birth: "",
+        father_place_of_work: "",
+        father_phone_number: "",
+        mother_last_name: "",
+        mother_first_name: "",
+        mother_patronymic: "",
+        mother_date_of_birth: "",
+        mother_place_of_work: "",
+        mother_phone_number: "",
+        foreign_language_was: "",
+        foreign_language_will_be: "",
+        subdivision: "",
+        group: "",
+        academy_start_year: "",
+        academy_end_year: "",
+        component_organ: "",
+        entrance_category: "",
+        arrived_from_go_rovd: "",
+        social_status: "",
+        region_for_medical_examination: "",
+        military_office: "",
+        extra_data: "",
+        vpk: "",
+        vpk_data: "",
+        aims_to_graduate_with_honors: "",
+        is_class_vpn: "",
+        is_class_pn: "",
+        is_class_other: "",
+        has_achievements_in_sports: "",
+        is_olympiad_winner: "",
+        health_group: "",
+        ppfl_test: "",
+        medical_age_group: "",
+        needs_increased_attention: "",
+        needs_psychological_support: "",
+        is_risk_group: "",
+        has_conviction: "",
+        has_dactocard: "",
+        has_gusb_check: "",
+        has_employee_in_family: "",
+        is_orphan: "",
+        passed_medical_examination: "",
+        passed_medical_examination_extra_data: "",
+        has_certificate_ideas_for_Belarus: "",
+        has_certificate_kind_heart: "",
+        is_employee: "",
+      },
+      cadetCategoryList: { count: "", results: [], previous: null, next: null },
+      subdivisionList: { count: "", results: [], previous: null, next: null },
+      cadetAPIInstance: getCadetAPIInstance(),
+      cadetCategoryAPIInstance: getCadetCategoryAPIAPIInstance(),
+    }
   },
-  async created() {},
+  async created() {
+    await this.loadData(this.$route.params.id)
+  },
   methods: {
-    // onSubmit(e) {
-    //   const form = e.target.form
-    // const tab =
-    //   form.find(".tab-pane.active:has(:invalid)")[0] ||
-    //   form.find(".tab-pane:has(:invalid)")[0]
-    // if (tab) {
-    //   const nav = $(`.nav-tabs li a[href="#${tab.id}"]`)
-    //   nav.tab("show")
-    //     // }
-    //   },
+    async loadData(cadetId) {
+      const [cadet, cadetCategories] = await Promise.all([
+        this.getCadetData(cadetId),
+        this.getLoadListFunction("cadetCategory")(cadetId),
+      ]).catch(() => (this.isError = true))
+      this.currentCadetData = cadet
+      this.cadetCategoryList = cadetCategories
+    },
+    async getCadetData(cadetId) {
+      const res = await this.cadetAPIInstance.getItemData(
+        "token is here!!!",
+        cadetId,
+      )
+      return res.data
+    },
+    getLoadListFunction(modelName) {
+      return async (cadetId) => {
+        this[`${modelName}APIInstance`].searchObj.cadet = cadetId
+        const res =
+          await this[`${modelName}APIInstance`].getItemsList("token is here!!!")
+        return res.data
+      }
+    },
+    getPaginatorUpdateFunction(modelName) {
+      return async (url) => {
+        try {
+          const response = await this[`${modelName}APIInstance`].updateList(
+            url,
+            "this.userToken",
+          )
+          this[`${modelName}List`] = await response.data
+        } catch (error) {
+          this.isError = true
+        }
+      }
+    },
+    debouncedUpdate: debounce(async function () {
+      this.isLoading = true
+      try {
+        await this.cadetAPIInstance.updateItem(
+          "token is here!!!",
+          this.currentCadetData,
+        )
+      } catch (e) {
+        this.isError = true
+      } finally {
+        this.isLoading = false
+      }
+    }, 500),
   },
-  computed: {},
+  computed: {
+    orderedCadetCategories() {
+      return this.cadetCategoryList.results
+    },
+  },
+  watch: {
+    currentCadetData: {
+      handler(newValue, oldValue) {
+        this.debouncedUpdate()
+      },
+      deep: true,
+    },
+  },
 }
 </script>
 
