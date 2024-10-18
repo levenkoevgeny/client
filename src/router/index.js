@@ -7,6 +7,7 @@ import { RankHistoryListView } from "@/components/cadet/rank"
 import { EntranceMainView } from "@/components/entrance_campaign"
 import { SpecialityHistoryView } from "@/components/cadet/speciality"
 import { CadetUpdateView } from "@/components/cadet"
+import { CadetListOkView } from "@/components/cadet"
 
 import {
   NotFoundView,
@@ -26,6 +27,11 @@ const routes = [
         path: "cadet",
         component: CadetListView,
         name: "cadet",
+      },
+      {
+        path: "cadet-full",
+        component: CadetListOkView,
+        name: "cadet-full",
       },
       {
         path: "cadet/:id",
