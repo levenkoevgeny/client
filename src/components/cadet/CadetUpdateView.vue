@@ -1,18 +1,6 @@
 <template>
   <div class="container-fluid">
-    <!--    {{ currentCadetData }}-->
-
-    <!--    <br />-->
-    <!--    <VueSelect-->
-    <!--      v-model="selected"-->
-    <!--      :options="[-->
-    <!--        { label: 'Option #1', value: 'option_1' },-->
-    <!--        { label: 'Option #2', value: 'option_2' },-->
-    <!--        { label: 'Option #3', value: 'option_3' },-->
-    <!--      ]"-->
-    <!--      placeholder="Select an option"-->
-    <!--      @search="(search) => console.log('search value:', search)"-->
-    <!--    />-->
+    <v-select :options="options" @search="fetchOptions"> </v-select>
     <br />
     <div>
       <h1 class="my-2 text-decoration-underline">Личное дело</h1>
@@ -1168,6 +1156,7 @@ import getGroupAPIInstance from "@/api/cadet/groupAPI"
 import { debounce } from "lodash/function"
 import { RankHistoryCadetComponent } from "@/components/cadet/rank"
 import { EncouragementCadetComponent } from "@/components/cadet/encouragement"
+import "vue-select/dist/vue-select.css"
 
 export default {
   name: "CadetUpdateView",
@@ -1177,6 +1166,7 @@ export default {
   },
   data() {
     return {
+      options: [],
       selected: "",
       isLoading: true,
       isError: false,
@@ -1354,6 +1344,19 @@ export default {
       this.educationHistoryList = educationHistories
       this.subdivisionList = subdivisions
       this.groupList = groups
+    },
+    async fetchOptions(search, loading) {
+      if (search.length) {
+        loading(true)
+        this.cadetAPIInstance.searchObj.last_name_rus__icontains = search
+        const res = await this.cadetAPIInstance.getItemsList("token is here!!!")
+        const data = await res.data.results
+        let data_str = []
+        data.map((item) => data_str.push(item.last_name_rus))
+        console.log("data", data_str)
+        this.options = data_str
+        loading(false)
+      }
     },
     async getCadetData(cadetId) {
       const res = await this.cadetAPIInstance.getItemData(
