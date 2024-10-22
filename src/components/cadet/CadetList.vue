@@ -306,31 +306,28 @@
       <div class="row">
         <div class="col-6">
           <div class="mb-3">
-            <label for="academy_start_year__gte" class="form-label"
-              >Год поступления (с)</label
+            <label for="academy_start_date__gte" class="form-label"
+              >Дата поступления (с)</label
             >
             <input
-              type="number"
-              min="1970"
+              type="date"
               max="2100"
               class="form-control"
-              id="academy_start_year__gte"
-              v-model="searchForm.academy_start_year__gte"
+              id="academy_start_date__gte"
+              v-model="searchForm.academy_start_date__gte"
             />
           </div>
         </div>
         <div class="col-6">
           <div class="mb-3">
-            <label for="passport_validity_period__lte" class="form-label"
-              >Год поступления (по)</label
+            <label for="academy_start_date__lte" class="form-label"
+              >Дата поступления (по)</label
             >
             <input
-              type="number"
-              min="1970"
-              max="2100"
+              type="date"
               class="form-control"
-              id="passport_validity_period__lte"
-              v-model="searchForm.passport_validity_period__lte"
+              id="academy_start_date__lte"
+              v-model="searchForm.academy_start_date__lte"
             />
           </div>
         </div>

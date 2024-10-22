@@ -1021,7 +1021,6 @@ export default {
         previous: null,
         next: null,
       },
-
       rewardHistoryList: {
         count: "",
         results: [],

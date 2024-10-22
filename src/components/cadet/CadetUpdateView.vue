@@ -1,6 +1,10 @@
 <template>
   <div class="container-fluid">
     {{ currentCadetData }}
+
+    <br />
+    <br />
+    {{ educationHistoryList }}
     <div>
       <h1 class="my-2 text-decoration-underline">Личное дело</h1>
       <div class="mb-3"></div>
@@ -185,6 +189,7 @@
                             class="form-control"
                             name="date_of_birth"
                             id="id_date_of_birth"
+                            v-model="currentCadetData.date_of_birth"
                           />
                         </div>
                         <div class="mb-3">
@@ -343,21 +348,30 @@
                       <thead>
                         <tr>
                           <th>Звание</th>
-                          <th>Дата присвоения</th>
+                          <th>С какого числа присвоено звание</th>
+                          <th>Дата приказа</th>
                           <th>Номер приказа</th>
+                          <th>Чей приказ</th>
                           <th>Доп. информация</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <!--                        <tr-->
-                        <!--                          v-for="rank in orderedRankHistory"-->
-                        <!--                          :key="rank.id"-->
-                        <!--                          class="align-baseline"-->
-                        <!--                        >-->
-                        <!--                          <td>{{ rank.get_rank_str || "Нет данных" }}</td>-->
-                        <!--                          <td>{{ rank.rank_date || "Нет данных" }}</td>-->
-                        <!--                          <td>{{ rank.extra_data || "Нет данных" }}</td>-->
-                        <!--                        </tr>-->
+                        <tr
+                          v-for="rankHistory in orderedRankHistories"
+                          :key="rankHistory.id"
+                          class="align-baseline"
+                        >
+                          <td>
+                            {{ rankHistory.get_rank_str || "Нет данных" }}
+                          </td>
+                          <td>{{ rankHistory.rank_date }}</td>
+                          <td>
+                            {{ rankHistory.rank_order_date || "Нет данных" }}
+                          </td>
+                          <td>{{ rankHistory.rank_order_number }}</td>
+                          <td>{{ rankHistory.get_rank_order_owner_str }}</td>
+                          <td>{{ rankHistory.extra_data || "Нет данных" }}</td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
@@ -409,6 +423,8 @@
                       <thead>
                         <tr>
                           <th>Уровень</th>
+                          <th>Вид учреждения образования</th>
+                          <th>Уровень образования</th>
                           <th>Наименование учебного учреждения</th>
                           <th>Начало обучения</th>
                           <th>Окончание обучекния</th>
@@ -416,15 +432,54 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <!--                        <tr-->
-                        <!--                          v-for="rank in orderedRankHistory"-->
-                        <!--                          :key="rank.id"-->
-                        <!--                          class="align-baseline"-->
-                        <!--                        >-->
-                        <!--                          <td>{{ rank.get_rank_str || "Нет данных" }}</td>-->
-                        <!--                          <td>{{ rank.rank_date || "Нет данных" }}</td>-->
-                        <!--                          <td>{{ rank.extra_data || "Нет данных" }}</td>-->
-                        <!--                        </tr>-->
+                        <tr
+                          v-for="educationHistory in orderedEducationHistories"
+                          :key="educationHistory.id"
+                          class="align-baseline"
+                        >
+                          <td>
+                            {{
+                              educationHistory.get_education_level_str ||
+                              "Нет данных"
+                            }}
+                          </td>
+                          <td>
+                            {{
+                              educationHistory.get_education_kind_str ||
+                              "Нет данных"
+                            }}
+                          </td>
+                          <td>
+                            {{
+                              educationHistory.get_education_level_str ||
+                              "Нет данных"
+                            }}
+                          </td>
+                          <td>
+                            {{
+                              educationHistory.education_graduated ||
+                              "Нет данных"
+                            }}
+                          </td>
+                          <td>
+                            {{
+                              educationHistory.education_graduating_start_year ||
+                              "Нет данных"
+                            }}
+                          </td>
+                          <td>
+                            {{
+                              educationHistory.education_graduating_end_year ||
+                              "Нет данных"
+                            }}
+                          </td>
+                          <td>
+                            {{
+                              educationHistory.education_average_score ||
+                              "Нет данных"
+                            }}
+                          </td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
@@ -1073,8 +1128,20 @@
 
 <script>
 import getCadetAPIInstance from "@/api/cadet/cadetAPI"
-import { debounce } from "lodash/function"
+import getEncouragementAPIInstance from "@/api/cadet/encouragementAPI"
+import getPunishmentAPIInstance from "@/api/cadet/punishmentAPI"
+import getRankHistoryAPIInstance from "@/api/cadet/rankHistoryAPI"
+import getRankAPIInstance from "@/api/cadet/rankAPI"
+import getPositionHistoryAPIInstance from "@/api/cadet/positionHistoryAPI"
+import getSpecialityHistoryAPIInstance from "@/api/cadet/specialityHistoryAPI"
+import getEducationHistoryAPIInstance from "@/api/cadet/educationHistoryAPI"
+import getJobHistoryAPIInstance from "@/api/cadet/jobHistoryAPI"
+import getRewardHistoryAPIInstance from "@/api/cadet/rewardHistoryAPI"
+import getArmyHistoryAPIInstance from "@/api/cadet/armyHistoryAPI"
+import getMVDHistoryAPIInstance from "@/api/cadet/mvdHistoryAPI"
 import getCadetCategoryAPIAPIInstance from "@/api/cadet/cadetCategoryAPI"
+import getOrderOwnerAPIInstance from "@/api/cadet/orderOwnerAPI"
+import { debounce } from "lodash/function"
 
 export default {
   name: "CadetUpdateView",
@@ -1159,8 +1226,73 @@ export default {
       },
       cadetCategoryList: { count: "", results: [], previous: null, next: null },
       subdivisionList: { count: "", results: [], previous: null, next: null },
+      encouragementList: { count: "", results: [], previous: null, next: null },
+      orderOwnerList: { count: "", results: [], previous: null, next: null },
+      encouragementKindList: {
+        count: "",
+        results: [],
+        previous: null,
+        next: null,
+      },
+      punishmentList: { count: "", results: [], previous: null, next: null },
+      rankHistoryList: { count: "", results: [], previous: null, next: null },
+      rankList: { count: "", results: [], previous: null, next: null },
+      positionHistoryList: {
+        count: "",
+        results: [],
+        previous: null,
+        next: null,
+      },
+      specialityHistoryList: {
+        count: "",
+        results: [],
+        previous: null,
+        next: null,
+      },
+      educationHistoryList: {
+        count: "",
+        results: [],
+        previous: null,
+        next: null,
+      },
+      jobHistoryList: {
+        count: "",
+        results: [],
+        previous: null,
+        next: null,
+      },
+      rewardHistoryList: {
+        count: "",
+        results: [],
+        previous: null,
+        next: null,
+      },
+      armyHistoryList: {
+        count: "",
+        results: [],
+        previous: null,
+        next: null,
+      },
+      mvdHistoryList: {
+        count: "",
+        results: [],
+        previous: null,
+        next: null,
+      },
       cadetAPIInstance: getCadetAPIInstance(),
       cadetCategoryAPIInstance: getCadetCategoryAPIAPIInstance(),
+      encouragementAPIInstance: getEncouragementAPIInstance(),
+      punishmentAPIInstance: getPunishmentAPIInstance(),
+      rankHistoryAPIInstance: getRankHistoryAPIInstance(),
+      rankAPIInstance: getRankAPIInstance(),
+      positionHistoryAPIInstance: getPositionHistoryAPIInstance(),
+      specialityHistoryAPIInstance: getSpecialityHistoryAPIInstance(),
+      educationHistoryAPIInstance: getEducationHistoryAPIInstance(),
+      jobHistoryAPIInstance: getJobHistoryAPIInstance(),
+      rewardHistoryAPIInstance: getRewardHistoryAPIInstance(),
+      armyHistoryAPIInstance: getArmyHistoryAPIInstance(),
+      mvdHistoryAPIInstance: getMVDHistoryAPIInstance(),
+      orderOwnerAPIInstance: getOrderOwnerAPIInstance(),
     }
   },
   async created() {
@@ -1168,12 +1300,27 @@ export default {
   },
   methods: {
     async loadData(cadetId) {
-      const [cadet, cadetCategories] = await Promise.all([
+      const [
+        cadet,
+        cadetCategories,
+        rankHistories,
+        ranks,
+        orderOwners,
+        educationHistories,
+      ] = await Promise.all([
         this.getCadetData(cadetId),
         this.getLoadListFunction("cadetCategory")(cadetId),
+        this.getLoadListFunction("rankHistory")(cadetId),
+        this.getLoadListFunction("rank")(),
+        this.getLoadListFunction("orderOwner")(),
+        this.getLoadListFunction("educationHistory")(cadetId),
       ]).catch(() => (this.isError = true))
       this.currentCadetData = cadet
       this.cadetCategoryList = cadetCategories
+      this.rankHistoryList = rankHistories
+      this.rankList = ranks
+      this.orderOwnerList = orderOwners
+      this.educationHistoryList = educationHistories
     },
     async getCadetData(cadetId) {
       const res = await this.cadetAPIInstance.getItemData(
@@ -1184,7 +1331,9 @@ export default {
     },
     getLoadListFunction(modelName) {
       return async (cadetId) => {
-        this[`${modelName}APIInstance`].searchObj.cadet = cadetId
+        if (cadetId) {
+          this[`${modelName}APIInstance`].searchObj.cadet = cadetId
+        }
         const res =
           await this[`${modelName}APIInstance`].getItemsList("token is here!!!")
         return res.data
@@ -1220,6 +1369,18 @@ export default {
   computed: {
     orderedCadetCategories() {
       return this.cadetCategoryList.results
+    },
+    orderedRanks() {
+      return this.rankList.results
+    },
+    orderedEducationHistories() {
+      return this.educationHistoryList.results
+    },
+    orderedOrderOwners() {
+      return this.orderOwnerList.results
+    },
+    orderedRankHistories() {
+      return this.rankHistoryList.results
     },
   },
   watch: {
