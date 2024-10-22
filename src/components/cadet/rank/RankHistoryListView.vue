@@ -91,11 +91,7 @@
           v-model="searchForm.rank"
         >
           <option selected value="">--------</option>
-          <option
-            v-for="rank in orderedRanks"
-            :key="rank.id"
-            :value="rank.id"
-          >
+          <option v-for="rank in orderedRanks" :key="rank.id" :value="rank.id">
             {{ rank.rank }}
           </option>
         </select>
@@ -104,7 +100,7 @@
         <div class="col-6">
           <div class="mb-3">
             <label for="rank_date__gte" class="form-label"
-            >Дата присвоения звания (с)</label
+              >Дата присвоения звания (с)</label
             >
             <input
               type="date"
@@ -117,7 +113,7 @@
         <div class="col-6">
           <div class="mb-3">
             <label for="rank_date__lte" class="form-label"
-            >Дата присвоения звания (по)</label
+              >Дата присвоения звания (по)</label
             >
             <input
               type="date"
@@ -132,7 +128,7 @@
         <div class="col-6">
           <div class="mb-3">
             <label for="rank_order_date__gte" class="form-label"
-            >Дата приказа (с)</label
+              >Дата приказа (с)</label
             >
             <input
               type="date"
@@ -145,7 +141,7 @@
         <div class="col-6">
           <div class="mb-3">
             <label for="rank_order_date__lte" class="form-label"
-            >Дата приказа (по)</label
+              >Дата приказа (по)</label
             >
             <input
               type="date"
@@ -158,7 +154,7 @@
       </div>
       <div class="mb-3">
         <label for="rank_order_number__icontains" class="form-label"
-        >Номер приказа (содержит)</label
+          >Номер приказа (содержит)</label
         >
         <input
           type="text"
@@ -189,7 +185,6 @@
       <button type="button" class="btn btn-primary" @click="clearFilter">
         Сбросить фильтр
       </button>
-
     </template>
   </base-list-layout>
 </template>
@@ -199,7 +194,7 @@ import getCadetAPIInstance from "@/api/cadet/cadetAPI"
 import getOrderOwnerAPIInstance from "@/api/cadet/orderOwnerAPI"
 import getRankAPIInstance from "@/api/cadet/rankAPI"
 import getRankHistoryAPIInstance from "@/api/cadet/rankHistoryAPI"
-import BaseListLayout from "@/components/cadet/BaseListLayout.vue"
+import BaseListLayout from "@/components/layouts/BaseListLayout.vue"
 import { PaginatorView } from "@/components/common"
 import { debounce } from "lodash/function"
 

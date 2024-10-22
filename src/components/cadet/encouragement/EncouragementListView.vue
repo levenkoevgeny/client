@@ -283,7 +283,7 @@ import getEncouragementKindAPIInstance from "@/api/cadet/encouragementKindAPI"
 import getCadetAPIInstance from "@/api/cadet/cadetAPI"
 import getOrderOwnerAPIInstance from "@/api/cadet/orderOwnerAPI"
 
-import BaseListLayout from "@/components/cadet/BaseListLayout.vue"
+import BaseListLayout from "@/components/layouts/BaseListLayout.vue"
 import { PaginatorView } from "@/components/common"
 import EncouragementFormView from "@/components/cadet/encouragement/modals/FormView.vue"
 import { debounce } from "lodash/function"

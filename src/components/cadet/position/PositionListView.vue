@@ -6,8 +6,8 @@
           <button class="nav-link active">
             <span>Всего записей</span
             ><span class="text-body-tertiary fw-semibold"
-          >({{ positionHistoryList.count }})</span
-          >
+              >({{ positionHistoryList.count }})</span
+            >
           </button>
         </li>
       </ul>
@@ -104,7 +104,7 @@
         <div class="col-6">
           <div class="mb-3">
             <label for="position_date__gte" class="form-label"
-            >Дата назначения (с)</label
+              >Дата назначения (с)</label
             >
             <input
               type="date"
@@ -117,7 +117,7 @@
         <div class="col-6">
           <div class="mb-3">
             <label for="position_date__lte" class="form-label"
-            >Дата назначения (по)</label
+              >Дата назначения (по)</label
             >
             <input
               type="date"
@@ -132,7 +132,7 @@
         <div class="col-6">
           <div class="mb-3">
             <label for="position_order_date__gte" class="form-label"
-            >Дата приказа (с)</label
+              >Дата приказа (с)</label
             >
             <input
               type="date"
@@ -145,7 +145,7 @@
         <div class="col-6">
           <div class="mb-3">
             <label for="position_order_date__lte" class="form-label"
-            >Дата приказа (по)</label
+              >Дата приказа (по)</label
             >
             <input
               type="date"
@@ -158,7 +158,7 @@
       </div>
       <div class="mb-3">
         <label for="position_order_number__icontains" class="form-label"
-        >Номер приказа (содержит)</label
+          >Номер приказа (содержит)</label
         >
         <input
           type="text"
@@ -201,7 +201,7 @@ import getPositionHistoryAPIInstance from "@/api/cadet/positionHistoryAPI"
 import { PaginatorView } from "@/components/common"
 import { debounce } from "lodash/function"
 
-import BaseListLayout from "@/components/cadet/BaseListLayout.vue"
+import BaseListLayout from "@/components/layouts/BaseListLayout.vue"
 
 export default {
   name: "PositionListView",
@@ -237,12 +237,13 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [positionHistories, positions, cadets, orderOwners] = await Promise.all([
-          this.getPositionHistories(),
-          this.getPositions(),
-          this.getCadets(),
-          this.getOrderOwners(),
-        ]).catch(() => (this.isError = true))
+        const [positionHistories, positions, cadets, orderOwners] =
+          await Promise.all([
+            this.getPositionHistories(),
+            this.getPositions(),
+            this.getCadets(),
+            this.getOrderOwners(),
+          ]).catch(() => (this.isError = true))
 
         this.positionHistoryList = positionHistories
         this.positionList = positions

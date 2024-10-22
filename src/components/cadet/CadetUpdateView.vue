@@ -1,10 +1,19 @@
 <template>
   <div class="container-fluid">
-    {{ currentCadetData }}
+    <!--    {{ currentCadetData }}-->
 
+    <!--    <br />-->
+    <!--    <VueSelect-->
+    <!--      v-model="selected"-->
+    <!--      :options="[-->
+    <!--        { label: 'Option #1', value: 'option_1' },-->
+    <!--        { label: 'Option #2', value: 'option_2' },-->
+    <!--        { label: 'Option #3', value: 'option_3' },-->
+    <!--      ]"-->
+    <!--      placeholder="Select an option"-->
+    <!--      @search="(search) => console.log('search value:', search)"-->
+    <!--    />-->
     <br />
-    <br />
-    {{ educationHistoryList }}
     <div>
       <h1 class="my-2 text-decoration-underline">Личное дело</h1>
       <div class="mb-3"></div>
@@ -332,724 +341,735 @@
               </div>
               <div
                 class="shadow p-3 mb-3 bg-body-tertiary rounded"
-                id="simple-list-rank-data"
+                id="simple-list-academy-data"
               >
                 <div class="card">
                   <div class="card-body">
-                    <h5 class="card-title">Присвоение званий</h5>
-                    <div
-                      class="d-flex align-items-center justify-content-end mb-4"
-                    >
-                      <button type="button" class="btn btn-warning">
-                        Добавить запись
-                      </button>
-                    </div>
-                    <table class="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>Звание</th>
-                          <th>С какого числа присвоено звание</th>
-                          <th>Дата приказа</th>
-                          <th>Номер приказа</th>
-                          <th>Чей приказ</th>
-                          <th>Доп. информация</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr
-                          v-for="rankHistory in orderedRankHistories"
-                          :key="rankHistory.id"
-                          class="align-baseline"
-                        >
-                          <td>
-                            {{ rankHistory.get_rank_str || "Нет данных" }}
-                          </td>
-                          <td>{{ rankHistory.rank_date }}</td>
-                          <td>
-                            {{ rankHistory.rank_order_date || "Нет данных" }}
-                          </td>
-                          <td>{{ rankHistory.rank_order_number }}</td>
-                          <td>{{ rankHistory.get_rank_order_owner_str }}</td>
-                          <td>{{ rankHistory.extra_data || "Нет данных" }}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="shadow p-3 mb-3 bg-body-tertiary rounded"
-                id="simple-list-military-office-data"
-              >
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Воинский учет</h5>
+                    <h5 class="card-title">Обучение в Академии МВД</h5>
                     <div class="row">
-                      <div class="col-4">
+                      <div class="col-lg-3">
+                        <div class="mb-3">
+                          <label class="form-label" for="id_subdivision"
+                            >Дата начала обучения</label
+                          >
+                          <input
+                            type="date"
+                            class="form-control"
+                            v-model="currentCadetData.academy_start_date"
+                            id="id_subdivision"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-lg-3">
+                        <div class="mb-3">
+                          <label class="form-label" for="id_subdivision"
+                            >Дата окончания обучения</label
+                          >
+                          <input
+                            type="date"
+                            class="form-control"
+                            v-model="currentCadetData.academy_end_date"
+                            id="id_subdivision"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-lg-3">
                         <div class="mb-3">
                           <label class="form-label" for="id_category"
-                            >С воинского учета снят</label
-                          >
-                          <input type="date" class="form-control" />
-                        </div>
-                      </div>
-                      <div class="col-8">
-                        <div class="mb-3">
-                          <label class="form-label" for="id_category"
-                            >Отношение военного комиссариата</label
-                          >
-                          <input type="text" class="form-control" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="shadow p-3 mb-3 bg-body-tertiary rounded"
-                id="simple-list-education-data"
-              >
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Образование</h5>
-                    <div
-                      class="d-flex align-items-center justify-content-end mb-4"
-                    >
-                      <button type="button" class="btn btn-warning">
-                        Добавить запись
-                      </button>
-                    </div>
-                    <table class="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>Уровень</th>
-                          <th>Вид учреждения образования</th>
-                          <th>Уровень образования</th>
-                          <th>Наименование учебного учреждения</th>
-                          <th>Начало обучения</th>
-                          <th>Окончание обучекния</th>
-                          <th>Средний бал</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr
-                          v-for="educationHistory in orderedEducationHistories"
-                          :key="educationHistory.id"
-                          class="align-baseline"
-                        >
-                          <td>
-                            {{
-                              educationHistory.get_education_level_str ||
-                              "Нет данных"
-                            }}
-                          </td>
-                          <td>
-                            {{
-                              educationHistory.get_education_kind_str ||
-                              "Нет данных"
-                            }}
-                          </td>
-                          <td>
-                            {{
-                              educationHistory.get_education_level_str ||
-                              "Нет данных"
-                            }}
-                          </td>
-                          <td>
-                            {{
-                              educationHistory.education_graduated ||
-                              "Нет данных"
-                            }}
-                          </td>
-                          <td>
-                            {{
-                              educationHistory.education_graduating_start_year ||
-                              "Нет данных"
-                            }}
-                          </td>
-                          <td>
-                            {{
-                              educationHistory.education_graduating_end_year ||
-                              "Нет данных"
-                            }}
-                          </td>
-                          <td>
-                            {{
-                              educationHistory.education_average_score ||
-                              "Нет данных"
-                            }}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="shadow p-3 mb-3 bg-body-tertiary rounded"
-                id="simple-list-foreign-language-data"
-              >
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Иностранные языки</h5>
-                    <div
-                      class="d-flex align-items-center justify-content-end mb-4"
-                    >
-                      <button type="button" class="btn btn-warning">
-                        Добавить запись
-                      </button>
-                    </div>
-                    <table class="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>Язык</th>
-                          <th>Уровень владения</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <!--                        <tr-->
-                        <!--                          v-for="rank in orderedRankHistory"-->
-                        <!--                          :key="rank.id"-->
-                        <!--                          class="align-baseline"-->
-                        <!--                        >-->
-                        <!--                          <td>{{ rank.get_rank_str || "Нет данных" }}</td>-->
-                        <!--                          <td>{{ rank.rank_date || "Нет данных" }}</td>-->
-                        <!--                          <td>{{ rank.extra_data || "Нет данных" }}</td>-->
-                        <!--                        </tr>-->
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="shadow p-3 mb-3 bg-body-tertiary rounded"
-                id="simple-list-scientific-works-data"
-              >
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Научные труды и изобретения</h5>
-                    <div
-                      class="d-flex align-items-center justify-content-end mb-4"
-                    >
-                      <button type="button" class="btn btn-warning">
-                        Добавить запись
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="shadow p-3 mb-3 bg-body-tertiary rounded"
-                id="simple-list-job-data"
-              >
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Трудовая деятельность</h5>
-                    <div
-                      class="d-flex align-items-center justify-content-end mb-4"
-                    >
-                      <button type="button" class="btn btn-warning">
-                        Добавить запись
-                      </button>
-                    </div>
-                    <table class="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>С какого числа</th>
-                          <th>По какое время</th>
-                          <th>Место работы</th>
-                          <th>Должность</th>
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="shadow p-3 mb-3 bg-body-tertiary rounded"
-                id="simple-list-army-service-data"
-              >
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Прохождение службы в ВС РБ</h5>
-                    <div
-                      class="d-flex align-items-center justify-content-end mb-4"
-                    >
-                      <button type="button" class="btn btn-warning">
-                        Добавить запись
-                      </button>
-                    </div>
-                    <table class="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>С какого времени</th>
-                          <th>По какое время</th>
-                          <th>Должность</th>
-                          <th>Место прохождения службы</th>
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="shadow p-3 mb-3 bg-body-tertiary rounded"
-                id="simple-list-mvd-service-data"
-              >
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Прохождение службы в МВД РБ</h5>
-                    <div
-                      class="d-flex align-items-center justify-content-end mb-4"
-                    >
-                      <button type="button" class="btn btn-warning">
-                        Добавить запись
-                      </button>
-                    </div>
-                    <table class="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>С какого времени</th>
-                          <th>По какое время</th>
-                          <th>Должность</th>
-                          <th>Место прохождения службы</th>
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="shadow p-3 mb-3 bg-body-tertiary rounded"
-                id="simple-list-rewards-data"
-              >
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Награды</h5>
-                    <div
-                      class="d-flex align-items-center justify-content-end mb-4"
-                    >
-                      <button type="button" class="btn btn-warning">
-                        Добавить запись
-                      </button>
-                    </div>
-                    <table class="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>Чем награжден</th>
-                          <th>За что награжден</th>
-                          <th>Основание</th>
-                          <th>Номер приказа, дата приказа</th>
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="shadow p-3 mb-3 bg-body-tertiary rounded"
-                id="simple-list-encouragements-data"
-              >
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Поощрения</h5>
-                    <div
-                      class="d-flex align-items-center justify-content-end mb-4"
-                    >
-                      <button type="button" class="btn btn-warning">
-                        Добавить запись
-                      </button>
-                    </div>
-                    <table class="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>Поощрение</th>
-                          <th>Дата</th>
-                          <th>Приказ</th>
-                          <th>Чей приказ</th>
-                          <th>Фабула</th>
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="shadow p-3 mb-3 bg-body-tertiary rounded"
-                id="simple-list-punishments-data"
-              >
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Дисциплинарные взыскания</h5>
-                    <div
-                      class="d-flex align-items-center justify-content-end mb-4"
-                    >
-                      <button type="button" class="btn btn-warning">
-                        Добавить запись
-                      </button>
-                    </div>
-                    <table class="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>Взыскание</th>
-                          <th>Дата наложения</th>
-                          <th>Приказ о наложении</th>
-                          <th>Чей приказ</th>
-                          <th>Фабула</th>
-                          <th>Дата снятия</th>
-                          <th>Приказ о снятии</th>
-                          <th>Чей приказ</th>
-                          <th>Фабула</th>
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="shadow p-3 mb-3 bg-body-tertiary rounded"
-                id="simple-list-ranks-data"
-              >
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Должности</h5>
-                    <div
-                      class="d-flex align-items-center justify-content-end mb-4"
-                    >
-                      <button type="button" class="btn btn-warning">
-                        Добавить запись
-                      </button>
-                    </div>
-                    <table class="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>Должность</th>
-                          <th>Дата назначения</th>
-                          <th>Приказ о назначении</th>
-                          <th>Дата приказа</th>
-                          <th>Чей приказ</th>
-                          <th>Фабула</th>
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="shadow p-3 mb-3 bg-body-tertiary rounded"
-                id="simple-list-specialities-data"
-              >
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Специальности</h5>
-                    <div
-                      class="d-flex align-items-center justify-content-end mb-4"
-                    >
-                      <button type="button" class="btn btn-warning">
-                        Добавить запись
-                      </button>
-                    </div>
-                    <table class="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>Специальность</th>
-                          <th>Дата</th>
-                          <th>Приказ о назначении</th>
-                          <th>Дата приказа</th>
-                          <th>Чей приказ</th>
-                          <th>Фабула</th>
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="shadow p-3 mb-3 bg-body-tertiary rounded"
-                id="simple-list-parents-data"
-              >
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Данные о родителях</h5>
-                    <div class="row">
-                      <div class="col-lg-6">
-                        <div class="shadow p-3 bg-body-tertiary rounded">
-                          <h5>Отец</h5>
-                          <div class="row">
-                            <div class="col-4">
-                              <div class="mb-3">
-                                <label
-                                  class="form-label"
-                                  for="id_father_last_name"
-                                  >Фамилия:</label
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  name="father_last_name"
-                                  maxlength="30"
-                                  id="id_father_last_name"
-                                />
-                              </div>
-                            </div>
-                            <div class="col-4">
-                              <div class="mb-3">
-                                <label
-                                  class="form-label"
-                                  for="id_father_first_name"
-                                  >Имя</label
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  name="father_first_name"
-                                  maxlength="30"
-                                  id="id_father_first_name"
-                                />
-                              </div>
-                            </div>
-                            <div class="col-4">
-                              <div class="mb-3">
-                                <label
-                                  class="form-label"
-                                  for="id_father_patronymic"
-                                  >Отчество</label
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  name="father_patronymic"
-                                  maxlength="30"
-                                  id="id_father_patronymic"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-4">
-                              <div class="mb-3">
-                                <label
-                                  class="form-label"
-                                  for="id_father_date_of_birth"
-                                  >Дата рождения</label
-                                >
-                                <input
-                                  type="date"
-                                  class="form-control"
-                                  name="father_date_of_birth"
-                                  id="id_father_date_of_birth"
-                                />
-                              </div>
-                            </div>
-                            <div class="col-8">
-                              <div class="mb-3">
-                                <label
-                                  class="form-label"
-                                  for="id_father_phone_number"
-                                  >Номер телефона</label
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  name="father_phone_number"
-                                  maxlength="30"
-                                  id="id_father_phone_number"
-                                />
-                              </div>
-                            </div>
-                            <div class="col-4"></div>
-                          </div>
-                          <div class="row">
-                            <div class="col-12">
-                              <div class="mb-3">
-                                <label
-                                  class="form-label"
-                                  for="id_father_place_of_work"
-                                  >Место работы</label
-                                >
-                                <textarea
-                                  class="form-control"
-                                  name="father_place_of_work"
-                                  cols="40"
-                                  rows="2"
-                                  id="id_father_place_of_work"
-                                ></textarea>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-6">
-                        <div class="shadow p-3 bg-body-tertiary rounded">
-                          <h5>Мать</h5>
-                          <div class="row">
-                            <div class="col-4">
-                              <div class="mb-3">
-                                <label
-                                  class="form-label"
-                                  for="id_mother_last_name"
-                                  >Фамилия:</label
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  name="mother_last_name"
-                                  maxlength="30"
-                                  id="id_mother_last_name"
-                                />
-                              </div>
-                            </div>
-                            <div class="col-4">
-                              <div class="mb-3">
-                                <label
-                                  class="form-label"
-                                  for="id_mother_first_name"
-                                  >Имя</label
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  name="mother_first_name"
-                                  maxlength="30"
-                                  id="id_mother_first_name"
-                                />
-                              </div>
-                            </div>
-                            <div class="col-4">
-                              <div class="mb-3">
-                                <label
-                                  class="form-label"
-                                  for="id_mother_patronymic"
-                                  >Отчество</label
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  name="mother_patronymic"
-                                  maxlength="30"
-                                  id="id_mother_patronymic"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-4">
-                              <div class="mb-3">
-                                <label
-                                  class="form-label"
-                                  for="id_mother_date_of_birth"
-                                  >Дата рождения</label
-                                >
-                                <input
-                                  type="date"
-                                  class="form-control"
-                                  name="mother_date_of_birth"
-                                  id="id_mother_date_of_birth"
-                                />
-                              </div>
-                            </div>
-                            <div class="col-8">
-                              <div class="mb-3">
-                                <label
-                                  class="form-label"
-                                  for="id_mother_phone_number"
-                                  >Номер телефона</label
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  name="mother_phone_number"
-                                  maxlength="30"
-                                  id="id_mother_phone_number"
-                                />
-                              </div>
-                            </div>
-                            <div class="col-4"></div>
-                          </div>
-                          <div class="row">
-                            <div class="col-12">
-                              <div class="mb-3">
-                                <label
-                                  class="form-label"
-                                  for="id_father_place_of_work"
-                                  >Место работы</label
-                                >
-                                <textarea
-                                  class="form-control"
-                                  name="father_place_of_work"
-                                  cols="40"
-                                  rows="2"
-                                  id="id_father_place_of_work"
-                                ></textarea>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="shadow p-3 mb-3 bg-body-tertiary rounded"
-                id="simple-list-marital-status-data"
-              >
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Семейное положение</h5>
-                    <div class="row">
-                      <div class="col-4">
-                        <div class="mb-3">
-                          <label class="form-label" for="id_last_name_rus"
-                            >Семейное положение</label
+                            >Факультет</label
                           >
                           <select
-                            id="id_last_name_rus"
-                            name="last_name_rus"
                             class="form-select"
+                            name="subdivision"
+                            id="id_subdivision"
+                            v-model="currentCadetData.subdivision"
                           >
-                            <option value="">---------</option>
+                            <option value="null" selected>---------</option>
+                            <option
+                              v-for="subdivision in orderedSubdivisions"
+                              :value="subdivision.id"
+                              :key="subdivision.id"
+                            >
+                              {{ subdivision.subdivision_name }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-lg-3">
+                        <div class="mb-3">
+                          <label class="form-label" for="id_category"
+                            >Группа</label
+                          >
+                          <select
+                            class="form-select"
+                            name="subdivision"
+                            id="id_subdivision"
+                            v-model="currentCadetData.group"
+                          >
+                            <option value="null" selected>---------</option>
+                            <option
+                              v-for="group in orderedGroups"
+                              :value="group.id"
+                              :key="group.id"
+                            >
+                              {{ group.group_name }}
+                            </option>
                           </select>
                         </div>
                       </div>
                     </div>
-
-                    <div
-                      class="d-flex align-items-center justify-content-end mb-4"
-                    >
-                      <button type="button" class="btn btn-warning">
-                        Добавить запись
-                      </button>
-                    </div>
-                    <table class="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>
-                            Фамилия, имя, отчество жены (мужа), детей и лиц,
-                            находящихся на иждивении
-                          </th>
-                          <th>Степень родства</th>
-                          <th>Приказ о назначении</th>
-                          <th>Число, месяц, год и место рождения</th>
-                          <th>
-                            Основание: номер и дата свидетельства о браке, о
-                            рождении, кем выдано
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
                   </div>
                 </div>
               </div>
+
+              <RankHistoryCadetComponent :cadet-id="$route.params.id" />
+              <EncouragementCadetComponent :cadet-id="$route.params.id" />
+
+              <!--              <div-->
+              <!--                class="shadow p-3 mb-3 bg-body-tertiary rounded"-->
+              <!--                id="simple-list-military-office-data"-->
+              <!--              >-->
+              <!--                <div class="card">-->
+              <!--                  <div class="card-body">-->
+              <!--                    <h5 class="card-title">Воинский учет</h5>-->
+              <!--                    <div class="row">-->
+              <!--                      <div class="col-4">-->
+              <!--                        <div class="mb-3">-->
+              <!--                          <label class="form-label" for="id_category"-->
+              <!--                            >С воинского учета снят</label-->
+              <!--                          >-->
+              <!--                          <input type="date" class="form-control" />-->
+              <!--                        </div>-->
+              <!--                      </div>-->
+              <!--                      <div class="col-8">-->
+              <!--                        <div class="mb-3">-->
+              <!--                          <label class="form-label" for="id_category"-->
+              <!--                            >Отношение военного комиссариата</label-->
+              <!--                          >-->
+              <!--                          <input type="text" class="form-control" />-->
+              <!--                        </div>-->
+              <!--                      </div>-->
+              <!--                    </div>-->
+              <!--                  </div>-->
+              <!--                </div>-->
+              <!--              </div>-->
+              <!--              <div-->
+              <!--                class="shadow p-3 mb-3 bg-body-tertiary rounded"-->
+              <!--                id="simple-list-education-data"-->
+              <!--              >-->
+              <!--                <div class="card">-->
+              <!--                  <div class="card-body">-->
+              <!--                    <h5 class="card-title">Образование</h5>-->
+              <!--                    <div-->
+              <!--                      class="d-flex align-items-center justify-content-end mb-4"-->
+              <!--                    >-->
+              <!--                      <button type="button" class="btn btn-warning">-->
+              <!--                        Добавить запись-->
+              <!--                      </button>-->
+              <!--                    </div>-->
+              <!--                    <table class="table table-hover">-->
+              <!--                      <thead>-->
+              <!--                        <tr>-->
+              <!--                          <th>Уровень</th>-->
+              <!--                          <th>Вид учреждения образования</th>-->
+              <!--                          <th>Уровень образования</th>-->
+              <!--                          <th>Наименование учебного учреждения</th>-->
+              <!--                          <th>Начало обучения</th>-->
+              <!--                          <th>Окончание обучекния</th>-->
+              <!--                          <th>Средний бал</th>-->
+              <!--                        </tr>-->
+              <!--                      </thead>-->
+              <!--                      <tbody>-->
+              <!--                        <tr-->
+              <!--                          v-for="educationHistory in orderedEducationHistories"-->
+              <!--                          :key="educationHistory.id"-->
+              <!--                          class="align-baseline"-->
+              <!--                        >-->
+              <!--                          <td>-->
+              <!--                            {{-->
+              <!--                              educationHistory.get_education_level_str ||-->
+              <!--                              "Нет данных"-->
+              <!--                            }}-->
+              <!--                          </td>-->
+              <!--                          <td>-->
+              <!--                            {{-->
+              <!--                              educationHistory.get_education_kind_str ||-->
+              <!--                              "Нет данных"-->
+              <!--                            }}-->
+              <!--                          </td>-->
+              <!--                          <td>-->
+              <!--                            {{-->
+              <!--                              educationHistory.get_education_level_str ||-->
+              <!--                              "Нет данных"-->
+              <!--                            }}-->
+              <!--                          </td>-->
+              <!--                          <td>-->
+              <!--                            {{-->
+              <!--                              educationHistory.education_graduated ||-->
+              <!--                              "Нет данных"-->
+              <!--                            }}-->
+              <!--                          </td>-->
+              <!--                          <td>-->
+              <!--                            {{-->
+              <!--                              educationHistory.education_graduating_start_year ||-->
+              <!--                              "Нет данных"-->
+              <!--                            }}-->
+              <!--                          </td>-->
+              <!--                          <td>-->
+              <!--                            {{-->
+              <!--                              educationHistory.education_graduating_end_year ||-->
+              <!--                              "Нет данных"-->
+              <!--                            }}-->
+              <!--                          </td>-->
+              <!--                          <td>-->
+              <!--                            {{-->
+              <!--                              educationHistory.education_average_score ||-->
+              <!--                              "Нет данных"-->
+              <!--                            }}-->
+              <!--                          </td>-->
+              <!--                        </tr>-->
+              <!--                      </tbody>-->
+              <!--                    </table>-->
+              <!--                  </div>-->
+              <!--                </div>-->
+              <!--              </div>-->
+              <!--              <div-->
+              <!--                class="shadow p-3 mb-3 bg-body-tertiary rounded"-->
+              <!--                id="simple-list-foreign-language-data"-->
+              <!--              >-->
+              <!--                <div class="card">-->
+              <!--                  <div class="card-body">-->
+              <!--                    <h5 class="card-title">Иностранные языки</h5>-->
+              <!--                    <div-->
+              <!--                      class="d-flex align-items-center justify-content-end mb-4"-->
+              <!--                    >-->
+              <!--                      <button type="button" class="btn btn-warning">-->
+              <!--                        Добавить запись-->
+              <!--                      </button>-->
+              <!--                    </div>-->
+              <!--                    <table class="table table-hover">-->
+              <!--                      <thead>-->
+              <!--                        <tr>-->
+              <!--                          <th>Язык</th>-->
+              <!--                          <th>Уровень владения</th>-->
+              <!--                        </tr>-->
+              <!--                      </thead>-->
+              <!--                      <tbody>-->
+              <!--                        &lt;!&ndash;                        <tr&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                          v-for="rank in orderedRankHistory"&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                          :key="rank.id"&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                          class="align-baseline"&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                        >&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                          <td>{{ rank.get_rank_str || "Нет данных" }}</td>&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                          <td>{{ rank.rank_date || "Нет данных" }}</td>&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                          <td>{{ rank.extra_data || "Нет данных" }}</td>&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                        </tr>&ndash;&gt;-->
+              <!--                      </tbody>-->
+              <!--                    </table>-->
+              <!--                  </div>-->
+              <!--                </div>-->
+              <!--              </div>-->
+              <!--              <div-->
+              <!--                class="shadow p-3 mb-3 bg-body-tertiary rounded"-->
+              <!--                id="simple-list-scientific-works-data"-->
+              <!--              >-->
+              <!--                <div class="card">-->
+              <!--                  <div class="card-body">-->
+              <!--                    <h5 class="card-title">Научные труды и изобретения</h5>-->
+              <!--                    <div-->
+              <!--                      class="d-flex align-items-center justify-content-end mb-4"-->
+              <!--                    >-->
+              <!--                      <button type="button" class="btn btn-warning">-->
+              <!--                        Добавить запись-->
+              <!--                      </button>-->
+              <!--                    </div>-->
+              <!--                  </div>-->
+              <!--                </div>-->
+              <!--              </div>-->
+              <!--              <div-->
+              <!--                class="shadow p-3 mb-3 bg-body-tertiary rounded"-->
+              <!--                id="simple-list-job-data"-->
+              <!--              >-->
+              <!--                <div class="card">-->
+              <!--                  <div class="card-body">-->
+              <!--                    <h5 class="card-title">Трудовая деятельность</h5>-->
+              <!--                    <div-->
+              <!--                      class="d-flex align-items-center justify-content-end mb-4"-->
+              <!--                    >-->
+              <!--                      <button type="button" class="btn btn-warning">-->
+              <!--                        Добавить запись-->
+              <!--                      </button>-->
+              <!--                    </div>-->
+              <!--                    <table class="table table-hover">-->
+              <!--                      <thead>-->
+              <!--                        <tr>-->
+              <!--                          <th>С какого числа</th>-->
+              <!--                          <th>По какое время</th>-->
+              <!--                          <th>Место работы</th>-->
+              <!--                          <th>Должность</th>-->
+              <!--                        </tr>-->
+              <!--                      </thead>-->
+              <!--                      <tbody></tbody>-->
+              <!--                    </table>-->
+              <!--                  </div>-->
+              <!--                </div>-->
+              <!--              </div>-->
+              <!--              <div-->
+              <!--                class="shadow p-3 mb-3 bg-body-tertiary rounded"-->
+              <!--                id="simple-list-army-service-data"-->
+              <!--              >-->
+              <!--                <div class="card">-->
+              <!--                  <div class="card-body">-->
+              <!--                    <h5 class="card-title">Прохождение службы в ВС РБ</h5>-->
+              <!--                    <div-->
+              <!--                      class="d-flex align-items-center justify-content-end mb-4"-->
+              <!--                    >-->
+              <!--                      <button type="button" class="btn btn-warning">-->
+              <!--                        Добавить запись-->
+              <!--                      </button>-->
+              <!--                    </div>-->
+              <!--                    <table class="table table-hover">-->
+              <!--                      <thead>-->
+              <!--                        <tr>-->
+              <!--                          <th>С какого времени</th>-->
+              <!--                          <th>По какое время</th>-->
+              <!--                          <th>Должность</th>-->
+              <!--                          <th>Место прохождения службы</th>-->
+              <!--                        </tr>-->
+              <!--                      </thead>-->
+              <!--                      <tbody></tbody>-->
+              <!--                    </table>-->
+              <!--                  </div>-->
+              <!--                </div>-->
+              <!--              </div>-->
+              <!--              <div-->
+              <!--                class="shadow p-3 mb-3 bg-body-tertiary rounded"-->
+              <!--                id="simple-list-mvd-service-data"-->
+              <!--              >-->
+              <!--                <div class="card">-->
+              <!--                  <div class="card-body">-->
+              <!--                    <h5 class="card-title">Прохождение службы в МВД РБ</h5>-->
+              <!--                    <div-->
+              <!--                      class="d-flex align-items-center justify-content-end mb-4"-->
+              <!--                    >-->
+              <!--                      <button type="button" class="btn btn-warning">-->
+              <!--                        Добавить запись-->
+              <!--                      </button>-->
+              <!--                    </div>-->
+              <!--                    <table class="table table-hover">-->
+              <!--                      <thead>-->
+              <!--                        <tr>-->
+              <!--                          <th>С какого времени</th>-->
+              <!--                          <th>По какое время</th>-->
+              <!--                          <th>Должность</th>-->
+              <!--                          <th>Место прохождения службы</th>-->
+              <!--                        </tr>-->
+              <!--                      </thead>-->
+              <!--                      <tbody></tbody>-->
+              <!--                    </table>-->
+              <!--                  </div>-->
+              <!--                </div>-->
+              <!--              </div>-->
+              <!--              <div-->
+              <!--                class="shadow p-3 mb-3 bg-body-tertiary rounded"-->
+              <!--                id="simple-list-rewards-data"-->
+              <!--              >-->
+              <!--                <div class="card">-->
+              <!--                  <div class="card-body">-->
+              <!--                    <h5 class="card-title">Награды</h5>-->
+              <!--                    <div-->
+              <!--                      class="d-flex align-items-center justify-content-end mb-4"-->
+              <!--                    >-->
+              <!--                      <button type="button" class="btn btn-warning">-->
+              <!--                        Добавить запись-->
+              <!--                      </button>-->
+              <!--                    </div>-->
+              <!--                    <table class="table table-hover">-->
+              <!--                      <thead>-->
+              <!--                        <tr>-->
+              <!--                          <th>Чем награжден</th>-->
+              <!--                          <th>За что награжден</th>-->
+              <!--                          <th>Основание</th>-->
+              <!--                          <th>Номер приказа, дата приказа</th>-->
+              <!--                        </tr>-->
+              <!--                      </thead>-->
+              <!--                      <tbody></tbody>-->
+              <!--                    </table>-->
+              <!--                  </div>-->
+              <!--                </div>-->
+              <!--              </div>-->
+
+              <!--              <div-->
+              <!--                class="shadow p-3 mb-3 bg-body-tertiary rounded"-->
+              <!--                id="simple-list-punishments-data"-->
+              <!--              >-->
+              <!--                <div class="card">-->
+              <!--                  <div class="card-body">-->
+              <!--                    <h5 class="card-title">Дисциплинарные взыскания</h5>-->
+              <!--                    <div-->
+              <!--                      class="d-flex align-items-center justify-content-end mb-4"-->
+              <!--                    >-->
+              <!--                      <button type="button" class="btn btn-warning">-->
+              <!--                        Добавить запись-->
+              <!--                      </button>-->
+              <!--                    </div>-->
+              <!--                    <table class="table table-hover">-->
+              <!--                      <thead>-->
+              <!--                        <tr>-->
+              <!--                          <th>Взыскание</th>-->
+              <!--                          <th>Дата наложения</th>-->
+              <!--                          <th>Приказ о наложении</th>-->
+              <!--                          <th>Чей приказ</th>-->
+              <!--                          <th>Фабула</th>-->
+              <!--                          <th>Дата снятия</th>-->
+              <!--                          <th>Приказ о снятии</th>-->
+              <!--                          <th>Чей приказ</th>-->
+              <!--                          <th>Фабула</th>-->
+              <!--                        </tr>-->
+              <!--                      </thead>-->
+              <!--                      <tbody></tbody>-->
+              <!--                    </table>-->
+              <!--                  </div>-->
+              <!--                </div>-->
+              <!--              </div>-->
+              <!--              <div-->
+              <!--                class="shadow p-3 mb-3 bg-body-tertiary rounded"-->
+              <!--                id="simple-list-ranks-data"-->
+              <!--              >-->
+              <!--                <div class="card">-->
+              <!--                  <div class="card-body">-->
+              <!--                    <h5 class="card-title">Должности</h5>-->
+              <!--                    <div-->
+              <!--                      class="d-flex align-items-center justify-content-end mb-4"-->
+              <!--                    >-->
+              <!--                      <button type="button" class="btn btn-warning">-->
+              <!--                        Добавить запись-->
+              <!--                      </button>-->
+              <!--                    </div>-->
+              <!--                    <table class="table table-hover">-->
+              <!--                      <thead>-->
+              <!--                        <tr>-->
+              <!--                          <th>Должность</th>-->
+              <!--                          <th>Дата назначения</th>-->
+              <!--                          <th>Приказ о назначении</th>-->
+              <!--                          <th>Дата приказа</th>-->
+              <!--                          <th>Чей приказ</th>-->
+              <!--                          <th>Фабула</th>-->
+              <!--                        </tr>-->
+              <!--                      </thead>-->
+              <!--                      <tbody></tbody>-->
+              <!--                    </table>-->
+              <!--                  </div>-->
+              <!--                </div>-->
+              <!--              </div>-->
+              <!--              <div-->
+              <!--                class="shadow p-3 mb-3 bg-body-tertiary rounded"-->
+              <!--                id="simple-list-specialities-data"-->
+              <!--              >-->
+              <!--                <div class="card">-->
+              <!--                  <div class="card-body">-->
+              <!--                    <h5 class="card-title">Специальности</h5>-->
+              <!--                    <div-->
+              <!--                      class="d-flex align-items-center justify-content-end mb-4"-->
+              <!--                    >-->
+              <!--                      <button type="button" class="btn btn-warning">-->
+              <!--                        Добавить запись-->
+              <!--                      </button>-->
+              <!--                    </div>-->
+              <!--                    <table class="table table-hover">-->
+              <!--                      <thead>-->
+              <!--                        <tr>-->
+              <!--                          <th>Специальность</th>-->
+              <!--                          <th>Дата</th>-->
+              <!--                          <th>Приказ о назначении</th>-->
+              <!--                          <th>Дата приказа</th>-->
+              <!--                          <th>Чей приказ</th>-->
+              <!--                          <th>Фабула</th>-->
+              <!--                        </tr>-->
+              <!--                      </thead>-->
+              <!--                      <tbody></tbody>-->
+              <!--                    </table>-->
+              <!--                  </div>-->
+              <!--                </div>-->
+              <!--              </div>-->
+              <!--              <div-->
+              <!--                class="shadow p-3 mb-3 bg-body-tertiary rounded"-->
+              <!--                id="simple-list-parents-data"-->
+              <!--              >-->
+              <!--                <div class="card">-->
+              <!--                  <div class="card-body">-->
+              <!--                    <h5 class="card-title">Данные о родителях</h5>-->
+              <!--                    <div class="row">-->
+              <!--                      <div class="col-lg-6">-->
+              <!--                        <div class="shadow p-3 bg-body-tertiary rounded">-->
+              <!--                          <h5>Отец</h5>-->
+              <!--                          <div class="row">-->
+              <!--                            <div class="col-4">-->
+              <!--                              <div class="mb-3">-->
+              <!--                                <label-->
+              <!--                                  class="form-label"-->
+              <!--                                  for="id_father_last_name"-->
+              <!--                                  >Фамилия:</label-->
+              <!--                                >-->
+              <!--                                <input-->
+              <!--                                  type="text"-->
+              <!--                                  class="form-control"-->
+              <!--                                  name="father_last_name"-->
+              <!--                                  maxlength="30"-->
+              <!--                                  id="id_father_last_name"-->
+              <!--                                />-->
+              <!--                              </div>-->
+              <!--                            </div>-->
+              <!--                            <div class="col-4">-->
+              <!--                              <div class="mb-3">-->
+              <!--                                <label-->
+              <!--                                  class="form-label"-->
+              <!--                                  for="id_father_first_name"-->
+              <!--                                  >Имя</label-->
+              <!--                                >-->
+              <!--                                <input-->
+              <!--                                  type="text"-->
+              <!--                                  class="form-control"-->
+              <!--                                  name="father_first_name"-->
+              <!--                                  maxlength="30"-->
+              <!--                                  id="id_father_first_name"-->
+              <!--                                />-->
+              <!--                              </div>-->
+              <!--                            </div>-->
+              <!--                            <div class="col-4">-->
+              <!--                              <div class="mb-3">-->
+              <!--                                <label-->
+              <!--                                  class="form-label"-->
+              <!--                                  for="id_father_patronymic"-->
+              <!--                                  >Отчество</label-->
+              <!--                                >-->
+              <!--                                <input-->
+              <!--                                  type="text"-->
+              <!--                                  class="form-control"-->
+              <!--                                  name="father_patronymic"-->
+              <!--                                  maxlength="30"-->
+              <!--                                  id="id_father_patronymic"-->
+              <!--                                />-->
+              <!--                              </div>-->
+              <!--                            </div>-->
+              <!--                          </div>-->
+              <!--                          <div class="row">-->
+              <!--                            <div class="col-4">-->
+              <!--                              <div class="mb-3">-->
+              <!--                                <label-->
+              <!--                                  class="form-label"-->
+              <!--                                  for="id_father_date_of_birth"-->
+              <!--                                  >Дата рождения</label-->
+              <!--                                >-->
+              <!--                                <input-->
+              <!--                                  type="date"-->
+              <!--                                  class="form-control"-->
+              <!--                                  name="father_date_of_birth"-->
+              <!--                                  id="id_father_date_of_birth"-->
+              <!--                                />-->
+              <!--                              </div>-->
+              <!--                            </div>-->
+              <!--                            <div class="col-8">-->
+              <!--                              <div class="mb-3">-->
+              <!--                                <label-->
+              <!--                                  class="form-label"-->
+              <!--                                  for="id_father_phone_number"-->
+              <!--                                  >Номер телефона</label-->
+              <!--                                >-->
+              <!--                                <input-->
+              <!--                                  type="text"-->
+              <!--                                  class="form-control"-->
+              <!--                                  name="father_phone_number"-->
+              <!--                                  maxlength="30"-->
+              <!--                                  id="id_father_phone_number"-->
+              <!--                                />-->
+              <!--                              </div>-->
+              <!--                            </div>-->
+              <!--                            <div class="col-4"></div>-->
+              <!--                          </div>-->
+              <!--                          <div class="row">-->
+              <!--                            <div class="col-12">-->
+              <!--                              <div class="mb-3">-->
+              <!--                                <label-->
+              <!--                                  class="form-label"-->
+              <!--                                  for="id_father_place_of_work"-->
+              <!--                                  >Место работы</label-->
+              <!--                                >-->
+              <!--                                <textarea-->
+              <!--                                  class="form-control"-->
+              <!--                                  name="father_place_of_work"-->
+              <!--                                  cols="40"-->
+              <!--                                  rows="2"-->
+              <!--                                  id="id_father_place_of_work"-->
+              <!--                                ></textarea>-->
+              <!--                              </div>-->
+              <!--                            </div>-->
+              <!--                          </div>-->
+              <!--                        </div>-->
+              <!--                      </div>-->
+              <!--                      <div class="col-lg-6">-->
+              <!--                        <div class="shadow p-3 bg-body-tertiary rounded">-->
+              <!--                          <h5>Мать</h5>-->
+              <!--                          <div class="row">-->
+              <!--                            <div class="col-4">-->
+              <!--                              <div class="mb-3">-->
+              <!--                                <label-->
+              <!--                                  class="form-label"-->
+              <!--                                  for="id_mother_last_name"-->
+              <!--                                  >Фамилия:</label-->
+              <!--                                >-->
+              <!--                                <input-->
+              <!--                                  type="text"-->
+              <!--                                  class="form-control"-->
+              <!--                                  name="mother_last_name"-->
+              <!--                                  maxlength="30"-->
+              <!--                                  id="id_mother_last_name"-->
+              <!--                                />-->
+              <!--                              </div>-->
+              <!--                            </div>-->
+              <!--                            <div class="col-4">-->
+              <!--                              <div class="mb-3">-->
+              <!--                                <label-->
+              <!--                                  class="form-label"-->
+              <!--                                  for="id_mother_first_name"-->
+              <!--                                  >Имя</label-->
+              <!--                                >-->
+              <!--                                <input-->
+              <!--                                  type="text"-->
+              <!--                                  class="form-control"-->
+              <!--                                  name="mother_first_name"-->
+              <!--                                  maxlength="30"-->
+              <!--                                  id="id_mother_first_name"-->
+              <!--                                />-->
+              <!--                              </div>-->
+              <!--                            </div>-->
+              <!--                            <div class="col-4">-->
+              <!--                              <div class="mb-3">-->
+              <!--                                <label-->
+              <!--                                  class="form-label"-->
+              <!--                                  for="id_mother_patronymic"-->
+              <!--                                  >Отчество</label-->
+              <!--                                >-->
+              <!--                                <input-->
+              <!--                                  type="text"-->
+              <!--                                  class="form-control"-->
+              <!--                                  name="mother_patronymic"-->
+              <!--                                  maxlength="30"-->
+              <!--                                  id="id_mother_patronymic"-->
+              <!--                                />-->
+              <!--                              </div>-->
+              <!--                            </div>-->
+              <!--                          </div>-->
+              <!--                          <div class="row">-->
+              <!--                            <div class="col-4">-->
+              <!--                              <div class="mb-3">-->
+              <!--                                <label-->
+              <!--                                  class="form-label"-->
+              <!--                                  for="id_mother_date_of_birth"-->
+              <!--                                  >Дата рождения</label-->
+              <!--                                >-->
+              <!--                                <input-->
+              <!--                                  type="date"-->
+              <!--                                  class="form-control"-->
+              <!--                                  name="mother_date_of_birth"-->
+              <!--                                  id="id_mother_date_of_birth"-->
+              <!--                                />-->
+              <!--                              </div>-->
+              <!--                            </div>-->
+              <!--                            <div class="col-8">-->
+              <!--                              <div class="mb-3">-->
+              <!--                                <label-->
+              <!--                                  class="form-label"-->
+              <!--                                  for="id_mother_phone_number"-->
+              <!--                                  >Номер телефона</label-->
+              <!--                                >-->
+              <!--                                <input-->
+              <!--                                  type="text"-->
+              <!--                                  class="form-control"-->
+              <!--                                  name="mother_phone_number"-->
+              <!--                                  maxlength="30"-->
+              <!--                                  id="id_mother_phone_number"-->
+              <!--                                />-->
+              <!--                              </div>-->
+              <!--                            </div>-->
+              <!--                            <div class="col-4"></div>-->
+              <!--                          </div>-->
+              <!--                          <div class="row">-->
+              <!--                            <div class="col-12">-->
+              <!--                              <div class="mb-3">-->
+              <!--                                <label-->
+              <!--                                  class="form-label"-->
+              <!--                                  for="id_father_place_of_work"-->
+              <!--                                  >Место работы</label-->
+              <!--                                >-->
+              <!--                                <textarea-->
+              <!--                                  class="form-control"-->
+              <!--                                  name="father_place_of_work"-->
+              <!--                                  cols="40"-->
+              <!--                                  rows="2"-->
+              <!--                                  id="id_father_place_of_work"-->
+              <!--                                ></textarea>-->
+              <!--                              </div>-->
+              <!--                            </div>-->
+              <!--                          </div>-->
+              <!--                        </div>-->
+              <!--                      </div>-->
+              <!--                    </div>-->
+              <!--                  </div>-->
+              <!--                </div>-->
+              <!--              </div>-->
+              <!--              <div-->
+              <!--                class="shadow p-3 mb-3 bg-body-tertiary rounded"-->
+              <!--                id="simple-list-marital-status-data"-->
+              <!--              >-->
+              <!--                <div class="card">-->
+              <!--                  <div class="card-body">-->
+              <!--                    <h5 class="card-title">Семейное положение</h5>-->
+              <!--                    <div class="row">-->
+              <!--                      <div class="col-4">-->
+              <!--                        <div class="mb-3">-->
+              <!--                          <label class="form-label" for="id_last_name_rus"-->
+              <!--                            >Семейное положение</label-->
+              <!--                          >-->
+              <!--                          <select-->
+              <!--                            id="id_last_name_rus"-->
+              <!--                            name="last_name_rus"-->
+              <!--                            class="form-select"-->
+              <!--                          >-->
+              <!--                            <option value="">-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>-->
+              <!--                          </select>-->
+              <!--                        </div>-->
+              <!--                      </div>-->
+              <!--                    </div>-->
+
+              <!--                    <div-->
+              <!--                      class="d-flex align-items-center justify-content-end mb-4"-->
+              <!--                    >-->
+              <!--                      <button type="button" class="btn btn-warning">-->
+              <!--                        Добавить запись-->
+              <!--                      </button>-->
+              <!--                    </div>-->
+              <!--                    <table class="table table-hover">-->
+              <!--                      <thead>-->
+              <!--                        <tr>-->
+              <!--                          <th>-->
+              <!--                            Фамилия, имя, отчество жены (мужа), детей и лиц,-->
+              <!--                            находящихся на иждивении-->
+              <!--                          </th>-->
+              <!--                          <th>Степень родства</th>-->
+              <!--                          <th>Приказ о назначении</th>-->
+              <!--                          <th>Число, месяц, год и место рождения</th>-->
+              <!--                          <th>-->
+              <!--                            Основание: номер и дата свидетельства о браке, о-->
+              <!--                            рождении, кем выдано-->
+              <!--                          </th>-->
+              <!--                        </tr>-->
+              <!--                      </thead>-->
+              <!--                      <tbody></tbody>-->
+              <!--                    </table>-->
+              <!--                  </div>-->
+              <!--                </div>-->
+              <!--              </div>-->
             </form>
           </div>
         </div>
@@ -1064,7 +1084,9 @@
                   <a class="p-1 rounded" href="#simple-list-personal-data"
                     >Личные данные</a
                   >
-
+                  <a class="p-1 rounded" href="#simple-list-academy-data"
+                    >Обучение в Академии МВД</a
+                  >
                   <a class="p-1 rounded" href="#simple-list-rank-data"
                     >Присвоение званий</a
                   >
@@ -1141,13 +1163,21 @@ import getArmyHistoryAPIInstance from "@/api/cadet/armyHistoryAPI"
 import getMVDHistoryAPIInstance from "@/api/cadet/mvdHistoryAPI"
 import getCadetCategoryAPIAPIInstance from "@/api/cadet/cadetCategoryAPI"
 import getOrderOwnerAPIInstance from "@/api/cadet/orderOwnerAPI"
+import getSubdivisionAPIInstance from "@/api/cadet/subdivisionAPI"
+import getGroupAPIInstance from "@/api/cadet/groupAPI"
 import { debounce } from "lodash/function"
+import { RankHistoryCadetComponent } from "@/components/cadet/rank"
+import { EncouragementCadetComponent } from "@/components/cadet/encouragement"
 
 export default {
   name: "CadetUpdateView",
-  components: {},
+  components: {
+    RankHistoryCadetComponent,
+    EncouragementCadetComponent,
+  },
   data() {
     return {
+      selected: "",
       isLoading: true,
       isError: false,
       currentCadetData: {
@@ -1190,8 +1220,8 @@ export default {
         foreign_language_will_be: "",
         subdivision: "",
         group: "",
-        academy_start_year: "",
-        academy_end_year: "",
+        academy_start_date: "",
+        academy_end_date: "",
         component_organ: "",
         entrance_category: "",
         arrived_from_go_rovd: "",
@@ -1226,6 +1256,7 @@ export default {
       },
       cadetCategoryList: { count: "", results: [], previous: null, next: null },
       subdivisionList: { count: "", results: [], previous: null, next: null },
+      groupList: { count: "", results: [], previous: null, next: null },
       encouragementList: { count: "", results: [], previous: null, next: null },
       orderOwnerList: { count: "", results: [], previous: null, next: null },
       encouragementKindList: {
@@ -1293,6 +1324,8 @@ export default {
       armyHistoryAPIInstance: getArmyHistoryAPIInstance(),
       mvdHistoryAPIInstance: getMVDHistoryAPIInstance(),
       orderOwnerAPIInstance: getOrderOwnerAPIInstance(),
+      subdivisionAPIInstance: getSubdivisionAPIInstance(),
+      groupAPIInstance: getGroupAPIInstance(),
     }
   },
   async created() {
@@ -1303,24 +1336,24 @@ export default {
       const [
         cadet,
         cadetCategories,
-        rankHistories,
-        ranks,
         orderOwners,
         educationHistories,
+        subdivisions,
+        groups,
       ] = await Promise.all([
         this.getCadetData(cadetId),
         this.getLoadListFunction("cadetCategory")(cadetId),
-        this.getLoadListFunction("rankHistory")(cadetId),
-        this.getLoadListFunction("rank")(),
         this.getLoadListFunction("orderOwner")(),
         this.getLoadListFunction("educationHistory")(cadetId),
+        this.getLoadListFunction("subdivision")(),
+        this.getLoadListFunction("group")(),
       ]).catch(() => (this.isError = true))
       this.currentCadetData = cadet
       this.cadetCategoryList = cadetCategories
-      this.rankHistoryList = rankHistories
-      this.rankList = ranks
       this.orderOwnerList = orderOwners
       this.educationHistoryList = educationHistories
+      this.subdivisionList = subdivisions
+      this.groupList = groups
     },
     async getCadetData(cadetId) {
       const res = await this.cadetAPIInstance.getItemData(
@@ -1369,6 +1402,12 @@ export default {
   computed: {
     orderedCadetCategories() {
       return this.cadetCategoryList.results
+    },
+    orderedSubdivisions() {
+      return this.subdivisionList.results
+    },
+    orderedGroups() {
+      return this.groupList.results
     },
     orderedRanks() {
       return this.rankList.results

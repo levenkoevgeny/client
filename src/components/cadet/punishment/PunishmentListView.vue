@@ -377,7 +377,7 @@ import getPunishmentKindAPIInstance from "@/api/cadet/punishmentKindAPI"
 import getCadetAPIInstance from "@/api/cadet/cadetAPI"
 import getOrderOwnerAPIInstance from "@/api/cadet/orderOwnerAPI"
 
-import BaseListLayout from "@/components/cadet/BaseListLayout.vue"
+import BaseListLayout from "@/components/layouts/BaseListLayout.vue"
 import { PaginatorView } from "@/components/common"
 import { debounce } from "lodash/function"
 import PunishmentFormView from "@/components/cadet/punishment/modals/FormView.vue"
