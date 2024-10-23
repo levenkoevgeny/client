@@ -173,13 +173,33 @@
 
     <template v-slot:search-form>
       <div class="mb-3">
-        <label for="last_name_rus" class="form-label">Фамилия</label>
-        <input
-          type="text"
-          id="last_name_rus"
-          class="form-control"
-          v-model="searchForm.last_name_rus__icontains"
-        />
+        <label for="category" class="form-label">Категория</label>
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          v-model="searchForm.category"
+        >
+          <option selected value="">--------</option>
+          <option
+            v-for="category in orderedCadetCategories"
+            :key="category.id"
+            :value="category.id"
+          >
+            {{ category.category }}
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="category" class="form-label">Пол</label>
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          v-model="searchForm.gender"
+        >
+          <option selected value="">--------</option>
+          <option value="0">Мужской</option>
+          <option value="1">Женский</option>
+        </select>
       </div>
       <div class="mb-3">
         <label for="subdivision" class="form-label">Факультет</label>
@@ -197,6 +217,80 @@
             {{ subdivision.subdivision_short_name }}
           </option>
         </select>
+      </div>
+      <div class="mb-3">
+        <label for="subdivision" class="form-label">Группа</label>
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          v-model="searchForm.group"
+        >
+          <option selected value="">--------</option>
+          <option
+            v-for="group in orderedGroups"
+            :key="group.id"
+            :value="group.id"
+          >
+            {{ group.group_name }}
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="subdivision" class="form-label">Звание</label>
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          v-model="searchForm.current_rank"
+        >
+          <option selected value="">--------</option>
+          <option v-for="rank in orderedRanks" :key="rank.id" :value="rank.id">
+            {{ rank.rank }}
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="subdivision" class="form-label">Специальность</label>
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          v-model="searchForm.current_speciality"
+        >
+          <option selected value="">--------</option>
+          <option
+            v-for="speciality in orderedSpecialities"
+            :key="speciality.id"
+            :value="speciality.id"
+          >
+            {{ speciality.speciality_name }}
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="subdivision" class="form-label">Должность</label>
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          v-model="searchForm.current_position"
+        >
+          <option selected value="">--------</option>
+          <option
+            v-for="position in orderedPositions"
+            :key="position.id"
+            :value="position.id"
+          >
+            {{ position.position }}
+          </option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="last_name_rus" class="form-label">Фамилия</label>
+        <input
+          type="text"
+          id="last_name_rus"
+          class="form-control"
+          v-model="searchForm.last_name_rus__icontains"
+        />
       </div>
       <div class="row">
         <div class="col-6">
@@ -226,7 +320,6 @@
           </div>
         </div>
       </div>
-
       <div class="mb-3">
         <label for="address__icontains" class="form-label"
           >Адрес (содержит)</label
@@ -342,11 +435,17 @@
 
 <script>
 import getCadetAPIInstance from "@/api/cadet/cadetAPI"
+import getCadetCategoryAPIAPIInstance from "@/api/cadet/cadetCategoryAPI"
 import getSubdivisionAPIInstance from "@/api/cadet/subdivisionAPI"
+import getGroupAPIInstance from "@/api/cadet/groupAPI"
+import getRankAPIInstance from "@/api/cadet/rankAPI"
+import getSpecialityAPIInstance from "@/api/cadet/specialityAPI"
+import getPositionAPIInstance from "@/api/cadet/positionAPI"
 import BaseListLayout from "@/components/layouts/BaseListLayout.vue"
 import { PaginatorView } from "@/components/common"
 import { debounce } from "lodash/function"
 import EncouragementFormView from "@/components/cadet/encouragement/modals/FormView.vue"
+import { getLoadListFunction } from "../../../utils"
 
 export default {
   name: "CadetList",
@@ -354,14 +453,24 @@ export default {
   data() {
     return {
       cadetList: { count: "", results: [], previous: null, next: null },
+      cadetCategoryList: { count: "", results: [], previous: null, next: null },
       subdivisionList: { count: "", results: [], previous: null, next: null },
+      groupList: { count: "", results: [], previous: null, next: null },
+      rankList: { count: "", results: [], previous: null, next: null },
+      specialityList: { count: "", results: [], previous: null, next: null },
+      positionList: { count: "", results: [], previous: null, next: null },
       isLoading: true,
       isError: false,
       BACKEND_PROTOCOL: process.env.VUE_APP_BACKEND_PROTOCOL,
       BACKEND_HOST: process.env.VUE_APP_BACKEND_HOST,
       BACKEND_PORT: process.env.VUE_APP_BACKEND_PORT,
       cadetAPIInstance: getCadetAPIInstance(),
+      cadetCategoryAPIInstance: getCadetCategoryAPIAPIInstance(),
       subdivisionAPIInstance: getSubdivisionAPIInstance(),
+      groupAPIInstance: getGroupAPIInstance(),
+      rankAPIInstance: getRankAPIInstance(),
+      specialityAPIInstance: getSpecialityAPIInstance(),
+      positionAPIInstance: getPositionAPIInstance(),
       searchForm: Object.assign({}, getCadetAPIInstance().searchObj),
       cadetNewForm: {
         last_name_rus: "",
@@ -375,15 +484,34 @@ export default {
   },
   methods: {
     async loadData() {
+      const listFunction = getLoadListFunction.bind(this)
       this.isLoading = true
       this.isError = false
       try {
-        const [cadets, subdivisions] = await Promise.all([
-          this.getCadets(),
-          this.getSubdivisions(),
+        const [
+          cadetCategories,
+          cadets,
+          subdivisions,
+          groups,
+          ranks,
+          specialities,
+          positions,
+        ] = await Promise.all([
+          listFunction("cadetCategory")(),
+          listFunction("cadet")(),
+          listFunction("subdivision")(),
+          listFunction("group")(),
+          listFunction("rank")(),
+          listFunction("speciality")(),
+          listFunction("position")(),
         ]).catch(() => (this.isError = true))
+        this.cadetCategoryList = cadetCategories
         this.cadetList = cadets
         this.subdivisionList = subdivisions
+        this.groupList = groups
+        this.rankList = ranks
+        this.specialityList = specialities
+        this.positionList = positions
       } catch (e) {
         this.isError = true
       } finally {
@@ -430,17 +558,6 @@ export default {
       })
       myModal.show()
     },
-    async getCadets() {
-      const res = await this.cadetAPIInstance.getItemsList("token is here!!!")
-      return res.data
-    },
-
-    async getSubdivisions() {
-      const res =
-        await this.subdivisionAPIInstance.getItemsList("token is here!!!")
-      return res.data
-    },
-
     async addNewCadet() {
       try {
         const response = await this.cadetAPIInstance.addItem(
@@ -462,16 +579,30 @@ export default {
         this.isLoading = false
       }
     },
-
     updateCadetView(cadetId) {},
   },
 
   computed: {
+    orderedCadetCategories() {
+      return this.cadetCategoryList.results
+    },
     orderedCadets() {
       return this.cadetList.results
     },
     orderedSubdivisions() {
       return this.subdivisionList.results
+    },
+    orderedGroups() {
+      return this.groupList.results
+    },
+    orderedRanks() {
+      return this.rankList.results
+    },
+    orderedSpecialities() {
+      return this.specialityList.results
+    },
+    orderedPositions() {
+      return this.positionList.results
     },
   },
   watch: {
