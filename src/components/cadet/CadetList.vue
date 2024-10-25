@@ -91,6 +91,7 @@
       <button class="btn btn-warning" @click="showCadetAddModal">
         Добавить запись
       </button>
+      <router-link :to="{ name: 'cadet-full' }"> Табличный режим </router-link>
     </template>
     <template v-slot:thead>
       <tr>
