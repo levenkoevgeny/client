@@ -8,6 +8,7 @@ import { EntranceMainView } from "@/components/entrance_campaign"
 import { SpecialityHistoryView } from "@/components/cadet/speciality"
 import { CadetUpdateView } from "@/components/cadet"
 import { CadetListOkView } from "@/components/cadet"
+import NavigationPage from "@/components/NavigationPage.vue"
 
 import {
   NotFoundView,
@@ -17,7 +18,7 @@ import {
 
 const routes = [
   { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFoundView },
-  { path: "", name: "root", redirect: "/kis" },
+  { path: "", name: "navigation", component: NavigationPage },
   {
     path: "/kis",
     name: "kis-main",

@@ -9,7 +9,7 @@
         aria-hidden="true"
         ref="cadetAddModal"
       >
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
               <h1 class="modal-title fs-5" id="exampleModalLabel">
@@ -88,28 +88,27 @@
       </ul>
     </template>
     <template v-slot:add-button>
-      <button class="btn btn-warning" @click="showCadetAddModal">
-        Добавить запись
-      </button>
-      <router-link :to="{ name: 'cadet-full' }"> Табличный режим </router-link>
+      <div class="d-flex justify-content-between align-items-center">
+        <button class="btn btn-warning" @click="showCadetAddModal">
+          Добавить запись
+        </button>
+        <router-link
+          :to="{ name: 'cadet-full' }"
+          class="fs-3 fw-light link-secondary"
+          title="Табличный режим"
+        >
+          <font-awesome-icon :icon="['fas', 'table']" />
+        </router-link>
+      </div>
     </template>
     <template v-slot:thead>
       <tr>
-        <th scope="col">
-          <div class="form-check">
-            <input
-              type="checkbox"
-              class="form-check-input"
-              id="exampleCheck1"
-            />
-          </div>
-        </th>
         <th scope="col"></th>
         <th scope="col">Фамилия, имя, отчество</th>
-        <th scope="col">Адрес</th>
+        <th scope="col">Факультет</th>
+        <th scope="col">Группа</th>
         <th scope="col">Специальность</th>
-        <th scope="col">Начало обучения</th>
-        <th scope="col">Окончание обучения</th>
+        <th scope="col">Период обучения</th>
       </tr>
     </template>
     <template v-slot:tbody>
@@ -121,15 +120,6 @@
           $router.push({ name: 'cadet-update', params: { id: cadet.id } })
         "
       >
-        <th scope="row" class="text-center align-middle">
-          <div class="form-check">
-            <input
-              type="checkbox"
-              class="form-check-input"
-              id="exampleCheck1"
-            />
-          </div>
-        </th>
         <td>
           <img
             v-if="cadet.photo"
@@ -157,10 +147,13 @@
             {{ cadet.first_name_rus }}<br />{{ cadet.patronymic_rus }}
           </router-link>
         </td>
-        <td>{{ cadet.address }}</td>
-        <td>{{ cadet.speciality }}</td>
-        <td>{{ cadet.academy_start_year }}</td>
-        <td>{{ cadet.academy_end_year }}</td>
+        <td>{{ cadet.get_subdivision }}</td>
+        <td>{{ cadet.get_group }}</td>
+        <td>{{ cadet.get_speciality }}</td>
+        <td>
+          {{ cadet.academy_start_date }} - <br />
+          {{ cadet.academy_end_date }}
+        </td>
       </tr>
     </template>
     <template v-slot:paginator>
@@ -173,6 +166,15 @@
     </template>
 
     <template v-slot:search-form>
+      <div class="mb-3">
+        <label for="last_name_rus" class="form-label">Фамилия</label>
+        <input
+          type="text"
+          id="last_name_rus"
+          class="form-control"
+          v-model="searchForm.last_name_rus__icontains"
+        />
+      </div>
       <div class="mb-3">
         <label for="category" class="form-label">Категория</label>
         <select
@@ -283,16 +285,6 @@
           </option>
         </select>
       </div>
-
-      <div class="mb-3">
-        <label for="last_name_rus" class="form-label">Фамилия</label>
-        <input
-          type="text"
-          id="last_name_rus"
-          class="form-control"
-          v-model="searchForm.last_name_rus__icontains"
-        />
-      </div>
       <div class="row">
         <div class="col-6">
           <div class="mb-3">
@@ -321,82 +313,82 @@
           </div>
         </div>
       </div>
-      <div class="mb-3">
-        <label for="address__icontains" class="form-label"
-          >Адрес (содержит)</label
-        >
-        <input
-          type="text"
-          class="form-control"
-          id="address__icontains"
-          v-model="searchForm.address__icontains"
-        />
-      </div>
-      <div class="mb-3">
-        <label for="passport_number" class="form-label">Номер паспорта</label>
-        <input
-          type="text"
-          class="form-control"
-          id="passport_number"
-          v-model="searchForm.passport_number"
-        />
-      </div>
-      <div class="row">
-        <div class="col-6">
-          <div class="mb-3">
-            <label for="passport_issue_date__gte" class="form-label"
-              >Дата выдачи паспорта (с)</label
-            >
-            <input
-              type="date"
-              class="form-control"
-              id="passport_issue_date__gte"
-              v-model="searchForm.passport_issue_date__gte"
-            />
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="mb-3">
-            <label for="passport_issue_date__lte" class="form-label"
-              >Дата выдачи паспорта (по)</label
-            >
-            <input
-              type="date"
-              class="form-control"
-              id="passport_issue_date__lte"
-              v-model="searchForm.passport_issue_date__lte"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-6">
-          <div class="mb-3">
-            <label for="passport_validity_period__gte" class="form-label"
-              >Окончание действия паспорта (с)</label
-            >
-            <input
-              type="date"
-              class="form-control"
-              id="passport_validity_period__gte"
-              v-model="searchForm.passport_validity_period__gte"
-            />
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="mb-3">
-            <label for="passport_validity_period__lte" class="form-label"
-              >Окончание действия паспорта (по)</label
-            >
-            <input
-              type="date"
-              class="form-control"
-              id="passport_validity_period__lte"
-              v-model="searchForm.passport_validity_period__lte"
-            />
-          </div>
-        </div>
-      </div>
+      <!--      <div class="mb-3">-->
+      <!--        <label for="address__icontains" class="form-label"-->
+      <!--          >Адрес (содержит)</label-->
+      <!--        >-->
+      <!--        <input-->
+      <!--          type="text"-->
+      <!--          class="form-control"-->
+      <!--          id="address__icontains"-->
+      <!--          v-model="searchForm.address__icontains"-->
+      <!--        />-->
+      <!--      </div>-->
+      <!--      <div class="mb-3">-->
+      <!--        <label for="passport_number" class="form-label">Номер паспорта</label>-->
+      <!--        <input-->
+      <!--          type="text"-->
+      <!--          class="form-control"-->
+      <!--          id="passport_number"-->
+      <!--          v-model="searchForm.passport_number"-->
+      <!--        />-->
+      <!--      </div>-->
+      <!--      <div class="row">-->
+      <!--        <div class="col-6">-->
+      <!--          <div class="mb-3">-->
+      <!--            <label for="passport_issue_date__gte" class="form-label"-->
+      <!--              >Дата выдачи паспорта (с)</label-->
+      <!--            >-->
+      <!--            <input-->
+      <!--              type="date"-->
+      <!--              class="form-control"-->
+      <!--              id="passport_issue_date__gte"-->
+      <!--              v-model="searchForm.passport_issue_date__gte"-->
+      <!--            />-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--        <div class="col-6">-->
+      <!--          <div class="mb-3">-->
+      <!--            <label for="passport_issue_date__lte" class="form-label"-->
+      <!--              >Дата выдачи паспорта (по)</label-->
+      <!--            >-->
+      <!--            <input-->
+      <!--              type="date"-->
+      <!--              class="form-control"-->
+      <!--              id="passport_issue_date__lte"-->
+      <!--              v-model="searchForm.passport_issue_date__lte"-->
+      <!--            />-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      </div>-->
+      <!--      <div class="row">-->
+      <!--        <div class="col-6">-->
+      <!--          <div class="mb-3">-->
+      <!--            <label for="passport_validity_period__gte" class="form-label"-->
+      <!--              >Окончание действия паспорта (с)</label-->
+      <!--            >-->
+      <!--            <input-->
+      <!--              type="date"-->
+      <!--              class="form-control"-->
+      <!--              id="passport_validity_period__gte"-->
+      <!--              v-model="searchForm.passport_validity_period__gte"-->
+      <!--            />-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--        <div class="col-6">-->
+      <!--          <div class="mb-3">-->
+      <!--            <label for="passport_validity_period__lte" class="form-label"-->
+      <!--              >Окончание действия паспорта (по)</label-->
+      <!--            >-->
+      <!--            <input-->
+      <!--              type="date"-->
+      <!--              class="form-control"-->
+      <!--              id="passport_validity_period__lte"-->
+      <!--              v-model="searchForm.passport_validity_period__lte"-->
+      <!--            />-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      </div>-->
       <div class="row">
         <div class="col-6">
           <div class="mb-3">
@@ -580,7 +572,6 @@ export default {
         this.isLoading = false
       }
     },
-    updateCadetView(cadetId) {},
   },
 
   computed: {

@@ -5,7 +5,7 @@
     <div class="row">
       <div class="col-8">
         <slot name="extra"></slot>
-        <div class="my-4 d-flex">
+        <div class="my-4">
           <slot name="add-button">
             <button class="btn btn-warning" :disabled="isLoading">
               <span class="fas fa-plus me-2"></span>Добавить запись
@@ -14,7 +14,10 @@
         </div>
         <div v-if="isLoading">Loading</div>
         <div v-else>
-          <div class="table-responsive">
+          <div
+            class="table-responsive my-3"
+            style="max-height: 70vh; overflow: auto"
+          >
             <table class="table table-hover fw-light">
               <thead>
                 <slot name="thead"></slot>
@@ -54,4 +57,9 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+thead {
+  position: sticky;
+  top: 0;
+}
+</style>

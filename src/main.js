@@ -10,6 +10,7 @@ import { faHandHoldingDollar } from "@fortawesome/free-solid-svg-icons"
 import { faCreditCardAlt } from "@fortawesome/free-solid-svg-icons"
 import { faPlus } from "@fortawesome/free-solid-svg-icons"
 import { faTrash } from "@fortawesome/free-solid-svg-icons"
+import { faTable } from "@fortawesome/free-solid-svg-icons"
 import { faStar } from "@fortawesome/free-regular-svg-icons"
 import vSelect from "vue-select"
 
@@ -20,6 +21,7 @@ library.add(faCreditCardAlt)
 library.add(faStar)
 library.add(faPlus)
 library.add(faTrash)
+library.add(faTable)
 
 createApp(App)
   .component("font-awesome-icon", FontAwesomeIcon)

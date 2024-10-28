@@ -19,12 +19,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/">Home</a>
+              <a class="nav-link active" aria-current="page" href="/"
+                >Раздел навигации</a
+              >
             </li>
-
             <li class="nav-item">
               <router-link class="nav-link" :to="{ name: 'cadet' }">
-                Курсанты
+                Главная
               </router-link>
             </li>
             <li class="nav-item dropdown">
@@ -35,7 +36,7 @@
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                Кадры
+                Подразделы
               </a>
               <ul class="dropdown-menu">
                 <li class="nav-item">
@@ -67,11 +68,6 @@
                   </router-link>
                 </li>
               </ul>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" :to="{ name: 'entrance' }">
-                Вступительная кампания
-              </router-link>
             </li>
           </ul>
         </div>
