@@ -27,6 +27,8 @@ export default function getCadetAPIInstance() {
     passport_validity_period__lte: "",
     passport_issue_authority: "",
     identification_number__icontains: "",
+    identification_number__gte: "",
+    identification_number__lte: "",
     father_date_of_birth__gte: "",
     father_date_of_birth__lte: "",
     mother_date_of_birth__gte: "",

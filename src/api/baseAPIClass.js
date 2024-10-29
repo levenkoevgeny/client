@@ -2,10 +2,11 @@ import axios from "axios"
 import { authHeaders } from "@/api/auth/authAPI"
 
 export default class BaseAPI {
-  constructor(baseURL, searchObj) {
+  constructor(baseURL, searchObj, formData = {}) {
     this.baseURL = baseURL
     this.searchObj = searchObj
     this.searchObjDefault = Object.assign({}, searchObj)
+    this.formData = Object.assign({}, formData)
   }
 
   getQueryStringFromSearchObj() {

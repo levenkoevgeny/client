@@ -3,7 +3,7 @@
     <div class="mb-3">
       <label for="id_rank" class="form-label">Звание</label>
       <select id="id_rank" class="form-select" v-model="mainData.rank" required>
-        <option value="null">-------</option>
+        <option value="">-------</option>
         <option v-for="rank in ranks" :value="rank.id" :key="rank.id">
           {{ rank.rank }}
         </option>
@@ -61,7 +61,12 @@
     </div>
     <div class="mb-3">
       <label for="id_rank_extra_data" class="form-label">Фабула</label>
-      <textarea class="form-control" id="id_rank_extra_data" rows="3" />
+      <textarea
+        class="form-control"
+        id="id_rank_extra_data"
+        rows="3"
+        v-model="mainData.rank_extra_data"
+      />
     </div>
   </div>
 </template>
