@@ -19,6 +19,7 @@ export function showAddNewMainItemModal() {
   })
   myModal.show()
 }
+
 export async function showUpdateMainItemModal(id) {
   this.clearFormData()
   try {
@@ -34,6 +35,23 @@ export async function showUpdateMainItemModal(id) {
   })
   myModal.show()
 }
+
+export function showDeleteApproveModal() {
+  let addModal = this.$refs.deleteApproveModal
+  let myModal = new bootstrap.Modal(addModal, {
+    keyboard: false,
+  })
+  myModal.show()
+}
+
+export function showDeleteApproveMultipleModal() {
+  let addModal = this.$refs.deleteApproveMultipleModal
+  let myModal = new bootstrap.Modal(addModal, {
+    keyboard: false,
+  })
+  myModal.show()
+}
+
 export async function addNewMainItem() {
   this.isLoading = true
   this.isError = false
@@ -51,6 +69,7 @@ export async function addNewMainItem() {
     this.isLoading = false
   }
 }
+
 export async function updateMainItem() {
   try {
     const response = await this.mainItemAPIInstance.updateItem(
@@ -70,9 +89,7 @@ export async function updateMainItem() {
     this.isLoading = false
   }
 }
-export async function deleteItem(id) {
-  console.log(id)
-}
+
 export async function updatePaginator(url) {
   this.isLoading = true
   this.isError = false
@@ -88,6 +105,7 @@ export async function updatePaginator(url) {
     this.isLoading = false
   }
 }
+
 export function checkAllHandler(e) {
   if (e.target.checked) {
     this.mainItemList.results = this.mainItemList.results.map((item) => ({
@@ -101,6 +119,7 @@ export function checkAllHandler(e) {
     }))
   }
 }
+
 export function clearFormData() {
   this.itemForm = Object.assign({}, this.mainItemAPIInstance.formData)
 }
@@ -115,4 +134,41 @@ export function checkedForDeleteCount() {
   return counter
 }
 
-export async function deleteCheckedSubdivisionsHandler() {}
+export async function deleteItemHandler() {
+  this.isLoading = true
+  this.isError = false
+
+  try {
+    await this.mainItemAPIInstance.deleteItem("this.token", this.deleteItemId)
+    await this.loadData()
+    this.$refs.deleteApproveModalCloseButton.click()
+  } catch (e) {
+    this.isError = true
+  } finally {
+    this.isLoading = false
+  }
+}
+
+export async function deleteCheckedItemsHandler() {
+  this.isLoading = true
+  this.isError = false
+  let requestIds = []
+  this.mainItemList.results.map((item) => {
+    if (item.isSelected) {
+      requestIds.push(item.id)
+    }
+    return
+  })
+  let requests = requestIds.map((id) =>
+    this.mainItemAPIInstance.deleteItem("this.token", id),
+  )
+  Promise.all(requests)
+    .then(async () => {
+      await this.loadData()
+      this.$refs.deleteApproveModalMultipleCloseButton.click()
+    })
+    .catch(() => (this.isError = true))
+    .finally(() => {
+      this.isLoading = false
+    })
+}

@@ -121,7 +121,7 @@ import {
   addNewMainItem,
   updateMainItem,
   updatePaginator,
-  deleteItem,
+  deleteItemHandler,
   checkAllHandler,
   clearFormData,
 } from "../../../../utils"
@@ -185,7 +185,7 @@ export default {
     addNewMainItem,
     updateMainItem,
     updatePaginator,
-    deleteItem,
+    deleteItemHandler,
     checkAllHandler,
     clearFormData,
   },

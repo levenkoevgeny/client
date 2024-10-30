@@ -6,8 +6,8 @@
     <base-list-layout-for-cadet-update
       :is-loading="isLoading"
       :main-list-length="orderedMainList.length"
+      title="Научные труды и изобретения"
     >
-      <template v-slot:title>Научные труды и изобретения</template>
       <template v-slot:add-button>
         <button class="btn btn-warning" :disabled="isLoading" type="button">
           <span class="fas fa-plus me-2"></span>Добавить запись

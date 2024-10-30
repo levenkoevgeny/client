@@ -95,6 +95,100 @@
     </div>
   </div>
 
+  <!-- delete approve modal-->
+
+  <div
+    class="modal fade"
+    id="deleteApproveModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+    ref="deleteApproveModal"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">
+            Подтверждение удаления
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">Вы действительно хотите удалить запись?</div>
+        <div class="modal-footer border-0">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            ref="deleteApproveModalCloseButton"
+          >
+            Отмена
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            @click="deleteItemHandler"
+          >
+            Удалить
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- delete approve multiple modal-->
+
+  <div
+    class="modal fade"
+    id="deleteApproveMultipleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+    ref="deleteApproveMultipleModal"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">
+            Подтверждение удаления
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          Вы действительно хотите удалить данные записи -
+          {{ checkedForDeleteCount }} ?
+        </div>
+        <div class="modal-footer border-0">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            ref="deleteApproveModalMultipleCloseButton"
+          >
+            Отмена
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            @click="deleteCheckedItemsHandler"
+          >
+            Удалить
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--  main content-->
   <div
     class="shadow p-3 mb-3 bg-body-tertiary rounded"
     id="simple-list-rank-data"
@@ -114,10 +208,10 @@
           <span class="fas fa-plus me-2"></span>Добавить запись
         </button>
       </template>
-      <template v-slot:delete-selected-button
-        ><button
-          @click="deleteCheckedSubdivisionsHandler"
-          class="btn btn-danger"
+      <template v-slot:delete-selected-button>
+        <button
+          @click="deleteMultipleClick"
+          class="btn btn-outline-danger"
           v-if="checkedForDeleteCount"
         >
           Удалить ({{ checkedForDeleteCount }})
@@ -172,14 +266,17 @@
           <td>{{ rankHistory.rank_order_number }}</td>
           <td>{{ rankHistory.get_rank_order_owner_str }}</td>
           <td>{{ rankHistory.rank_extra_data || "Нет данных" }}</td>
-          <td>
-            <button
-              type="button"
-              class="btn btn-outline-danger"
-              @click="deleteItem(rankHistory.id)"
-            >
-              <font-awesome-icon :icon="['fas', 'trash']" />
-            </button>
+          <td class="d-flex align-items-end justify-content-end">
+            <div>
+              <button
+                type="button"
+                class="btn btn-outline-danger"
+                @click="trashButtonClick(rankHistory.id)"
+                style="padding: 0.25rem 0.5rem"
+              >
+                <font-awesome-icon :icon="['fas', 'trash']" />
+              </button>
+            </div>
           </td>
         </tr>
       </template>
@@ -203,14 +300,16 @@ import {
   getLoadListFunction,
   showAddNewMainItemModal,
   showUpdateMainItemModal,
+  showDeleteApproveModal,
+  showDeleteApproveMultipleModal,
   addNewMainItem,
   updateMainItem,
   updatePaginator,
-  deleteItem,
   checkAllHandler,
   clearFormData,
   checkedForDeleteCount,
-  deleteCheckedSubdivisionsHandler,
+  deleteItemHandler,
+  deleteCheckedItemsHandler,
 } from "../../../../utils"
 import RankHistoryModalForCadetUpdate from "@/components/cadet/rank/modals/RankHistoryModalForCadetUpdate.vue"
 import BaseListLayoutForCadetUpdate from "@/components/layouts/BaseListLayoutForCadetUpdate.vue"
@@ -241,6 +340,7 @@ export default {
       orderOwnerAPIInstance: getOrderOwnerAPIInstance(),
       itemForm: Object.assign({}, getRankHistoryAPIInstance().formData),
       selectedItems: [],
+      deleteItemId: "",
     }
   },
   async created() {
@@ -269,13 +369,22 @@ export default {
     },
     showAddNewMainItemModal,
     showUpdateMainItemModal,
+    showDeleteApproveModal,
+    showDeleteApproveMultipleModal,
     addNewMainItem,
     updateMainItem,
     updatePaginator,
-    deleteItem,
+    trashButtonClick(id) {
+      this.deleteItemId = id
+      this.showDeleteApproveModal()
+    },
+    deleteMultipleClick() {
+      this.showDeleteApproveMultipleModal()
+    },
     checkAllHandler,
     clearFormData,
-    deleteCheckedSubdivisionsHandler,
+    deleteItemHandler,
+    deleteCheckedItemsHandler,
   },
   computed: {
     checkedForDeleteCount,

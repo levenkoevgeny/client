@@ -1,11 +1,12 @@
 <template>
+  <!-- add modal-->
   <div
     class="modal fade"
-    id="foreignLanguageAddModal"
+    id="mainItemAddModal"
     tabindex="-1"
     aria-labelledby="exampleModalLabel"
     aria-hidden="true"
-    ref="foreignLanguageAddModal"
+    ref="mainItemAddModal"
   >
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -20,6 +21,169 @@
             aria-label="Close"
           ></button>
         </div>
+
+        <form @submit.prevent="addNewMainItem">
+          <div class="modal-body">
+            <ForeignLanguageModalForCadetUpdate
+              :main-data="itemForm"
+              :foreign-languages="orderedForeignLanguagesList"
+              :foreign-language-levels="orderedForeignLanguageLevelsList"
+            />
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              ref="mainItemAddModalCloseButton"
+            >
+              Закрыть
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Добавить запись
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- update modal-->
+  <div
+    class="modal fade"
+    id="mainItemUpdateModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+    ref="mainItemUpdateModal"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">
+            Добавление записи
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+
+        <form @submit.prevent="updateMainItem">
+          <div class="modal-body">
+            <ForeignLanguageModalForCadetUpdate
+              :main-data="itemForm"
+              :foreign-languages="orderedForeignLanguagesList"
+              :foreign-language-levels="orderedForeignLanguageLevelsList"
+            />
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              ref="mainItemUpdateModalCloseButton"
+            >
+              Закрыть
+            </button>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- delete approve modal-->
+
+  <div
+    class="modal fade"
+    id="deleteApproveModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+    ref="deleteApproveModal"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">
+            Подтверждение удаления
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">Вы действительно хотите удалить запись?</div>
+        <div class="modal-footer border-0">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            ref="deleteApproveModalCloseButton"
+          >
+            Отмена
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            @click="deleteItemHandler"
+          >
+            Удалить
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- delete approve multiple modal-->
+
+  <div
+    class="modal fade"
+    id="deleteApproveMultipleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+    ref="deleteApproveMultipleModal"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">
+            Подтверждение удаления
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          Вы действительно хотите удалить данные записи -
+          {{ checkedForDeleteCount }} ?
+        </div>
+        <div class="modal-footer border-0">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            ref="deleteApproveModalMultipleCloseButton"
+          >
+            Отмена
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            @click="deleteCheckedItemsHandler"
+          >
+            Удалить
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -31,35 +195,90 @@
     <base-list-layout-for-cadet-update
       :is-loading="isLoading"
       :main-list-length="orderedMainList.length"
+      title="Иностранные языки"
     >
-      <template v-slot:title>Иностранные языки</template>
       <template v-slot:add-button>
         <button
           class="btn btn-warning"
           :disabled="isLoading"
-          @click="showAddNewForeignLanguageModal"
+          @click="showAddNewMainItemModal"
           type="button"
         >
           <span class="fas fa-plus me-2"></span>Добавить запись
         </button>
       </template>
+      <template v-slot:delete-selected-button>
+        <button
+          @click="deleteMultipleClick"
+          class="btn btn-outline-danger"
+          v-if="checkedForDeleteCount"
+        >
+          Удалить ({{ checkedForDeleteCount }})
+        </button>
+      </template>
       <template v-slot:thead>
         <tr>
+          <th>
+            <div
+              class="form-check d-flex align-items-center justify-content-center"
+            >
+              <input
+                type="checkbox"
+                class="form-check-input my-0"
+                @change="checkAllHandler($event)"
+              />
+            </div>
+          </th>
           <th>Язык</th>
           <th>Уровень владения</th>
+          <th></th>
         </tr>
       </template>
       <template v-slot:tbody>
-        <tr v-for="forLang in orderedMainList" :key="forLang.id">
+        <tr
+          v-for="forLang in orderedMainList"
+          :key="forLang.id"
+          @dblclick.stop="showUpdateMainItemModal(forLang.id)"
+        >
+          <td>
+            <div
+              class="form-check d-flex align-items-center justify-content-center"
+            >
+              <input
+                type="checkbox"
+                class="form-check-input my-0"
+                v-model="forLang.isSelected"
+              />
+            </div>
+          </td>
           <td>
             {{ forLang.get_foreign_language_str || "Нет данных" }}
           </td>
           <td>
             {{ forLang.get_foreign_language_level_str || "Нет данных" }}
           </td>
+          <td class="d-flex align-items-end justify-content-end">
+            <div>
+              <button
+                type="button"
+                class="btn btn-outline-danger"
+                @click="trashButtonClick(forLang.id)"
+                style="padding: 0.25rem 0.5rem"
+              >
+                <font-awesome-icon :icon="['fas', 'trash']" />
+              </button>
+            </div>
+          </td>
         </tr>
       </template>
-      <template v-slot:paginator></template>
+      <template v-slot:paginator>
+        <PaginatorView
+          :update-paginator="updatePaginator"
+          :list-next="mainItemList.next"
+          :list-previous="mainItemList.previous"
+          v-if="mainItemList.previous || mainItemList.next"
+        />
+      </template>
     </base-list-layout-for-cadet-update>
   </div>
 </template>
@@ -69,12 +288,34 @@ import getCadetForeignLanguageLevelAPIInstance from "@/api/cadet/cadetForeignLan
 import getForeignLanguageAPIInstance from "@/api/cadet/foreignLanguageAPI"
 import getForeignLanguageLevelAPIInstance from "@/api/cadet/foreignLanguageLevel"
 
-import { getLoadListFunction } from "../../../../utils"
+import {
+  getLoadListFunction,
+  showAddNewMainItemModal,
+  showUpdateMainItemModal,
+  showDeleteApproveModal,
+  showDeleteApproveMultipleModal,
+  addNewMainItem,
+  updateMainItem,
+  updatePaginator,
+  checkAllHandler,
+  clearFormData,
+  checkedForDeleteCount,
+  deleteItemHandler,
+  deleteCheckedItemsHandler,
+} from "../../../../utils"
 import BaseListLayoutForCadetUpdate from "@/components/layouts/BaseListLayoutForCadetUpdate.vue"
+import EducationHistoryModalForCadetUpdate from "@/components/cadet/education/modals/EducationHistoryModalForCadetUpdate.vue"
+import ForeignLanguageModalForCadetUpdate from "@/components/cadet/languages/modals/ForeignLanguageModalForCadetUpdate.vue"
+import { PaginatorView } from "@/components/common"
 
 export default {
   name: "ForeignLanguagesCadetComponent",
-  components: { BaseListLayoutForCadetUpdate },
+  components: {
+    PaginatorView,
+    EducationHistoryModalForCadetUpdate,
+    BaseListLayoutForCadetUpdate,
+    ForeignLanguageModalForCadetUpdate,
+  },
   props: {
     cadetId: {
       type: String,
@@ -85,7 +326,7 @@ export default {
     return {
       isLoading: true,
       isError: false,
-      cadetForeignLanguageLevelList: {
+      mainItemList: {
         count: "",
         results: [],
         previous: null,
@@ -103,10 +344,15 @@ export default {
         previous: null,
         next: null,
       },
-      cadetForeignLanguageLevelAPIInstance:
-        getCadetForeignLanguageLevelAPIInstance(),
+      mainItemAPIInstance: getCadetForeignLanguageLevelAPIInstance(),
       foreignLanguageAPIInstance: getForeignLanguageAPIInstance(),
       foreignLanguageLevelAPIInstance: getForeignLanguageLevelAPIInstance(),
+      itemForm: Object.assign(
+        {},
+        getCadetForeignLanguageLevelAPIInstance().formData,
+      ),
+      selectedItems: [],
+      deleteItemId: "",
     }
   },
   async created() {
@@ -123,11 +369,11 @@ export default {
           foreignLanguages,
           foreignLanguageLevels,
         ] = await Promise.all([
-          listFunction("cadetForeignLanguageLevel")(this.cadetId),
+          listFunction("mainItem")(this.cadetId),
           listFunction("foreignLanguage")(),
           listFunction("foreignLanguageLevel")(),
         ])
-        this.cadetForeignLanguageLevelList = cadetForeignLanguageLevels
+        this.mainItemList = cadetForeignLanguageLevels
         this.foreignLanguageList = foreignLanguages
         this.foreignLanguageLevelList = foreignLanguageLevels
       } catch (e) {
@@ -136,23 +382,34 @@ export default {
         this.isLoading = false
       }
     },
-    showAddNewForeignLanguageModal() {
-      let addModal = this.$refs.foreignLanguageAddModal
-      let myModal = new bootstrap.Modal(addModal, {
-        keyboard: false,
-      })
-      myModal.show()
+    showAddNewMainItemModal,
+    showUpdateMainItemModal,
+    showDeleteApproveModal,
+    showDeleteApproveMultipleModal,
+    addNewMainItem,
+    updateMainItem,
+    updatePaginator,
+    trashButtonClick(id) {
+      this.deleteItemId = id
+      this.showDeleteApproveModal()
     },
-    async updatePaginator(url) {},
+    deleteMultipleClick() {
+      this.showDeleteApproveMultipleModal()
+    },
+    checkAllHandler,
+    clearFormData,
+    deleteItemHandler,
+    deleteCheckedItemsHandler,
   },
   computed: {
+    checkedForDeleteCount,
     orderedMainList() {
-      return this.cadetForeignLanguageLevelList.results
+      return this.mainItemList.results
     },
-    orderedForeignLanguageList() {
+    orderedForeignLanguagesList() {
       return this.foreignLanguageList.results
     },
-    orderedForeignLanguageLevelList() {
+    orderedForeignLanguageLevelsList() {
       return this.foreignLanguageLevelList.results
     },
   },
