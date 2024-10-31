@@ -281,8 +281,8 @@
           <td>
             {{ educationHistory.education_average_score || "Нет данных" }}
           </td>
-          <td class="d-flex align-items-end justify-content-end">
-            <div>
+          <td>
+            <div class="d-flex align-items-end justify-content-end">
               <button
                 type="button"
                 class="btn btn-outline-danger"

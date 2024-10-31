@@ -64,6 +64,7 @@ export async function addNewMainItem() {
     this.mainItemList.results.push(newItemData)
     this.$refs.mainItemAddModalCloseButton.click()
   } catch (e) {
+    console.log(e)
     this.isError = true
   } finally {
     this.isLoading = false

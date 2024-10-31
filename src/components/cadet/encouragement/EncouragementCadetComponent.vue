@@ -1,4 +1,5 @@
 <template>
+  <!-- add modal-->
   <div
     class="modal fade"
     id="mainItemAddModal"
@@ -19,6 +20,169 @@
             data-bs-dismiss="modal"
             aria-label="Close"
           ></button>
+        </div>
+
+        <form @submit.prevent="addNewMainItem">
+          <div class="modal-body">
+            <EncouragementModalForCadetUpdate
+              :main-data="itemForm"
+              :encouragement-kind-list="orderedEncouragementKinds"
+              :order-owners="orderedOrderOwnerList"
+            />
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              ref="mainItemAddModalCloseButton"
+            >
+              Закрыть
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Добавить запись
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- update modal-->
+  <div
+    class="modal fade"
+    id="mainItemUpdateModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+    ref="mainItemUpdateModal"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">
+            Добавление записи
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+
+        <form @submit.prevent="updateMainItem">
+          <div class="modal-body">
+            <EncouragementModalForCadetUpdate
+              :main-data="itemForm"
+              :encouragement-kind-list="orderedEncouragementKinds"
+              :order-owners="orderedOrderOwnerList"
+            />
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              ref="mainItemUpdateModalCloseButton"
+            >
+              Закрыть
+            </button>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- delete approve modal-->
+
+  <div
+    class="modal fade"
+    id="deleteApproveModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+    ref="deleteApproveModal"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">
+            Подтверждение удаления
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">Вы действительно хотите удалить запись?</div>
+        <div class="modal-footer border-0">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            ref="deleteApproveModalCloseButton"
+          >
+            Отмена
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            @click="deleteItemHandler"
+          >
+            Удалить
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- delete approve multiple modal-->
+
+  <div
+    class="modal fade"
+    id="deleteApproveMultipleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+    ref="deleteApproveMultipleModal"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">
+            Подтверждение удаления
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          Вы действительно хотите удалить данные записи -
+          {{ checkedForDeleteCount }} ?
+        </div>
+        <div class="modal-footer border-0">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            ref="deleteApproveModalMultipleCloseButton"
+          >
+            Отмена
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            @click="deleteCheckedItemsHandler"
+          >
+            Удалить
+          </button>
         </div>
       </div>
     </div>
@@ -41,6 +205,15 @@
           type="button"
         >
           <span class="fas fa-plus me-2"></span>Добавить запись
+        </button>
+      </template>
+      <template v-slot:delete-selected-button>
+        <button
+          @click="deleteMultipleClick"
+          class="btn btn-outline-danger"
+          v-if="checkedForDeleteCount"
+        >
+          Удалить ({{ checkedForDeleteCount }})
         </button>
       </template>
       <template v-slot:thead>
@@ -89,13 +262,16 @@
           <td>{{ encouragement.get_encouragement_order_owner }}</td>
           <td>{{ encouragement.extra_data || "Нет данных" }}</td>
           <td>
-            <button
-              type="button"
-              class="btn btn-outline-danger"
-              @click="deleteItem(encouragement.id)"
-            >
-              <font-awesome-icon :icon="['fas', 'trash']" />
-            </button>
+            <div class="d-flex align-items-end justify-content-end">
+              <button
+                type="button"
+                class="btn btn-outline-danger"
+                @click="trashButtonClick(encouragement.id)"
+                style="padding: 0.25rem 0.5rem"
+              >
+                <font-awesome-icon :icon="['fas', 'trash']" />
+              </button>
+            </div>
           </td>
         </tr>
       </template>
@@ -118,24 +294,37 @@ import {
   getLoadListFunction,
   showAddNewMainItemModal,
   showUpdateMainItemModal,
+  showDeleteApproveModal,
+  showDeleteApproveMultipleModal,
   addNewMainItem,
   updateMainItem,
   updatePaginator,
-  deleteItemHandler,
   checkAllHandler,
   clearFormData,
+  checkedForDeleteCount,
+  deleteItemHandler,
+  deleteCheckedItemsHandler,
 } from "../../../../utils"
-import getOrderOwnerAPIInstance from "@/api/cadet/orderOwnerAPI"
 import BaseListLayoutForCadetUpdate from "@/components/layouts/BaseListLayoutForCadetUpdate.vue"
 import { PaginatorView } from "@/components/common"
+import EncouragementModalForCadetUpdate from "@/components/cadet/encouragement/modals/EncouragementModalForCadetUpdate.vue"
 
 export default {
   name: "EncouragementCadetComponent",
-  components: { PaginatorView, BaseListLayoutForCadetUpdate },
+  components: {
+    PaginatorView,
+    BaseListLayoutForCadetUpdate,
+    EncouragementModalForCadetUpdate,
+  },
   props: {
     cadetId: {
       type: String,
       required: true,
+    },
+    orderOwnersList: {
+      type: Object,
+      required: true,
+      default: { count: "", results: [], previous: null, next: null },
     },
   },
   data() {
@@ -152,8 +341,9 @@ export default {
       orderOwnerList: { count: "", results: [], previous: null, next: null },
       mainItemAPIInstance: getEncouragementAPIInstance(),
       encouragementKindAPIInstance: getEncouragementKindAPIInstance(),
-      orderOwnerAPIInstance: getOrderOwnerAPIInstance(),
       itemForm: Object.assign({}, getEncouragementAPIInstance().formData),
+      selectedItems: [],
+      deleteItemId: "",
     }
   },
   async created() {
@@ -165,15 +355,12 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [encouragements, encouragementKinds, orderOwners] =
-          await Promise.all([
-            listFunction("mainItem")(this.cadetId),
-            listFunction("encouragementKind")(),
-            listFunction("orderOwner")(),
-          ])
+        const [encouragements, encouragementKinds] = await Promise.all([
+          listFunction("mainItem")(this.cadetId),
+          listFunction("encouragementKind")(),
+        ])
         this.mainItemList = encouragements
         this.encouragementKindList = encouragementKinds
-        this.orderOwnerList = orderOwners
       } catch (e) {
         this.isError = true
       } finally {
@@ -182,19 +369,33 @@ export default {
     },
     showAddNewMainItemModal,
     showUpdateMainItemModal,
+    showDeleteApproveModal,
+    showDeleteApproveMultipleModal,
     addNewMainItem,
     updateMainItem,
     updatePaginator,
-    deleteItemHandler,
+    trashButtonClick(id) {
+      this.deleteItemId = id
+      this.showDeleteApproveModal()
+    },
+    deleteMultipleClick() {
+      this.showDeleteApproveMultipleModal()
+    },
     checkAllHandler,
     clearFormData,
+    deleteItemHandler,
+    deleteCheckedItemsHandler,
   },
   computed: {
+    checkedForDeleteCount,
     orderedMainList() {
       return this.mainItemList.results
     },
     orderedEncouragementKinds() {
       return this.encouragementKindList.results
+    },
+    orderedOrderOwnerList() {
+      return this.orderOwnersList.results
     },
   },
   watch: {},

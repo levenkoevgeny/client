@@ -59,8 +59,6 @@ export default {
   name: "JobHistoryModalForCadetUpdate",
   props: {
     mainData: { type: Object, required: true },
-    // ranks: { type: Array, required: true },
-    // orderOwners: { type: Array, required: true },
   },
   components: {},
   data() {

@@ -257,8 +257,8 @@
           <td>
             {{ forLang.get_foreign_language_level_str || "Нет данных" }}
           </td>
-          <td class="d-flex align-items-end justify-content-end">
-            <div>
+          <td>
+            <div class="d-flex align-items-end justify-content-end">
               <button
                 type="button"
                 class="btn btn-outline-danger"

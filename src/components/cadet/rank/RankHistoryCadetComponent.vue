@@ -266,8 +266,8 @@
           <td>{{ rankHistory.rank_order_number }}</td>
           <td>{{ rankHistory.get_rank_order_owner_str }}</td>
           <td>{{ rankHistory.rank_extra_data || "Нет данных" }}</td>
-          <td class="d-flex align-items-end justify-content-end">
-            <div>
+          <td>
+            <div class="d-flex align-items-end justify-content-end">
               <button
                 type="button"
                 class="btn btn-outline-danger"

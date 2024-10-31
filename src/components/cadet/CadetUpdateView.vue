@@ -815,13 +815,34 @@
             <ForeignLanguagesCadetComponent :cadet-id="$route.params.id" />
             <ScientificWorksCadetComponent :cadet-id="$route.params.id" />
             <JobCadetComponent :cadet-id="$route.params.id" />
-            <ArmyServiceCadetComponent :cadet-id="$route.params.id" />
-            <MVDServiceCadetComponent :cadet-id="$route.params.id" />
-            <RewardCadetComponent :cadet-id="$route.params.id" />
-            <EncouragementCadetComponent :cadet-id="$route.params.id" />
-            <PunishmentCadetComponent :cadet-id="$route.params.id" />
-            <PositionCadetComponent :cadet-id="$route.params.id" />
-            <SpecialityCadetComponent :cadet-id="$route.params.id" />
+            <ArmyServiceCadetComponent
+              :cadet-id="$route.params.id"
+              :order-owners-list="orderOwnerList"
+            />
+            <MVDServiceCadetComponent
+              :cadet-id="$route.params.id"
+              :order-owners-list="orderOwnerList"
+            />
+            <RewardCadetComponent
+              :cadet-id="$route.params.id"
+              :order-owners-list="orderOwnerList"
+            />
+            <EncouragementCadetComponent
+              :cadet-id="$route.params.id"
+              :order-owners-list="orderOwnerList"
+            />
+            <PunishmentCadetComponent
+              :cadet-id="$route.params.id"
+              :order-owners-list="orderOwnerList"
+            />
+            <PositionCadetComponent
+              :cadet-id="$route.params.id"
+              :order-owners-list="orderOwnerList"
+            />
+            <SpecialityCadetComponent
+              :cadet-id="$route.params.id"
+              :order-owners-list="orderOwnerList"
+            />
 
             <!--              <div-->
             <!--                class="shadow p-3 mb-3 bg-body-tertiary rounded"-->

@@ -179,6 +179,7 @@
       </div>
     </div>
   </div>
+
   <div
     class="shadow p-3 mb-3 bg-body-tertiary rounded"
     id="simple-list-job-data"
@@ -256,8 +257,8 @@
           <td>
             {{ job.organisation_name || "Нет данных" }}
           </td>
-          <td class="d-flex align-items-end justify-content-end">
-            <div>
+          <td>
+            <div class="d-flex align-items-end justify-content-end">
               <button
                 type="button"
                 class="btn btn-outline-danger"
