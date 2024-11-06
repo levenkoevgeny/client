@@ -844,58 +844,7 @@
               :order-owners-list="orderOwnerList"
             />
 
-            <!--              <div-->
-            <!--                class="shadow p-3 mb-3 bg-body-tertiary rounded"-->
-            <!--                id="simple-list-marital-status-data"-->
-            <!--              >-->
-            <!--                <div class="card">-->
-            <!--                  <div class="card-body">-->
-            <!--                    <h5 class="card-title">Семейное положение</h5>-->
-            <!--                    <div class="row">-->
-            <!--                      <div class="col-4">-->
-            <!--                        <div class="mb-3">-->
-            <!--                          <label class="form-label" for="id_last_name_rus"-->
-            <!--                            >Семейное положение</label-->
-            <!--                          >-->
-            <!--                          <select-->
-            <!--                            id="id_last_name_rus"-->
-            <!--                            name="last_name_rus"-->
-            <!--                            class="form-select"-->
-            <!--                          >-->
-            <!--                            <option value="">-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>-->
-            <!--                          </select>-->
-            <!--                        </div>-->
-            <!--                      </div>-->
-            <!--                    </div>-->
-
-            <!--                    <div-->
-            <!--                      class="d-flex align-items-center justify-content-end mb-4"-->
-            <!--                    >-->
-            <!--                      <button type="button" class="btn btn-warning">-->
-            <!--                        Добавить запись-->
-            <!--                      </button>-->
-            <!--                    </div>-->
-            <!--                    <table class="table table-hover">-->
-            <!--                      <thead>-->
-            <!--                        <tr>-->
-            <!--                          <th>-->
-            <!--                            Фамилия, имя, отчество жены (мужа), детей и лиц,-->
-            <!--                            находящихся на иждивении-->
-            <!--                          </th>-->
-            <!--                          <th>Степень родства</th>-->
-            <!--                          <th>Приказ о назначении</th>-->
-            <!--                          <th>Число, месяц, год и место рождения</th>-->
-            <!--                          <th>-->
-            <!--                            Основание: номер и дата свидетельства о браке, о-->
-            <!--                            рождении, кем выдано-->
-            <!--                          </th>-->
-            <!--                        </tr>-->
-            <!--                      </thead>-->
-            <!--                      <tbody></tbody>-->
-            <!--                    </table>-->
-            <!--                  </div>-->
-            <!--                </div>-->
-            <!--              </div>-->
+            <RelativesCadetComponent :cadet-id="$route.params.id" />
           </div>
         </div>
         <div class="col-2">
@@ -1011,6 +960,7 @@ import { RewardCadetComponent } from "@/components/cadet/reward"
 import { PunishmentCadetComponent } from "@/components/cadet/punishment"
 import { PositionCadetComponent } from "@/components/cadet/position"
 import { SpecialityCadetComponent } from "@/components/cadet/speciality"
+import RelativesCadetComponent from "@/components/cadet/relatives/RelativesCadetComponent.vue"
 import "vue-select/dist/vue-select.css"
 
 export default {
@@ -1028,6 +978,7 @@ export default {
     PunishmentCadetComponent,
     PositionCadetComponent,
     SpecialityCadetComponent,
+    RelativesCadetComponent,
   },
   data() {
     return {

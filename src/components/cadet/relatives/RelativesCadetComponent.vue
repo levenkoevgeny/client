@@ -23,10 +23,9 @@
 
         <form @submit.prevent="addNewMainItem">
           <div class="modal-body">
-            <SpecialityModalForCadetUpdate
+            <RelativesModalForCadetUpdate
               :main-data="itemForm"
-              :speciality-list="orderedSpecialityList"
-              :order-owners="orderedOrderOwnerList"
+              :degree-of-kinship-list="orderedDegreeOfKinshipList"
             />
           </div>
           <div class="modal-footer">
@@ -72,10 +71,9 @@
 
         <form @submit.prevent="updateMainItem">
           <div class="modal-body">
-            <SpecialityModalForCadetUpdate
+            <RelativesModalForCadetUpdate
               :main-data="itemForm"
-              :speciality-list="orderedSpecialityList"
-              :order-owners="orderedOrderOwnerList"
+              :degree-of-kinship-list="orderedDegreeOfKinshipList"
             />
           </div>
           <div class="modal-footer">
@@ -189,12 +187,12 @@
 
   <div
     class="shadow p-3 mb-3 bg-body-tertiary rounded"
-    id="simple-list-specialities-data"
+    id="simple-list-marital-status-data"
   >
     <base-list-layout-for-cadet-update
       :is-loading="isLoading"
       :main-list-length="orderedMainList.length"
-      title="Специальности"
+      title="Семейное положение"
     >
       <template v-slot:add-button>
         <button
@@ -228,19 +226,25 @@
               />
             </div>
           </th>
-          <th>Специальность</th>
-          <th>Приказ о назначении</th>
-          <th>Дата приказа</th>
-          <th>Чей приказ</th>
-          <th>Фабула</th>
+          <th>
+            Фамилия, имя, отчество жены (мужа), детей и лиц, находящихся на
+            иждивении
+          </th>
+          <th>Степень родства</th>
+          <th>Дата рождения</th>
+          <th>Место рождения</th>
+          <th>
+            Основание: номер и дата свидетельства о браке, о рождении, кем
+            выдано
+          </th>
           <th></th>
         </tr>
       </template>
       <template v-slot:tbody>
         <tr
-          v-for="speciality in orderedMainList"
-          :key="speciality.id"
-          @dblclick.stop="showUpdateMainItemModal(speciality.id)"
+          v-for="relative in orderedMainList"
+          :key="relative.id"
+          @dblclick.stop="showUpdateMainItemModal(relative.id)"
         >
           <td>
             <div
@@ -249,23 +253,21 @@
               <input
                 type="checkbox"
                 class="form-check-input my-0"
-                v-model="speciality.isSelected"
+                v-model="relative.isSelected"
               />
             </div>
           </td>
-          <td>{{ speciality.get_speciality_str || "Нет данных" }}</td>
-          <td>{{ speciality.speciality_order_number || "Нет данных" }}</td>
-          <td>{{ speciality.speciality_order_date || "Нет данных" }}</td>
-          <td>
-            {{ speciality.get_speciality_order_owner_str || "Нет данных" }}
-          </td>
-          <td>{{ speciality.speciality_extra_data || "Нет данных" }}</td>
+          <td>{{ relative.kinship_data || "Нет данных" }}</td>
+          <td>{{ relative.get_degree_of_kinship_str || "Нет данных" }}</td>
+          <td>{{ relative.date_of_birth || "Нет данных" }}</td>
+          <td>{{ relative.place_of_birth || "Нет данных" }}</td>
+          <td>{{ relative.document_data || "Нет данных" }}</td>
           <td>
             <div class="d-flex align-items-end justify-content-end">
               <button
                 type="button"
                 class="btn btn-outline-danger"
-                @click="trashButtonClick(speciality.id)"
+                @click="trashButtonClick(relative.id)"
                 style="padding: 0.25rem 0.5rem"
               >
                 <font-awesome-icon :icon="['fas', 'trash']" />
@@ -287,11 +289,11 @@
 </template>
 
 <script>
-import getSpecialityAPIInstance from "@/api/cadet/specialityAPI"
-import getSpecialityHistoryAPIInstance from "@/api/cadet/specialityHistoryAPI"
-import SpecialityModalForCadetUpdate from "@/components/cadet/speciality/modals/SpecialityModalForCadetUpdate.vue"
+import getRelativesAPIInstance from "@/api/cadet/relativesAPI"
+import getDegreeOfKinshipAPIInstance from "@/api/cadet/degreeOfKinshipAPI"
 
 import BaseListLayoutForCadetUpdate from "@/components/layouts/BaseListLayoutForCadetUpdate.vue"
+import RelativesModalForCadetUpdate from "@/components/cadet/relatives/modals/RelativesModalForCadetUpdate.vue"
 import {
   getLoadListFunction,
   showAddNewMainItemModal,
@@ -308,24 +310,18 @@ import {
   deleteCheckedItemsHandler,
 } from "../../../../utils"
 import { PaginatorView } from "@/components/common"
-import getEncouragementAPIInstance from "@/api/cadet/encouragementAPI"
 
 export default {
   name: "SpecialityCadetComponent",
   components: {
     BaseListLayoutForCadetUpdate,
-    SpecialityModalForCadetUpdate,
     PaginatorView,
+    RelativesModalForCadetUpdate,
   },
   props: {
     cadetId: {
       type: String,
       required: true,
-    },
-    orderOwnersList: {
-      type: Object,
-      required: true,
-      default: { count: "", results: [], previous: null, next: null },
     },
   },
   data() {
@@ -338,15 +334,15 @@ export default {
         previous: null,
         next: null,
       },
-      specialityList: {
+      degreeOfKinshipList: {
         count: "",
         results: [],
         previous: null,
         next: null,
       },
-      mainItemAPIInstance: getSpecialityHistoryAPIInstance(),
-      specialityAPIInstance: getSpecialityAPIInstance(),
-      itemForm: Object.assign({}, getEncouragementAPIInstance().formData),
+      mainItemAPIInstance: getRelativesAPIInstance(),
+      degreeOfKinshipAPIInstance: getDegreeOfKinshipAPIInstance(),
+      itemForm: Object.assign({}, getRelativesAPIInstance().formData),
       selectedItems: [],
       deleteItemId: "",
     }
@@ -360,12 +356,12 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [specialityHistories, specialities] = await Promise.all([
+        const [relatives, degreesOfKinship] = await Promise.all([
           listFunction("mainItem")(this.cadetId),
-          listFunction("speciality")(),
+          listFunction("degreeOfKinship")(),
         ])
-        this.mainItemList = specialityHistories
-        this.specialityList = specialities
+        this.mainItemList = relatives
+        this.degreeOfKinshipList = degreesOfKinship
       } catch (e) {
         this.isError = true
       } finally {
@@ -396,11 +392,8 @@ export default {
     orderedMainList() {
       return this.mainItemList.results
     },
-    orderedSpecialityList() {
-      return this.specialityList.results
-    },
-    orderedOrderOwnerList() {
-      return this.orderOwnersList.results
+    orderedDegreeOfKinshipList() {
+      return this.degreeOfKinshipList.results
     },
   },
   watch: {},

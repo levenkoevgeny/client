@@ -1,41 +1,55 @@
 <template>
-  <slot name="modals"></slot>
   <div class="container-fluid">
-    <slot name="title"></slot>
     <div class="row">
       <div class="col-8">
-        <slot name="extra"></slot>
-        <div class="my-4">
-          <slot name="add-button">
-            <button class="btn btn-warning" :disabled="isLoading">
-              <span class="fas fa-plus me-2"></span>Добавить запись
-            </button>
-          </slot>
-        </div>
-        <div v-if="isLoading">Loading</div>
-        <div v-else>
-          <div
-            class="table-responsive my-3"
-            style="max-height: 70vh; overflow: auto"
-          >
-            <table class="table table-hover fw-light">
-              <thead>
-                <slot name="thead"></slot>
-              </thead>
-              <tbody class="table-borderless">
-                <slot name="tbody"></slot>
-              </tbody>
-            </table>
-          </div>
-          <slot name="paginator"></slot>
-        </div>
+        <slot name="list"></slot>
       </div>
-      <div class="col-4" style="max-height: 90vh; overflow: auto">
-        <h5 class="my-3">Поиск по критериям</h5>
-        <slot name="search-form"></slot>
+      <div class="col-4">
+        <h3 class="my-3">Поиск по критериям</h3>
+        <div style="max-height: 90vh; overflow-y: auto; overflow-x: hidden">
+          <slot name="search-form"></slot>
+        </div>
       </div>
     </div>
   </div>
+
+  <!--  <slot name="modals"></slot>-->
+  <!--  <div class="container-fluid">-->
+  <!--    <slot name="title"></slot>-->
+  <!--    <div class="row">-->
+  <!--      <div class="col-8">-->
+  <!--        <slot name="extra"></slot>-->
+  <!--        <div class="my-4">-->
+  <!--          <slot name="add-button">-->
+  <!--            <button class="btn btn-warning" :disabled="isLoading">-->
+  <!--              <span class="fas fa-plus me-2"></span>Добавить запись-->
+  <!--            </button>-->
+  <!--          </slot>-->
+  <!--        </div>-->
+  <!--        <div v-if="isLoading">Loading</div>-->
+  <!--        <div v-else>-->
+  <!--          <div-->
+  <!--            class="table-responsive my-3"-->
+  <!--            style="max-height: 70vh; overflow: auto"-->
+  <!--          >-->
+  <!--            <table class="table table-hover fw-light">-->
+  <!--              <thead>-->
+  <!--                <slot name="thead"></slot>-->
+  <!--              </thead>-->
+  <!--              <tbody class="table-borderless">-->
+  <!--                <slot name="tbody"></slot>-->
+  <!--              </tbody>-->
+  <!--            </table>-->
+  <!--          </div>-->
+  <!--          <slot name="paginator"></slot>-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--      <div class="col-4" style="max-height: 90vh; overflow: auto">-->
+  <!--        <h5 class="my-3">Поиск по критериям</h5>-->
+  <!--        <slot name="search-form"></slot>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
 </template>
 
 <script>

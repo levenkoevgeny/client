@@ -71,6 +71,22 @@
             </li>
           </ul>
         </div>
+        <!--        <div class="toggle-switch">-->
+        <!--          <label>-->
+        <!--            <input type="checkbox" />-->
+        <!--            <span class="slider"></span>-->
+        <!--          </label>-->
+        <!--        </div>-->
+
+        <div class="form-check form-switch">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="darkModeSwitch"
+            checked
+          />
+          <label class="form-check-label" for="darkModeSwitch">Dark Mode</label>
+        </div>
       </div>
     </nav>
     <router-view></router-view>

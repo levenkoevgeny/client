@@ -85,6 +85,7 @@ export async function updateMainItem() {
     })
     this.$refs.mainItemUpdateModalCloseButton.click()
   } catch (e) {
+    console.log(e)
     this.isError = true
   } finally {
     this.isLoading = false
