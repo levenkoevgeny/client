@@ -123,6 +123,11 @@
     --bs-form-valid-border-color: #198754;
     --bs-form-invalid-color: #dc3545;
     --bs-form-invalid-border-color: #dc3545;
+    --phoenix-theme-control-toggle-bg: rgba(255, 204, 133, 0.24);
+    --phoenix-warning: #e5780b;
+    --phoenix-theme-control-toggle-color: var(--phoenix-warning);
+    --phoenix-theme-control-toggle-hover-bg: var(--phoenix-warning);
+    --phoenix-theme-control-toggle-hover-color: #ffefca;
 }
 
 [data-bs-theme=dark] {
@@ -179,6 +184,13 @@
     --bs-form-valid-border-color: #75b798;
     --bs-form-invalid-color: #ea868f;
     --bs-form-invalid-border-color: #ea868f;
+    --phoenix-primary-light: #3874ff;
+    --phoenix-primary-rgb: 133, 169, 255;
+    --phoenix-theme-control-toggle-color: var(--phoenix-primary-light);
+    --phoenix-theme-control-toggle-hover-bg: rgba(var(--phoenix-primary-rgb), 0.7);
+    --phoenix-theme-control-toggle-hover-color: #e5edff;
+
+
 }
 
 *,

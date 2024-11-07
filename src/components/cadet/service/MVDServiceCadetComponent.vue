@@ -265,7 +265,6 @@
           <td>
             {{ mvdService.mvd_organization || "Нет данных" }}
           </td>
-
           <td>
             {{ mvdService.get_order_owner_str || "Нет данных" }}
           </td>

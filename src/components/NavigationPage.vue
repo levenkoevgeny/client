@@ -1,11 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/public">
-        <img src="../assets/logo.png" alt="KIS" width="30" height="30" />
-      </a>
-    </div>
-  </nav>
+<navigation-layout></navigation-layout>
   <div class="container">
     <h1 class="my-4">Навигация по разделам</h1>
     <div class="d-flex flex-row flex-wrap">
@@ -77,9 +71,10 @@
 </template>
 
 <script>
+import NavigationLayout from "@/components/layouts/NavigationLayout.vue"
 export default {
   name: "NavigationPage",
-  components: {},
+  components: {NavigationLayout},
   data() {
     return {}
   },
