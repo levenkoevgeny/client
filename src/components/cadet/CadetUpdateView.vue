@@ -29,13 +29,13 @@
                   <h5 class="card-title">Личные данные</h5>
                   <div class="row">
                     <div class="col-lg-4">
-                      <div class="text-center m-3">
+                      <div class="text-center m-3 border" style="position: relative">
                         <img
                           v-if="currentCadetData.photo"
                           :src="currentCadetData.photo"
                           class="rounded-2"
                           alt="..."
-                          style="width: 100%"
+                          style="width: 100%;"
                         />
                         <img
                           v-else
@@ -44,6 +44,7 @@
                           alt="..."
                           style="width: 100%"
                         />
+                        <input type="file" accept="image/png, image/jpeg" style="position: absolute; bottom: 10px;left:10px">
                       </div>
                     </div>
                     <div class="col-lg-8">
@@ -843,7 +844,6 @@
               :cadet-id="$route.params.id"
               :order-owners-list="orderOwnerList"
             />
-
             <RelativesCadetComponent :cadet-id="$route.params.id" />
           </div>
         </div>
@@ -1231,12 +1231,14 @@ export default {
     debouncedUpdate: debounce(async function () {
       this.isLoading = true
       try {
+        const { photo, ...rest } = this.currentCadetData;
         await this.cadetAPIInstance.updateItem(
           "token is here!!!",
-          this.currentCadetData,
+          rest
         )
       } catch (e) {
         this.isError = true
+        console.log(e)
       } finally {
         this.isLoading = false
       }
@@ -1279,4 +1281,5 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>
