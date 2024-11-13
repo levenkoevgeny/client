@@ -61,7 +61,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">
-            Добавление записи
+            Редактирование записи
           </h1>
           <button
             type="button"
@@ -338,7 +338,6 @@ export default {
         previous: null,
         next: null,
       },
-      orderOwnerList: { count: "", results: [], previous: null, next: null },
       mainItemAPIInstance: getEncouragementAPIInstance(),
       encouragementKindAPIInstance: getEncouragementKindAPIInstance(),
       itemForm: Object.assign({}, getEncouragementAPIInstance().formData),

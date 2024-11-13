@@ -1,57 +1,570 @@
 <template>
-  {{ orderedOrderOwners }}<br />
-  {{ selected }}
-  <v-select
-    multiple
-    v-model="selected"
-    :options="orderedOrderOwners"
-    label="order_owner"
-    :filterable="false"
-    @search="onSearch"
-    taggable
-    push-tags
+  <base-list-layout
+    :is-loading="isLoading"
+    :main-list-length="mainItemList.count"
+    title="Поощрения"
   >
-    <template slot="no-options">
-      type to search GitHub repositories..
-    </template>
-    <template slot="option" slot-scope="option">
-      <div class="d-center">
-        {{ option }}
-      </div>
-    </template>
-    <template slot="selected-option" slot-scope="option">
-      <div class="selected d-center">
-        {{ option }}
-      </div>
-    </template>
-  </v-select>
-  <!--  <template slot="option" slot-scope="option">-->
-  <!--    <div class="d-center">-->
-  <!--      {{ order_owner }}-->
-  <!--    </div>-->
-  <!--  </template>-->
+    <template v-slot:modals>
+      <!-- add modal-->
+      <div
+        class="modal fade"
+        id="mainItemAddModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+        ref="mainItemAddModal"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Добавление записи
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <form @submit.prevent="addNewMainItemInList">
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="id_encouragement_kind" class="form-label"
+                    >Курсант (курсанты)</label
+                  >
+                  <v-select
+                    multiple
+                    v-model="selectedCadet"
+                    :options="orderedCadets"
+                    label="get_full_name"
+                    :filterable="false"
+                    @search="onSearch"
+                  >
+                    <template slot="no-options"> Поиск по фамилии...</template>
+                    <template slot="option" slot-scope="option">
+                      <div class="d-center">
+                        {{ option }}
+                      </div>
+                    </template>
+                    <template slot="selected-option" slot-scope="option">
+                      <div class="selected d-center">
+                        {{ option }}
+                      </div>
+                    </template>
+                  </v-select>
+                </div>
 
-  <base-list-layout :is-loading="isLoading">
-    <template v-slot:list> hh</template>
-    <template v-slot:search-form> form</template>
+                <EncouragementModalForCadetUpdate
+                  :main-data="itemForm"
+                  :encouragement-kind-list="orderedEncouragementKinds"
+                  :order-owners="orderedOrderOwners"
+                />
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                  ref="mainItemAddModalCloseButton"
+                >
+                  Закрыть
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  Добавить запись
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- update modal-->
+      <div
+        class="modal fade"
+        id="mainItemUpdateModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+        ref="mainItemUpdateModal"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Редактирование записи
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <form @submit.prevent="updateMainItemInList">
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="id_encouragement_kind" class="form-label"
+                    >Курсант</label
+                  >
+                  <v-select
+                    v-model="selectedCadet"
+                    :options="orderedCadets"
+                    label="get_full_name"
+                    :filterable="false"
+                    @search="onSearch"
+                  >
+                    <template slot="no-options"> Поиск по фамилии...</template>
+                    <template slot="option" slot-scope="option">
+                      <div class="d-center">
+                        {{ option }}
+                      </div>
+                    </template>
+                    <template slot="selected-option" slot-scope="option">
+                      <div class="selected d-center">
+                        {{ option }}
+                      </div>
+                    </template>
+                  </v-select>
+                </div>
+
+                <EncouragementModalForCadetUpdate
+                  :main-data="itemForm"
+                  :encouragement-kind-list="orderedEncouragementKinds"
+                  :order-owners="orderedOrderOwnerList"
+                />
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                  ref="mainItemUpdateModalCloseButton"
+                >
+                  Закрыть
+                </button>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- delete approve modal-->
+
+      <div
+        class="modal fade"
+        id="deleteApproveModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+        ref="deleteApproveModal"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header border-0">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Подтверждение удаления
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              Вы действительно хотите удалить запись?
+            </div>
+            <div class="modal-footer border-0">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                ref="deleteApproveModalCloseButton"
+              >
+                Отмена
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                @click="deleteItemHandler"
+              >
+                Удалить
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- delete approve multiple modal-->
+
+      <div
+        class="modal fade"
+        id="deleteApproveMultipleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+        ref="deleteApproveMultipleModal"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header border-0">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Подтверждение удаления
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              Вы действительно хотите удалить данные записи -
+              {{ checkedForDeleteCount }} ?
+            </div>
+            <div class="modal-footer border-0">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                ref="deleteApproveModalMultipleCloseButton"
+              >
+                Отмена
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                @click="deleteCheckedItemsHandler"
+              >
+                Удалить
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+    <template v-slot:add-button>
+      <button
+        class="btn btn-warning"
+        :disabled="isLoading"
+        @click="showAddNewMainItemModal"
+      >
+        Добавить запись
+      </button>
+    </template>
+    <template v-slot:delete-selected-button>
+      <button
+        @click="deleteMultipleClick"
+        class="btn btn-outline-danger"
+        v-if="checkedForDeleteCount"
+      >
+        Удалить ({{ checkedForDeleteCount }})
+      </button>
+    </template>
+    <template v-slot:table-mode-button> </template>
+
+    <template v-slot:thead>
+      <tr>
+        <th>
+          <div
+            class="form-check d-flex align-items-center justify-content-center"
+          >
+            <input
+              type="checkbox"
+              class="form-check-input my-0"
+              @change="checkAllHandler($event)"
+            />
+          </div>
+        </th>
+        <th>Курсант</th>
+        <th>Поощрение</th>
+        <th>Дата</th>
+        <th>Номер приказа</th>
+        <th>Дата приказа</th>
+        <th>Чей приказ</th>
+        <th>Фабула</th>
+        <th></th>
+      </tr>
+    </template>
+    <template v-slot:tbody>
+      <tr
+        v-for="encouragement in orderedMainList"
+        :key="encouragement.id"
+        @dblclick.stop="showUpdateMainItemModalInList(encouragement.id)"
+      >
+        <td>
+          <div
+            class="form-check d-flex align-items-center justify-content-center"
+          >
+            <input
+              type="checkbox"
+              class="form-check-input my-0"
+              v-model="encouragement.isSelected"
+            />
+          </div>
+        </td>
+        <td>{{ encouragement.get_cadet_str }}</td>
+        <td>
+          {{ encouragement.get_encouragement_kind_str || "Нет данных" }}
+        </td>
+        <td>{{ encouragement.encouragement_date }}</td>
+        <td>{{ encouragement.encouragement_order_number }}</td>
+        <td>{{ encouragement.encouragement_order_date }}</td>
+        <td>{{ encouragement.get_encouragement_order_owner }}</td>
+        <td>{{ encouragement.extra_data || "Нет данных" }}</td>
+        <td>
+          <div class="d-flex align-items-end justify-content-end">
+            <button
+              type="button"
+              class="btn btn-outline-danger"
+              @click="trashButtonClick(encouragement.id)"
+              style="padding: 0.25rem 0.5rem"
+            >
+              <font-awesome-icon :icon="['fas', 'trash']" />
+            </button>
+          </div>
+        </td>
+      </tr>
+    </template>
+    <template v-slot:paginator>
+      <PaginatorView
+        :update-paginator="updatePaginator"
+        :list-next="mainItemList.next"
+        :list-previous="mainItemList.previous"
+        v-if="mainItemList.previous || mainItemList.next"
+      />
+    </template>
+    <template v-slot:search-form>
+      <div class="mb-3">
+        <label for="subdivision" class="form-label">Вид благодарности</label>
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          v-model="searchForm.encouragement_kind"
+        >
+          <option selected value="">--------</option>
+          <option
+            v-for="encouragementKind in orderedEncouragementKinds"
+            :key="encouragementKind.id"
+            :value="encouragementKind.id"
+          >
+            {{ encouragementKind.encouragement_kind }}
+          </option>
+        </select>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="encouragement_date__gte" class="form-label"
+              >Дата поощрения (с)</label
+            >
+            <input
+              type="date"
+              class="form-control"
+              id="encouragement_date__gte"
+              v-model="searchForm.encouragement_date__gte"
+            />
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="encouragement_date__lte" class="form-label"
+              >Дата поощрения (по)</label
+            >
+            <input
+              type="date"
+              class="form-control"
+              id="encouragement_date__lte"
+              v-model="searchForm.encouragement_date__lte"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="encouragement_order_date__gte" class="form-label"
+              >Дата приказа (с)</label
+            >
+            <input
+              type="date"
+              class="form-control"
+              id="encouragement_order_date__gte"
+              v-model="searchForm.encouragement_order_date__gte"
+            />
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="encouragement_order_date__lte" class="form-label"
+              >Дата приказа (по)</label
+            >
+            <input
+              type="date"
+              class="form-control"
+              id="encouragement_order_date__lte"
+              v-model="searchForm.encouragement_order_date__lte"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="subdivision" class="form-label">Чей приказ</label>
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          v-model="searchForm.encouragement_order_owner"
+        >
+          <option selected value="">--------</option>
+          <option
+            v-for="orderOwner in orderedOrderOwners"
+            :key="orderOwner.id"
+            :value="orderOwner.id"
+          >
+            {{ orderOwner.order_owner }}
+          </option>
+        </select>
+      </div>
+      <button type="button" class="btn btn-primary" @click="clearFilter">
+        Сбросить фильтр
+      </button>
+    </template>
+
+    <!--    <template v-slot:list>-->
+    <!--      <div class="my-4">-->
+    <!--        <div class="d-flex justify-content-between align-items-center">-->
+    <!--          <button class="btn btn-warning" @click="showCadetAddModal">-->
+    <!--            Добавить запись-->
+    <!--          </button>-->
+    <!--          <router-link-->
+    <!--            :to="{ name: 'cadet-full' }"-->
+    <!--            class="fs-3 fw-light link-secondary"-->
+    <!--            title="Табличный режим"-->
+    <!--          >-->
+    <!--            <font-awesome-icon :icon="['fas', 'table']" />-->
+    <!--          </router-link>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--      <div>-->
+    <!--        <ul class="nav nav-links my-3 mb-lg-2 mx-n3">-->
+    <!--          <li class="nav-item">-->
+    <!--            <a class="nav-link active" aria-current="page" href="#"-->
+    <!--              ><span>Всего </span-->
+    <!--              ><span class="text-body-tertiary fw-semibold">()</span></a-->
+    <!--            >-->
+    <!--          </li>-->
+    <!--        </ul>-->
+    <!--      </div>-->
+    <!--      <div-->
+    <!--        class="table-responsive my-3"-->
+    <!--        style="max-height: 70vh; overflow: auto"-->
+    <!--      >-->
+    <!--        <table class="table table-hover">-->
+    <!--          <thead style="position: sticky; top: 0">-->
+    <!--            <tr>-->
+    <!--              <th>-->
+    <!--                <div-->
+    <!--                  class="form-check d-flex align-items-center justify-content-center"-->
+    <!--                >-->
+    <!--                  <input-->
+    <!--                    type="checkbox"-->
+    <!--                    class="form-check-input my-0"-->
+    <!--                    @change="checkAllHandler($event)"-->
+    <!--                  />-->
+    <!--                </div>-->
+    <!--              </th>-->
+    <!--              <th>Поощрение</th>-->
+    <!--              <th>Дата</th>-->
+    <!--              <th>Приказ</th>-->
+    <!--              <th>Чей приказ</th>-->
+    <!--              <th>Фабула</th>-->
+    <!--              <th></th>-->
+    <!--            </tr>-->
+    <!--          </thead>-->
+
+    <!--          <tbody class="table-borderless">-->
+    <!--            <tr-->
+    <!--              v-for="encouragement in orderedMainList"-->
+    <!--              :key="encouragement.id"-->
+    <!--              @dblclick.stop="showUpdateMainItemModal(encouragement.id)"-->
+    <!--            >-->
+    <!--              <td>-->
+    <!--                <div-->
+    <!--                  class="form-check d-flex align-items-center justify-content-center"-->
+    <!--                >-->
+    <!--                  <input-->
+    <!--                    type="checkbox"-->
+    <!--                    class="form-check-input my-0"-->
+    <!--                    v-model="encouragement.isSelected"-->
+    <!--                  />-->
+    <!--                </div>-->
+    <!--              </td>-->
+    <!--              <td>-->
+    <!--                {{ encouragement.get_encouragement_kind_str || "Нет данных" }}-->
+    <!--              </td>-->
+    <!--              <td>{{ encouragement.encouragement_date }}</td>-->
+    <!--              <td>{{ encouragement.encouragement_order_number }}</td>-->
+    <!--              <td>{{ encouragement.get_encouragement_order_owner }}</td>-->
+    <!--              <td>{{ encouragement.extra_data || "Нет данных" }}</td>-->
+    <!--              <td>-->
+    <!--                <div class="d-flex align-items-end justify-content-end">-->
+    <!--                  <button-->
+    <!--                    type="button"-->
+    <!--                    class="btn btn-outline-danger"-->
+    <!--                    @click="trashButtonClick(encouragement.id)"-->
+    <!--                    style="padding: 0.25rem 0.5rem"-->
+    <!--                  >-->
+    <!--                    <font-awesome-icon :icon="['fas', 'trash']" />-->
+    <!--                  </button>-->
+    <!--                </div>-->
+    <!--              </td>-->
+    <!--            </tr>-->
+    <!--          </tbody>-->
+    <!--        </table>-->
+    <!--      </div>-->
+    <!--    </template>-->
+    <!--    <template v-slot:search-form>-->
+    <!--      <button type="button" class="btn btn-primary" @click="clearFilter">-->
+    <!--        Сбросить фильтр-->
+    <!--      </button>-->
+    <!--    </template>-->
   </base-list-layout>
 </template>
 
 <script>
 import getEncouragementAPIInstance from "@/api/cadet/encouragementAPI"
 import getEncouragementKindAPIInstance from "@/api/cadet/encouragementKindAPI"
-import getCadetAPIInstance from "@/api/cadet/cadetAPI"
 import getOrderOwnerAPIInstance from "@/api/cadet/orderOwnerAPI"
+import getCadetAPIInstance from "@/api/cadet/cadetAPI"
 
 import BaseListLayout from "@/components/layouts/BaseListLayout.vue"
 import { PaginatorView } from "@/components/common"
 import { debounce } from "lodash/function"
-import { getLoadListFunction } from "../../../../utils"
-import axios from "axios"
+
+import {
+  getLoadListFunction,
+  showAddNewMainItemModal,
+  showUpdateMainItemModalInList,
+  showDeleteApproveModal,
+  showDeleteApproveMultipleModal,
+  updatePaginator,
+  checkAllHandler,
+  checkedForDeleteCount,
+  deleteItemHandler,
+  deleteCheckedItemsHandler,
+  clearFormData,
+  addNewMainItemInList,
+  updateMainItemInList,
+} from "../../../../utils"
+import EncouragementModalForCadetUpdate from "@/components/cadet/encouragement/modals/EncouragementModalForCadetUpdate.vue"
 
 export default {
   name: "EncouragementListView",
   components: {
+    EncouragementModalForCadetUpdate,
     BaseListLayout,
     PaginatorView,
   },
@@ -60,10 +573,29 @@ export default {
       isLoading: true,
       isError: false,
       options: [],
+      selectedCadet: [],
+      mainItemList: {
+        count: 0,
+        results: [],
+        previous: null,
+        next: null,
+      },
+      encouragementKindList: {
+        count: "",
+        results: [],
+        previous: null,
+        next: null,
+      },
       orderOwnerList: { count: "", results: [], previous: null, next: null },
+      cadetList: { count: "", results: [], previous: null, next: null },
+      mainItemAPIInstance: getEncouragementAPIInstance(),
+      encouragementKindAPIInstance: getEncouragementKindAPIInstance(),
       orderOwnerAPIInstance: getOrderOwnerAPIInstance(),
-      searchForm: {},
-      selected: [],
+      cadetAPIInstance: getCadetAPIInstance(),
+      itemForm: Object.assign({}, getEncouragementAPIInstance().formData),
+      searchForm: Object.assign({}, getEncouragementAPIInstance().searchObj),
+      selectedItems: [],
+      deleteItemId: "",
     }
   },
   async created() {
@@ -77,78 +609,79 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [orderOwners] = await Promise.all([listFunction("orderOwner")()])
+        const [encouragements, encouragementKinds, orderOwners] =
+          await Promise.all([
+            listFunction("mainItem")(this.cadetId),
+            listFunction("encouragementKind")(),
+            listFunction("orderOwner")(),
+          ])
+        this.mainItemList = encouragements
+        this.encouragementKindList = encouragementKinds
         this.orderOwnerList = orderOwners
       } catch (e) {
         this.isError = true
       } finally {
         this.isLoading = false
       }
-
-      // try {
-      //   const [encouragements, encouragementKinds, cadets, orderOwners] =
-      //     await Promise.all([
-      //       this.getEncouragements(),
-      //       this.getEncouragementKinds(),
-      //       this.getCadets(),
-      //       this.getOrderOwners(),
-      //     ]).catch(() => (this.isError = true))
-      //
-      //   this.encouragementList = encouragements
-      //   this.encouragementKindList = encouragementKinds
-      //   this.cadetList = cadets
-      //   this.orderOwnerList = orderOwners
-      // } catch (e) {
-      //   this.isError = true
-      // } finally {
-      //   this.isLoading = false
-      // }
     },
     async onSearch(search, loading) {
       if (search.length) {
         loading(true)
-        const response = await axios(
-          `http://localhost:8000/api/order-owner/?order_owner__icontains=${search}`,
+        this.cadetAPIInstance.searchObj = Object.assign(
+          {},
+          { last_name_rus__icontains: search },
         )
-        const data = await response.data
-        this.options = data
-        console.log(data)
-        loading(false)
-        // this.search(loading, search, this)
+        try {
+          const cadetResponse =
+            await this.cadetAPIInstance.getItemsList("token is here!!!")
+          this.cadetList = await cadetResponse.data
+        } catch (e) {
+          this.isError = true
+        } finally {
+          loading(false)
+        }
       }
     },
-    async updatePaginator(url) {
+    addNewMainItemInList,
+    showAddNewMainItemModal,
+    showUpdateMainItemModalInList,
+    showDeleteApproveModal,
+    showDeleteApproveMultipleModal,
+    updatePaginator,
+    trashButtonClick(id) {
+      this.deleteItemId = id
+      this.showDeleteApproveModal()
+    },
+    deleteMultipleClick() {
+      this.showDeleteApproveMultipleModal()
+    },
+    checkAllHandler,
+    clearFormData,
+    deleteItemHandler,
+    deleteCheckedItemsHandler,
+    debouncedSearch: debounce(async function () {
       this.isLoading = true
+      this.mainItemAPIInstance.searchObj = Object.assign({}, this.searchForm)
       try {
-        const response = await this.encouragementAPIInstance.updateList(
-          url,
-          "this.userToken",
-        )
-        this.encouragementList = await response.data
-      } catch (error) {
+        const encouragementResponse =
+          await this.mainItemAPIInstance.getItemsList("token is here!!!")
+        this.mainItemList = await encouragementResponse.data
+      } catch (e) {
         this.isError = true
       } finally {
         this.isLoading = false
       }
+    }, 500),
+    clearFilter() {
+      this.searchForm = Object.assign(
+        {},
+        this.mainItemAPIInstance.searchObjDefault,
+      )
     },
-    // debouncedSearch: debounce(async function () {
-    //   this.isLoading = true
-    //   this.encouragementAPIInstance.searchObj = Object.assign(
-    //     {},
-    //     this.searchForm,
-    //   )
-    //   try {
-    //     const encouragementResponse =
-    //       await this.encouragementAPIInstance.getItemsList("token is here!!!")
-    //     this.encouragementList = await encouragementResponse.data
-    //   } catch (e) {
-    //     this.isError = true
-    //   } finally {
-    //     this.isLoading = false
-    //   }
-    // }, 500),
+    updateMainItemInList,
   },
   computed: {
+    checkedForDeleteCount,
     orderedMainList() {
       return this.mainItemList.results
     },
@@ -159,7 +692,7 @@ export default {
       return this.cadetList.results
     },
     orderedOrderOwners() {
-      return this.options.results
+      return this.orderOwnerList.results
     },
   },
   watch: {
@@ -173,4 +706,21 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+>>> {
+  --vs-controls-color: #664cc3;
+  --vs-border-color: #664cc3;
+
+  --vs-dropdown-bg: #282c34;
+  --vs-dropdown-color: #cc99cd;
+  --vs-dropdown-option-color: #cc99cd;
+
+  --vs-selected-bg: #664cc3;
+  --vs-selected-color: #eeeeee;
+
+  --vs-search-input-color: #eeeeee;
+
+  --vs-dropdown-option--active-bg: #664cc3;
+  --vs-dropdown-option--active-color: #eeeeee;
+}
+</style>

@@ -1,7 +1,10 @@
 export function getLoadListFunction(modelName) {
-  return async (cadetId) => {
+  return async (cadetId, limit) => {
     if (cadetId) {
       this[`${modelName}APIInstance`].searchObj.cadet = cadetId
+    }
+    if (limit) {
+      this[`${modelName}APIInstance`].searchObj.limit = limit
     }
     const res =
       await this[`${modelName}APIInstance`].getItemsList("token is here!!!")
@@ -13,6 +16,7 @@ export function getLoadListFunction(modelName) {
 
 export function showAddNewMainItemModal() {
   this.clearFormData()
+  this.selectedCadet = []
   let addModal = this.$refs.mainItemAddModal
   let myModal = new bootstrap.Modal(addModal, {
     keyboard: false,
@@ -25,6 +29,29 @@ export async function showUpdateMainItemModal(id) {
   try {
     const response = await this.mainItemAPIInstance.getItemData("token", id)
     this.itemForm = await response.data
+  } catch (e) {
+    this.isError = true
+  } finally {
+  }
+  let updateModal = this.$refs.mainItemUpdateModal
+  let myModal = new bootstrap.Modal(updateModal, {
+    keyboard: false,
+  })
+  myModal.show()
+}
+
+export async function showUpdateMainItemModalInList(id) {
+  this.clearFormData()
+  this.selectedCadet = []
+  try {
+    const mainResponse = await this.mainItemAPIInstance.getItemData("token", id)
+    this.itemForm = await mainResponse.data
+
+    const cadetResponse = await this.cadetAPIInstance.getItemData(
+      "token",
+      this.itemForm.cadet,
+    )
+    this.selectedCadet.push(await cadetResponse.data)
   } catch (e) {
     this.isError = true
   } finally {
@@ -72,6 +99,8 @@ export async function addNewMainItem() {
 }
 
 export async function updateMainItem() {
+  this.isLoading = true
+  this.isError = false
   try {
     const response = await this.mainItemAPIInstance.updateItem(
       "this.token",
@@ -139,7 +168,6 @@ export function checkedForDeleteCount() {
 export async function deleteItemHandler() {
   this.isLoading = true
   this.isError = false
-
   try {
     await this.mainItemAPIInstance.deleteItem("this.token", this.deleteItemId)
     await this.loadData()
@@ -173,4 +201,53 @@ export async function deleteCheckedItemsHandler() {
     .finally(() => {
       this.isLoading = false
     })
+}
+
+export async function addNewMainItemInList() {
+  this.isLoading = true
+  this.isError = false
+
+  let requests = this.selectedCadet.map((item) =>
+    this.mainItemAPIInstance.addItem("this.token", {
+      ...this.itemForm,
+      cadet: item.id,
+    }),
+  )
+
+  Promise.all(requests)
+    .then(async () => {
+      await this.loadData()
+      this.selectedCadet = []
+      this.$refs.mainItemAddModalCloseButton.click()
+    })
+    .catch((e) => {
+      this.isError = true
+      console.log(e)
+    })
+    .finally(() => {
+      this.isLoading = false
+    })
+}
+
+export async function updateMainItemInList() {
+  this.isLoading = true
+  this.isError = false
+  try {
+    const response = await this.mainItemAPIInstance.updateItem("this.token", {
+      ...this.itemForm,
+      cadet: this.selectedCadet[0].id,
+    })
+    const updatedItem = await response.data
+    this.mainItemList.results = this.mainItemList.results.map((item) => {
+      if (item.id === updatedItem.id) {
+        return { ...item, ...updatedItem }
+      } else return item
+    })
+    this.$refs.mainItemUpdateModalCloseButton.click()
+  } catch (e) {
+    console.log(e)
+    this.isError = true
+  } finally {
+    this.isLoading = false
+  }
 }

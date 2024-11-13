@@ -29,13 +29,16 @@
                   <h5 class="card-title">Личные данные</h5>
                   <div class="row">
                     <div class="col-lg-4">
-                      <div class="text-center m-3 border" style="position: relative">
+                      <div
+                        class="text-center m-3 border"
+                        style="position: relative"
+                      >
                         <img
                           v-if="currentCadetData.photo"
                           :src="currentCadetData.photo"
                           class="rounded-2"
                           alt="..."
-                          style="width: 100%;"
+                          style="width: 100%"
                         />
                         <img
                           v-else
@@ -44,7 +47,11 @@
                           alt="..."
                           style="width: 100%"
                         />
-                        <input type="file" accept="image/png, image/jpeg" style="position: absolute; bottom: 10px;left:10px">
+                        <input
+                          type="file"
+                          accept="image/png, image/jpeg"
+                          style="position: absolute; bottom: 10px; left: 10px"
+                        />
                       </div>
                     </div>
                     <div class="col-lg-8">
@@ -961,6 +968,9 @@ import { PunishmentCadetComponent } from "@/components/cadet/punishment"
 import { PositionCadetComponent } from "@/components/cadet/position"
 import { SpecialityCadetComponent } from "@/components/cadet/speciality"
 import RelativesCadetComponent from "@/components/cadet/relatives/RelativesCadetComponent.vue"
+
+import { getLoadListFunction } from "../../../utils"
+
 import "vue-select/dist/vue-select.css"
 
 export default {
@@ -1157,6 +1167,7 @@ export default {
   },
   methods: {
     async loadData(cadetId) {
+      const listFunction = getLoadListFunction.bind(this)
       const [
         cadet,
         cadetCategories,
@@ -1168,13 +1179,13 @@ export default {
         directionsOrd,
       ] = await Promise.all([
         this.getCadetData(cadetId),
-        this.getLoadListFunction("cadetCategory")(cadetId),
-        this.getLoadListFunction("orderOwner")(),
-        this.getLoadListFunction("subdivision")(),
-        this.getLoadListFunction("group")(),
-        this.getLoadListFunction("passportIssueAuthority")(),
-        this.getLoadListFunction("specialization")(),
-        this.getLoadListFunction("directionOrd")(),
+        listFunction("cadetCategory")(cadetId, 1000),
+        listFunction("orderOwner")(null, 1000),
+        listFunction("subdivision")(null, 1000),
+        listFunction("group")(null, 1000),
+        listFunction("passportIssueAuthority")(null, 1000),
+        listFunction("specialization")(null, 1000),
+        listFunction("directionOrd")(null, 1000),
       ]).catch(() => (this.isError = true))
       this.currentCadetData = cadet
       this.cadetCategoryList = cadetCategories
@@ -1205,37 +1216,11 @@ export default {
       )
       return res.data
     },
-    getLoadListFunction(modelName) {
-      return async (cadetId) => {
-        if (cadetId) {
-          this[`${modelName}APIInstance`].searchObj.cadet = cadetId
-        }
-        const res =
-          await this[`${modelName}APIInstance`].getItemsList("token is here!!!")
-        return res.data
-      }
-    },
-    getPaginatorUpdateFunction(modelName) {
-      return async (url) => {
-        try {
-          const response = await this[`${modelName}APIInstance`].updateList(
-            url,
-            "this.userToken",
-          )
-          this[`${modelName}List`] = await response.data
-        } catch (error) {
-          this.isError = true
-        }
-      }
-    },
     debouncedUpdate: debounce(async function () {
       this.isLoading = true
       try {
-        const { photo, ...rest } = this.currentCadetData;
-        await this.cadetAPIInstance.updateItem(
-          "token is here!!!",
-          rest
-        )
+        const { photo, ...rest } = this.currentCadetData
+        await this.cadetAPIInstance.updateItem("token is here!!!", rest)
       } catch (e) {
         this.isError = true
         console.log(e)
@@ -1281,5 +1266,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -55,3 +55,4 @@ export default function getCadetAPIInstance() {
     extra_data__icontains: "",
   })
 }
+export const globalCadetAPIInstance = getCadetAPIInstance()
