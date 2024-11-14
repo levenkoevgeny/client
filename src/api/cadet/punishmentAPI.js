@@ -31,7 +31,7 @@ export default function getPunishmentAPIInstance() {
       punishment_start_order_number: "",
       punishment_start_order_owner: "",
       punishment_start_extra_data: "",
-      punishment_expiration_date: "",
+      punishment_expiration_date: null,
       punishment_expiration_order_date: null,
       punishment_expiration_order_number: "",
       punishment_expiration_order_owner: "",

@@ -51,7 +51,7 @@ export async function showUpdateMainItemModalInList(id) {
       "token",
       this.itemForm.cadet,
     )
-    this.selectedCadet.push(await cadetResponse.data)
+    this.selectedCadet = await cadetResponse.data
   } catch (e) {
     this.isError = true
   } finally {
@@ -235,7 +235,7 @@ export async function updateMainItemInList() {
   try {
     const response = await this.mainItemAPIInstance.updateItem("this.token", {
       ...this.itemForm,
-      cadet: this.selectedCadet[0].id,
+      cadet: this.selectedCadet.id,
     })
     const updatedItem = await response.data
     this.mainItemList.results = this.mainItemList.results.map((item) => {

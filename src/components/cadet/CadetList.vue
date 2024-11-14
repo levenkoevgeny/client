@@ -700,7 +700,6 @@ import getPositionAPIInstance from "@/api/cadet/positionAPI"
 import BaseListLayout from "@/components/layouts/BaseListLayout.vue"
 import { PaginatorView } from "@/components/common"
 import { debounce } from "lodash/function"
-import EncouragementFormView from "@/components/cadet/encouragement/modals/FormView.vue"
 import { getLoadListFunction } from "../../../utils"
 import BaseListLayoutForCadetUpdate from "@/components/layouts/BaseListLayoutForCadetUpdate.vue"
 
@@ -708,7 +707,6 @@ export default {
   name: "CadetList",
   components: {
     BaseListLayoutForCadetUpdate,
-    EncouragementFormView,
     BaseListLayout,
     PaginatorView,
   },

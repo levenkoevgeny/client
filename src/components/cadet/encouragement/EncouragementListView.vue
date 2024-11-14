@@ -132,7 +132,7 @@
                 <EncouragementModalForCadetUpdate
                   :main-data="itemForm"
                   :encouragement-kind-list="orderedEncouragementKinds"
-                  :order-owners="orderedOrderOwnerList"
+                  :order-owners="orderedOrderOwners"
                 />
               </div>
               <div class="modal-footer">
@@ -264,7 +264,7 @@
         Удалить ({{ checkedForDeleteCount }})
       </button>
     </template>
-    <template v-slot:table-mode-button> </template>
+    <template v-slot:table-mode-button></template>
 
     <template v-slot:thead>
       <tr>
@@ -383,6 +383,23 @@
           </div>
         </div>
       </div>
+      <div class="mb-3">
+        <label for="subdivision" class="form-label">Чей приказ</label>
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          v-model="searchForm.encouragement_order_owner"
+        >
+          <option selected value="">--------</option>
+          <option
+            v-for="orderOwner in orderedOrderOwners"
+            :key="orderOwner.id"
+            :value="orderOwner.id"
+          >
+            {{ orderOwner.order_owner }}
+          </option>
+        </select>
+      </div>
       <div class="row">
         <div class="col-6">
           <div class="mb-3">
@@ -412,125 +429,31 @@
         </div>
       </div>
       <div class="mb-3">
-        <label for="subdivision" class="form-label">Чей приказ</label>
-        <select
-          class="form-select"
-          aria-label="Default select example"
-          v-model="searchForm.encouragement_order_owner"
+        <label for="encouragement_order_number__icontains" class="form-label"
+          >Номер приказа (содержит)</label
         >
-          <option selected value="">--------</option>
-          <option
-            v-for="orderOwner in orderedOrderOwners"
-            :key="orderOwner.id"
-            :value="orderOwner.id"
-          >
-            {{ orderOwner.order_owner }}
-          </option>
-        </select>
+        <input
+          type="text"
+          class="form-control"
+          id="encouragement_order_number__icontains"
+          v-model="searchForm.encouragement_order_number__icontains"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="encouragement_extra_data__icontains" class="form-label"
+          >Фабула (содержит)</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          id="encouragement_extra_data__icontains"
+          v-model="searchForm.encouragement_extra_data__icontains"
+        />
       </div>
       <button type="button" class="btn btn-primary" @click="clearFilter">
         Сбросить фильтр
       </button>
     </template>
-
-    <!--    <template v-slot:list>-->
-    <!--      <div class="my-4">-->
-    <!--        <div class="d-flex justify-content-between align-items-center">-->
-    <!--          <button class="btn btn-warning" @click="showCadetAddModal">-->
-    <!--            Добавить запись-->
-    <!--          </button>-->
-    <!--          <router-link-->
-    <!--            :to="{ name: 'cadet-full' }"-->
-    <!--            class="fs-3 fw-light link-secondary"-->
-    <!--            title="Табличный режим"-->
-    <!--          >-->
-    <!--            <font-awesome-icon :icon="['fas', 'table']" />-->
-    <!--          </router-link>-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--      <div>-->
-    <!--        <ul class="nav nav-links my-3 mb-lg-2 mx-n3">-->
-    <!--          <li class="nav-item">-->
-    <!--            <a class="nav-link active" aria-current="page" href="#"-->
-    <!--              ><span>Всего </span-->
-    <!--              ><span class="text-body-tertiary fw-semibold">()</span></a-->
-    <!--            >-->
-    <!--          </li>-->
-    <!--        </ul>-->
-    <!--      </div>-->
-    <!--      <div-->
-    <!--        class="table-responsive my-3"-->
-    <!--        style="max-height: 70vh; overflow: auto"-->
-    <!--      >-->
-    <!--        <table class="table table-hover">-->
-    <!--          <thead style="position: sticky; top: 0">-->
-    <!--            <tr>-->
-    <!--              <th>-->
-    <!--                <div-->
-    <!--                  class="form-check d-flex align-items-center justify-content-center"-->
-    <!--                >-->
-    <!--                  <input-->
-    <!--                    type="checkbox"-->
-    <!--                    class="form-check-input my-0"-->
-    <!--                    @change="checkAllHandler($event)"-->
-    <!--                  />-->
-    <!--                </div>-->
-    <!--              </th>-->
-    <!--              <th>Поощрение</th>-->
-    <!--              <th>Дата</th>-->
-    <!--              <th>Приказ</th>-->
-    <!--              <th>Чей приказ</th>-->
-    <!--              <th>Фабула</th>-->
-    <!--              <th></th>-->
-    <!--            </tr>-->
-    <!--          </thead>-->
-
-    <!--          <tbody class="table-borderless">-->
-    <!--            <tr-->
-    <!--              v-for="encouragement in orderedMainList"-->
-    <!--              :key="encouragement.id"-->
-    <!--              @dblclick.stop="showUpdateMainItemModal(encouragement.id)"-->
-    <!--            >-->
-    <!--              <td>-->
-    <!--                <div-->
-    <!--                  class="form-check d-flex align-items-center justify-content-center"-->
-    <!--                >-->
-    <!--                  <input-->
-    <!--                    type="checkbox"-->
-    <!--                    class="form-check-input my-0"-->
-    <!--                    v-model="encouragement.isSelected"-->
-    <!--                  />-->
-    <!--                </div>-->
-    <!--              </td>-->
-    <!--              <td>-->
-    <!--                {{ encouragement.get_encouragement_kind_str || "Нет данных" }}-->
-    <!--              </td>-->
-    <!--              <td>{{ encouragement.encouragement_date }}</td>-->
-    <!--              <td>{{ encouragement.encouragement_order_number }}</td>-->
-    <!--              <td>{{ encouragement.get_encouragement_order_owner }}</td>-->
-    <!--              <td>{{ encouragement.extra_data || "Нет данных" }}</td>-->
-    <!--              <td>-->
-    <!--                <div class="d-flex align-items-end justify-content-end">-->
-    <!--                  <button-->
-    <!--                    type="button"-->
-    <!--                    class="btn btn-outline-danger"-->
-    <!--                    @click="trashButtonClick(encouragement.id)"-->
-    <!--                    style="padding: 0.25rem 0.5rem"-->
-    <!--                  >-->
-    <!--                    <font-awesome-icon :icon="['fas', 'trash']" />-->
-    <!--                  </button>-->
-    <!--                </div>-->
-    <!--              </td>-->
-    <!--            </tr>-->
-    <!--          </tbody>-->
-    <!--        </table>-->
-    <!--      </div>-->
-    <!--    </template>-->
-    <!--    <template v-slot:search-form>-->
-    <!--      <button type="button" class="btn btn-primary" @click="clearFilter">-->
-    <!--        Сбросить фильтр-->
-    <!--      </button>-->
-    <!--    </template>-->
   </base-list-layout>
 </template>
 
@@ -572,7 +495,6 @@ export default {
     return {
       isLoading: true,
       isError: false,
-      options: [],
       selectedCadet: [],
       mainItemList: {
         count: 0,
@@ -612,8 +534,8 @@ export default {
         const [encouragements, encouragementKinds, orderOwners] =
           await Promise.all([
             listFunction("mainItem")(this.cadetId),
-            listFunction("encouragementKind")(),
-            listFunction("orderOwner")(),
+            listFunction("encouragementKind")(null, 1000),
+            listFunction("orderOwner")(null, 1000),
           ])
         this.mainItemList = encouragements
         this.encouragementKindList = encouragementKinds
@@ -706,21 +628,4 @@ export default {
 }
 </script>
 
-<style scoped>
->>> {
-  --vs-controls-color: #664cc3;
-  --vs-border-color: #664cc3;
-
-  --vs-dropdown-bg: #282c34;
-  --vs-dropdown-color: #cc99cd;
-  --vs-dropdown-option-color: #cc99cd;
-
-  --vs-selected-bg: #664cc3;
-  --vs-selected-color: #eeeeee;
-
-  --vs-search-input-color: #eeeeee;
-
-  --vs-dropdown-option--active-bg: #664cc3;
-  --vs-dropdown-option--active-color: #eeeeee;
-}
-</style>
+<style scoped></style>

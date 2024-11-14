@@ -1,90 +1,337 @@
 <template>
-  <base-list-layout :is-loading="isLoading">
-    <template v-slot:extra>
-      <ul class="nav nav-links my-3 mb-lg-2 mx-n3">
-        <li class="nav-item">
-          <button class="nav-link active">
-            <span>Всего записей</span
-            ><span class="text-body-tertiary fw-semibold"
-              >({{ rankHistoryList.count }})</span
-            >
-          </button>
-        </li>
-      </ul>
+  <base-list-layout
+    :is-loading="isLoading"
+    :main-list-length="mainItemList.count"
+    title="Присвоение званий"
+  >
+    <template v-slot:modals>
+      <!-- add modal-->
+      <div
+        class="modal fade"
+        id="mainItemAddModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+        ref="mainItemAddModal"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Добавление записи
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <form @submit.prevent="addNewMainItemInList">
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="id_encouragement_kind" class="form-label"
+                    >Курсант (курсанты)</label
+                  >
+                  <v-select
+                    multiple
+                    v-model="selectedCadet"
+                    :options="orderedCadets"
+                    label="get_full_name"
+                    :filterable="false"
+                    @search="onSearch"
+                  >
+                    <template slot="no-options"> Поиск по фамилии...</template>
+                    <template slot="option" slot-scope="option">
+                      <div class="d-center">
+                        {{ option }}
+                      </div>
+                    </template>
+                    <template slot="selected-option" slot-scope="option">
+                      <div class="selected d-center">
+                        {{ option }}
+                      </div>
+                    </template>
+                  </v-select>
+                </div>
+
+                <RankHistoryModalForCadetUpdate
+                  :main-data="itemForm"
+                  :ranks="orderedRanks"
+                  :order-owners="orderedOrderOwners"
+                />
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                  ref="mainItemAddModalCloseButton"
+                >
+                  Закрыть
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  Добавить запись
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!--      update modal-->
+      <div
+        class="modal fade"
+        id="mainItemUpdateModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+        ref="mainItemUpdateModal"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Редактирование записи
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <form @submit.prevent="updateMainItemInList">
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="id_encouragement_kind" class="form-label"
+                    >Курсант</label
+                  >
+                  <v-select
+                    v-model="selectedCadet"
+                    :options="orderedCadets"
+                    label="get_full_name"
+                    :filterable="false"
+                    @search="onSearch"
+                  >
+                    <template slot="no-options"> Поиск по фамилии...</template>
+                    <template slot="option" slot-scope="option">
+                      <div class="d-center">
+                        {{ option }}
+                      </div>
+                    </template>
+                    <template slot="selected-option" slot-scope="option">
+                      <div class="selected d-center">
+                        {{ option }}
+                      </div>
+                    </template>
+                  </v-select>
+                </div>
+
+                <RankHistoryModalForCadetUpdate
+                  :main-data="itemForm"
+                  :ranks="orderedRanks"
+                  :order-owners="orderedOrderOwners"
+                />
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                  ref="mainItemUpdateModalCloseButton"
+                >
+                  Закрыть
+                </button>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- delete approve modal-->
+
+      <div
+        class="modal fade"
+        id="deleteApproveModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+        ref="deleteApproveModal"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header border-0">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Подтверждение удаления
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              Вы действительно хотите удалить запись?
+            </div>
+            <div class="modal-footer border-0">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                ref="deleteApproveModalCloseButton"
+              >
+                Отмена
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                @click="deleteItemHandler"
+              >
+                Удалить
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- delete approve multiple modal-->
+
+      <div
+        class="modal fade"
+        id="deleteApproveMultipleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+        ref="deleteApproveMultipleModal"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header border-0">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Подтверждение удаления
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              Вы действительно хотите удалить данные записи -
+              {{ checkedForDeleteCount }} ?
+            </div>
+            <div class="modal-footer border-0">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                ref="deleteApproveModalMultipleCloseButton"
+              >
+                Отмена
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                @click="deleteCheckedItemsHandler"
+              >
+                Удалить
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </template>
-    <template v-slot:add-button></template>
+    <template v-slot:add-button>
+      <button
+        class="btn btn-warning"
+        :disabled="isLoading"
+        @click="showAddNewMainItemModal"
+      >
+        Добавить запись
+      </button>
+    </template>
+    <template v-slot:delete-selected-button>
+      <button
+        @click="deleteMultipleClick"
+        class="btn btn-outline-danger"
+        v-if="checkedForDeleteCount"
+      >
+        Удалить ({{ checkedForDeleteCount }})
+      </button>
+    </template>
+    <template v-slot:table-mode-button></template>
     <template v-slot:thead>
       <tr>
-        <th scope="col">
-          <div class="form-check">
+        <th>
+          <div
+            class="form-check d-flex align-items-center justify-content-center"
+          >
             <input
               type="checkbox"
-              class="form-check-input"
-              id="exampleCheck1"
+              class="form-check-input my-0"
+              @change="checkAllHandler($event)"
             />
           </div>
         </th>
-        <th scope="col">Фамилия, имя, отчество</th>
-        <th scope="col">Присвоенное звание</th>
-        <th scope="col">С даты</th>
-        <th scope="col">Дата приказа</th>
-        <th scope="col">Номер приказа</th>
-        <th scope="col">Чей приказ</th>
-        <th scope="col">Фабула</th>
+        <th>Курсант</th>
+        <th>Звание</th>
+        <th>С какого числа присвоено звание</th>
+        <th>Дата приказа</th>
+        <th>Номер приказа</th>
+        <th>Чей приказ</th>
+        <th>Доп. информация</th>
+        <th></th>
       </tr>
     </template>
     <template v-slot:tbody>
       <tr
-        class="align-middle"
-        v-for="rankHistory in orderedRankHistories"
+        v-for="rankHistory in orderedMainList"
         :key="rankHistory.id"
+        @dblclick.stop="showUpdateMainItemModalInList(rankHistory.id)"
       >
-        <th scope="row" class="text-center align-middle">
-          <div class="form-check">
+        <td>
+          <div
+            class="form-check d-flex align-items-center justify-content-center"
+          >
             <input
               type="checkbox"
-              class="form-check-input"
-              id="exampleCheck1"
+              class="form-check-input my-0"
+              v-model="rankHistory.isSelected"
             />
           </div>
-        </th>
+        </td>
         <td>{{ rankHistory.get_cadet_str }}</td>
-        <td>{{ rankHistory.get_rank_str }}</td>
+        <td>
+          {{ rankHistory.get_rank_str }}
+        </td>
         <td>{{ rankHistory.rank_date }}</td>
         <td>{{ rankHistory.rank_order_date }}</td>
         <td>{{ rankHistory.rank_order_number }}</td>
         <td>{{ rankHistory.get_rank_order_owner_str }}</td>
         <td>{{ rankHistory.rank_extra_data }}</td>
+
+        <td>
+          <div class="d-flex align-items-end justify-content-end">
+            <button
+              type="button"
+              class="btn btn-outline-danger"
+              @click="trashButtonClick(rankHistory.id)"
+              style="padding: 0.25rem 0.5rem"
+            >
+              <font-awesome-icon :icon="['fas', 'trash']" />
+            </button>
+          </div>
+        </td>
       </tr>
-    </template>
-    <template v-slot:paginator>
-      <PaginatorView
-        :update-paginator="updatePaginator"
-        :list-next="rankHistoryList.next"
-        :list-previous="rankHistoryList.previous"
-        v-if="rankHistoryList.previous || rankHistoryList.next"
-      />
     </template>
     <template v-slot:search-form>
       <div class="mb-3">
-        <label class="form-label">Курсант</label>
-        <select
-          class="form-select"
-          aria-label="Default select example"
-          v-model="searchForm.cadet"
-        >
-          <option selected value="">--------</option>
-          <option
-            v-for="cadet in orderedCadets"
-            :key="cadet.id"
-            :value="cadet.id"
-          >
-            {{ cadet.get_full_name }}
-          </option>
-        </select>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Звание</label>
+        <label for="subdivision" class="form-label">Звание</label>
         <select
           class="form-select"
           aria-label="Default select example"
@@ -96,11 +343,12 @@
           </option>
         </select>
       </div>
+
       <div class="row">
         <div class="col-6">
           <div class="mb-3">
             <label for="rank_date__gte" class="form-label"
-              >Дата присвоения звания (с)</label
+              >Дата присвоения (с)</label
             >
             <input
               type="date"
@@ -113,7 +361,7 @@
         <div class="col-6">
           <div class="mb-3">
             <label for="rank_date__lte" class="form-label"
-              >Дата присвоения звания (по)</label
+              >Дата присвоения (по)</label
             >
             <input
               type="date"
@@ -123,6 +371,24 @@
             />
           </div>
         </div>
+      </div>
+      <div class="mb-3">
+        <label for="rank_order_owner" class="form-label">Чей приказ</label>
+        <select
+          id="rank_order_owner"
+          class="form-select"
+          aria-label="Default select example"
+          v-model="searchForm.rank_order_owner"
+        >
+          <option selected value="">--------</option>
+          <option
+            v-for="orderOwner in orderedOrderOwners"
+            :key="orderOwner.id"
+            :value="orderOwner.id"
+          >
+            {{ orderOwner.order_owner }}
+          </option>
+        </select>
       </div>
       <div class="row">
         <div class="col-6">
@@ -164,27 +430,27 @@
         />
       </div>
       <div class="mb-3">
-        <label for="rank_order_owner" class="form-label">Чей приказ</label>
-        <select
-          class="form-select"
-          aria-label="Default select example"
-          id="rank_order_owner"
-          v-model="searchForm.rank_order_owner"
+        <label for="rank_extra_data__icontains" class="form-label">
+          Доп. информация (содержит)</label
         >
-          <option selected value="">--------</option>
-          <option
-            v-for="orderOwner in orderedOrderOwners"
-            :key="orderOwner.id"
-            :value="orderOwner.id"
-          >
-            {{ orderOwner.order_owner }}
-          </option>
-        </select>
+        <input
+          type="text"
+          class="form-control"
+          id="rank_extra_data__icontains"
+          v-model="searchForm.rank_extra_data__icontains"
+        />
       </div>
-
       <button type="button" class="btn btn-primary" @click="clearFilter">
         Сбросить фильтр
       </button>
+    </template>
+    <template v-slot:paginator>
+      <PaginatorView
+        :update-paginator="updatePaginator"
+        :list-next="mainItemList.next"
+        :list-previous="mainItemList.previous"
+        v-if="mainItemList.previous || mainItemList.next"
+      />
     </template>
   </base-list-layout>
 </template>
@@ -195,28 +461,62 @@ import getOrderOwnerAPIInstance from "@/api/cadet/orderOwnerAPI"
 import getRankAPIInstance from "@/api/cadet/rankAPI"
 import getRankHistoryAPIInstance from "@/api/cadet/rankHistoryAPI"
 import BaseListLayout from "@/components/layouts/BaseListLayout.vue"
+import RankHistoryModalForCadetUpdate from "@/components/cadet/rank/modals/RankHistoryModalForCadetUpdate.vue"
 import { PaginatorView } from "@/components/common"
 import { debounce } from "lodash/function"
 
+import {
+  getLoadListFunction,
+  showAddNewMainItemModal,
+  showUpdateMainItemModalInList,
+  showDeleteApproveModal,
+  showDeleteApproveMultipleModal,
+  updatePaginator,
+  checkAllHandler,
+  checkedForDeleteCount,
+  deleteItemHandler,
+  deleteCheckedItemsHandler,
+  clearFormData,
+  addNewMainItemInList,
+  updateMainItemInList,
+} from "../../../../utils"
+import PunishmentModalForCadetUpdate from "@/components/cadet/punishment/modals/PunishmentModalForCadetUpdate.vue"
+
 export default {
   name: "RankHistoryListView",
-  components: { BaseListLayout, PaginatorView },
+  components: {
+    PunishmentModalForCadetUpdate,
+    BaseListLayout,
+    PaginatorView,
+    RankHistoryModalForCadetUpdate,
+  },
   data() {
     return {
-      rankHistoryList: { count: "", results: [], previous: null, next: null },
-      rankList: { count: "", results: [], previous: null, next: null },
-      cadetList: { count: "", results: [], previous: null, next: null },
-      orderOwnerList: { count: "", results: [], previous: null, next: null },
       isLoading: true,
       isError: false,
-      BACKEND_PROTOCOL: process.env.VUE_APP_BACKEND_PROTOCOL,
-      BACKEND_HOST: process.env.VUE_APP_BACKEND_HOST,
-      BACKEND_PORT: process.env.VUE_APP_BACKEND_PORT,
-      rankHistoryAPIInstance: getRankHistoryAPIInstance(),
+      selectedCadet: [],
+      mainItemList: {
+        count: 0,
+        results: [],
+        previous: null,
+        next: null,
+      },
+      rankList: {
+        count: "",
+        results: [],
+        previous: null,
+        next: null,
+      },
+      orderOwnerList: { count: "", results: [], previous: null, next: null },
+      cadetList: { count: "", results: [], previous: null, next: null },
+      mainItemAPIInstance: getRankHistoryAPIInstance(),
       rankAPIInstance: getRankAPIInstance(),
-      cadetAPIInstance: getCadetAPIInstance(),
       orderOwnerAPIInstance: getOrderOwnerAPIInstance(),
+      cadetAPIInstance: getCadetAPIInstance(),
+      itemForm: Object.assign({}, getRankHistoryAPIInstance().formData),
       searchForm: Object.assign({}, getRankHistoryAPIInstance().searchObj),
+      selectedItems: [],
+      deleteItemId: "",
     }
   },
   async created() {
@@ -226,17 +526,17 @@ export default {
     async loadData() {
       this.isLoading = true
       this.isError = false
+      const listFunction = getLoadListFunction.bind(this)
+      this.isLoading = true
+      this.isError = false
       try {
-        const [rankHistories, ranks, cadets, orderOwners] = await Promise.all([
-          this.getRankHistories(),
-          this.getRanks(),
-          this.getCadets(),
-          this.getOrderOwners(),
-        ]).catch(() => (this.isError = true))
-
-        this.rankHistoryList = rankHistories
+        const [rankHistories, ranks, orderOwners] = await Promise.all([
+          listFunction("mainItem")(this.cadetId),
+          listFunction("rank")(null, 1000),
+          listFunction("orderOwner")(null, 1000),
+        ])
+        this.mainItemList = rankHistories
         this.rankList = ranks
-        this.cadetList = cadets
         this.orderOwnerList = orderOwners
       } catch (e) {
         this.isError = true
@@ -244,28 +544,48 @@ export default {
         this.isLoading = false
       }
     },
-
-    async updatePaginator(url) {
-      this.isLoading = true
-      try {
-        const response = await this.rankHistoryAPIInstance.updateList(
-          url,
-          "this.userToken",
+    async onSearch(search, loading) {
+      if (search.length) {
+        loading(true)
+        this.cadetAPIInstance.searchObj = Object.assign(
+          {},
+          { last_name_rus__icontains: search },
         )
-        this.rankHistoryList = await response.data
-      } catch (error) {
-        this.isError = true
-      } finally {
-        this.isLoading = false
+        try {
+          const cadetResponse =
+            await this.cadetAPIInstance.getItemsList("token is here!!!")
+          this.cadetList = await cadetResponse.data
+        } catch (e) {
+          this.isError = true
+        } finally {
+          loading(false)
+        }
       }
     },
+    addNewMainItemInList,
+    showAddNewMainItemModal,
+    showUpdateMainItemModalInList,
+    showDeleteApproveModal,
+    showDeleteApproveMultipleModal,
+    updatePaginator,
+    trashButtonClick(id) {
+      this.deleteItemId = id
+      this.showDeleteApproveModal()
+    },
+    deleteMultipleClick() {
+      this.showDeleteApproveMultipleModal()
+    },
+    checkAllHandler,
+    clearFormData,
+    deleteItemHandler,
+    deleteCheckedItemsHandler,
     debouncedSearch: debounce(async function () {
       this.isLoading = true
-      this.rankHistoryAPIInstance.searchObj = Object.assign({}, this.searchForm)
+      this.mainItemAPIInstance.searchObj = Object.assign({}, this.searchForm)
       try {
-        const rankHistoryResponse =
-          await this.rankHistoryAPIInstance.getItemsList("token is here!!!")
-        this.rankHistoryList = await rankHistoryResponse.data
+        const encouragementResponse =
+          await this.mainItemAPIInstance.getItemsList("token is here!!!")
+        this.mainItemList = await encouragementResponse.data
       } catch (e) {
         this.isError = true
       } finally {
@@ -275,32 +595,15 @@ export default {
     clearFilter() {
       this.searchForm = Object.assign(
         {},
-        this.rankHistoryAPIInstance.searchObjDefault,
+        this.mainItemAPIInstance.searchObjDefault,
       )
     },
-
-    async getRankHistories() {
-      const res =
-        await this.rankHistoryAPIInstance.getItemsList("token is here!!!")
-      return res.data
-    },
-    async getRanks() {
-      const res = await this.rankAPIInstance.getItemsList("token is here!!!")
-      return res.data
-    },
-    async getCadets() {
-      const res = await this.cadetAPIInstance.getItemsList("token is here!!!")
-      return res.data
-    },
-    async getOrderOwners() {
-      const res =
-        await this.orderOwnerAPIInstance.getItemsList("token is here!!!")
-      return res.data
-    },
+    updateMainItemInList,
   },
   computed: {
-    orderedRankHistories() {
-      return this.rankHistoryList.results
+    checkedForDeleteCount,
+    orderedMainList() {
+      return this.mainItemList.results
     },
     orderedRanks() {
       return this.rankList.results
