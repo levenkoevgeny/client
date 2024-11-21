@@ -1,6 +1,8 @@
 import axios from "axios"
 import index from "@/router"
 
+export const controller = new AbortController()
+
 export function authHeaders(token) {
   return {
     headers: {
@@ -8,6 +10,16 @@ export function authHeaders(token) {
     },
   }
 }
+
+axios.interceptors.request.use(
+  function (config) {
+    return config
+  },
+  function (error) {
+    // Do something with request error
+    return Promise.reject(error)
+  },
+)
 
 axios.interceptors.response.use(
   function (response) {

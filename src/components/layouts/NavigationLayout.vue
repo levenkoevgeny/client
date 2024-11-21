@@ -1,5 +1,8 @@
 <template>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <nav
+    class="navbar navbar-expand-lg bg-body-tertiary"
+    style="position: sticky; top: 0; z-index: 100000"
+  >
     <div class="container-fluid">
       <a class="navbar-brand" href="/">
         <img src="../../assets/logo.png" alt="KIS" width="30" height="30" />
@@ -9,26 +12,56 @@
       <div class="theme-control-toggle fa-icon-wait px-2">
         <input
           class="form-check-input ms-0 theme-control-toggle-input"
-          type="checkbox" data-theme-control="phoenixTheme"
-          value="dark" id="themeControlToggle"
+          type="checkbox"
+          data-theme-control="phoenixTheme"
+          value="dark"
+          id="themeControlToggle"
           @change="modeChange"
           :checked="currentTheme === 'dark'"
+        />
+        <label
+          class="mb-0 theme-control-toggle-label theme-control-toggle-light"
+          for="themeControlToggle"
+          data-bs-toggle="tooltip"
+          data-bs-placement="left"
+          data-bs-title="Switch theme"
+          style="height: 32px; width: 32px"
         >
-        <label class="mb-0 theme-control-toggle-label theme-control-toggle-light" for="themeControlToggle"
-               data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Switch theme"
-               style="height:32px;width:32px;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-               class="feather feather-moon icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16px"
+            height="16px"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-moon icon"
+          >
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
           </svg>
         </label>
-        <label class="mb-0 theme-control-toggle-label theme-control-toggle-dark" for="themeControlToggle"
-               data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Switch theme"
-               style="height:32px;width:32px;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-               class="feather feather-sun icon">
+        <label
+          class="mb-0 theme-control-toggle-label theme-control-toggle-dark"
+          for="themeControlToggle"
+          data-bs-toggle="tooltip"
+          data-bs-placement="left"
+          data-bs-title="Switch theme"
+          style="height: 32px; width: 32px"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16px"
+            height="16px"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-sun icon"
+          >
             <circle cx="12" cy="12" r="5"></circle>
             <line x1="12" y1="1" x2="12" y2="3"></line>
             <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -41,11 +74,8 @@
           </svg>
         </label>
       </div>
-
-
     </div>
   </nav>
-
 </template>
 
 <script>
@@ -55,7 +85,7 @@ export default {
   data() {
     return {
       htmlElement: null,
-      currentTheme: null
+      currentTheme: null,
     }
   },
   async created() {
@@ -73,9 +103,9 @@ export default {
         this.htmlElement.setAttribute("data-bs-theme", "light")
         localStorage.setItem("bsTheme", "light")
       }
-    }
+    },
   },
-  computed: {}
+  computed: {},
 }
 </script>
 
@@ -118,7 +148,9 @@ thead {
   border-radius: 50rem;
 }
 
-.theme-control-toggle.theme-control-toggle-slim .theme-control-toggle-label .icon {
+.theme-control-toggle.theme-control-toggle-slim
+  .theme-control-toggle-label
+  .icon {
   height: 10.2px;
   width: 10.2px;
 }
@@ -127,13 +159,15 @@ thead {
   display: none;
 }
 
-.theme-control-toggle .theme-control-toggle-input:checked ~ .theme-control-toggle-dark {
+.theme-control-toggle
+  .theme-control-toggle-input:checked
+  ~ .theme-control-toggle-dark {
   display: none;
 }
 
-.theme-control-toggle .theme-control-toggle-input:not(:checked) ~ .theme-control-toggle-light {
+.theme-control-toggle
+  .theme-control-toggle-input:not(:checked)
+  ~ .theme-control-toggle-light {
   display: none;
 }
-
-
 </style>

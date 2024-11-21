@@ -609,6 +609,7 @@ import {
   addNewMainItemInList,
   updateMainItemInList,
 } from "../../../../utils"
+import { mapGetters } from "vuex"
 
 export default {
   name: "PunishmentListView",
@@ -634,11 +635,9 @@ export default {
         previous: null,
         next: null,
       },
-      orderOwnerList: { count: "", results: [], previous: null, next: null },
       cadetList: { count: "", results: [], previous: null, next: null },
       mainItemAPIInstance: getPunishmentAPIInstance(),
       punishmentKindAPIInstance: getPunishmentKindAPIInstance(),
-      orderOwnerAPIInstance: getOrderOwnerAPIInstance(),
       cadetAPIInstance: getCadetAPIInstance(),
       itemForm: Object.assign({}, getPunishmentAPIInstance().formData),
       searchForm: Object.assign({}, getPunishmentAPIInstance().searchObj),
@@ -660,11 +659,9 @@ export default {
         const [punishments, punishmentKinds, orderOwners] = await Promise.all([
           listFunction("mainItem")(this.cadetId),
           listFunction("punishmentKind")(null, 1000),
-          listFunction("orderOwner")(null, 1000),
         ])
         this.mainItemList = punishments
         this.punishmentKindList = punishmentKinds
-        this.orderOwnerList = orderOwners
       } catch (e) {
         this.isError = true
       } finally {
@@ -739,8 +736,11 @@ export default {
       return this.cadetList.results
     },
     orderedOrderOwners() {
-      return this.orderOwnerList.results
+      return this.orderOwners.results
     },
+    ...mapGetters({
+      orderOwners: "common/getOrderOwners",
+    }),
   },
   watch: {
     searchForm: {

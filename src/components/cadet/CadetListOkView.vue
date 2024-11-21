@@ -604,11 +604,6 @@
 import getCadetAPIInstance from "@/api/cadet/cadetAPI"
 import { getLoadListFunction } from "../../../utils"
 import getCadetCategoryAPIAPIInstance from "@/api/cadet/cadetCategoryAPI"
-import getSubdivisionAPIInstance from "@/api/cadet/subdivisionAPI"
-import getGroupAPIInstance from "@/api/cadet/groupAPI"
-import getRankAPIInstance from "@/api/cadet/rankAPI"
-import getSpecialityAPIInstance from "@/api/cadet/specialityAPI"
-import getPositionAPIInstance from "@/api/cadet/positionAPI"
 import getMaritalStatusAPIInstance from "@/api/cadet/maritalStatusAPI"
 import getSpecializationAPIInstance from "@/api/cadet/specializationAPI"
 import getDirectionOrdAPIInstance from "@/api/cadet/directionOrdAPI"
@@ -617,6 +612,7 @@ import getPassportIssueAuthorityAPIInstance from "@/api/cadet/passportIssueAutho
 import getForeignLanguageAPIInstance from "@/api/cadet/foreignLanguageAPI"
 import { debounce } from "lodash/function"
 import { PaginatorView } from "@/components/common"
+import { mapGetters } from "vuex"
 
 export default {
   name: "CadetListOkView",
@@ -632,36 +628,6 @@ export default {
         next: null,
       },
       cadetCategoryList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      subdivisionList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      groupList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      rankList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      specialityList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      positionList: {
         count: "",
         results: [],
         previous: null,
@@ -708,11 +674,6 @@ export default {
 
       cadetAPIInstance: getCadetAPIInstance(),
       cadetCategoryAPIInstance: getCadetCategoryAPIAPIInstance(),
-      subdivisionAPIInstance: getSubdivisionAPIInstance(),
-      groupAPIInstance: getGroupAPIInstance(),
-      rankAPIInstance: getRankAPIInstance(),
-      specialityAPIInstance: getSpecialityAPIInstance(),
-      positionAPIInstance: getPositionAPIInstance(),
       maritalStatusAPIInstance: getMaritalStatusAPIInstance(),
       specializationAPIInstance: getSpecializationAPIInstance(),
       directionOrdAPIInstance: getDirectionOrdAPIInstance(),
@@ -733,11 +694,6 @@ export default {
         const [
           cadets,
           categories,
-          subdivisions,
-          groups,
-          ranks,
-          specialities,
-          positions,
           maritalStatuses,
           specializations,
           directions,
@@ -747,11 +703,6 @@ export default {
         ] = await Promise.all([
           listFunction("cadet")(this.cadetId),
           listFunction("cadetCategory")(),
-          listFunction("subdivision")(),
-          listFunction("group")(),
-          listFunction("rank")(),
-          listFunction("speciality")(),
-          listFunction("position")(),
           listFunction("maritalStatus")(),
           listFunction("specialization")(),
           listFunction("directionOrd")(),
@@ -761,11 +712,6 @@ export default {
         ])
         this.cadetList = cadets
         this.cadetCategoryList = categories
-        this.subdivisionList = subdivisions
-        this.groupList = groups
-        this.rankList = ranks
-        this.specialityList = specialities
-        this.positionList = positions
         this.maritalStatusList = maritalStatuses
         this.specializationList = specializations
         this.directionOrdList = directions
@@ -814,19 +760,19 @@ export default {
       return this.cadetCategoryList.results
     },
     orderedSubdivisions() {
-      return this.subdivisionList.results
+      return this.subdivisions.results
     },
     orderedGroups() {
-      return this.groupList.results
+      return this.groups.results
     },
     orderedRanks() {
-      return this.rankList.results
+      return this.ranks.results
     },
     orderedSpecialities() {
-      return this.specialityList.results
+      return this.specialities.results
     },
     orderedPositions() {
-      return this.positionList.results
+      return this.positions.results
     },
     orderedMaritalStatuses() {
       return this.maritalStatusList.results
@@ -846,6 +792,13 @@ export default {
     orderedForeignLanguages() {
       return this.foreignLanguageList.results
     },
+    ...mapGetters({
+      groups: "common/getGroups",
+      ranks: "common/getRanks",
+      subdivisions: "common/getSubdivisions",
+      specialities: "common/getSpecialities",
+      positions: "common/getPositions",
+    }),
   },
   watch: {
     searchForm: {

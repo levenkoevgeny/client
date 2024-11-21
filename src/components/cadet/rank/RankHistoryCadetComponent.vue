@@ -295,7 +295,6 @@
 <script>
 import getRankHistoryAPIInstance from "@/api/cadet/rankHistoryAPI"
 import getRankAPIInstance from "@/api/cadet/rankAPI"
-import getOrderOwnerAPIInstance from "@/api/cadet/orderOwnerAPI"
 import {
   getLoadListFunction,
   showAddNewMainItemModal,
@@ -327,6 +326,11 @@ export default {
       type: String,
       required: true,
     },
+    orderOwnersList: {
+      type: Object,
+      required: true,
+      default: { count: "", results: [], previous: null, next: null },
+    },
   },
   data() {
     return {
@@ -334,10 +338,8 @@ export default {
       isError: false,
       mainItemList: { count: "", results: [], previous: null, next: null },
       rankList: { count: "", results: [], previous: null, next: null },
-      orderOwnerList: { count: "", results: [], previous: null, next: null },
       mainItemAPIInstance: getRankHistoryAPIInstance(),
       rankAPIInstance: getRankAPIInstance(),
-      orderOwnerAPIInstance: getOrderOwnerAPIInstance(),
       itemForm: Object.assign({}, getRankHistoryAPIInstance().formData),
       selectedItems: [],
       deleteItemId: "",
@@ -355,12 +357,9 @@ export default {
         const [rankHistories, ranks, orderOwners] = await Promise.all([
           listFunction("mainItem")(this.cadetId),
           listFunction("rank")(),
-          listFunction("orderOwner")(),
         ]).catch((e) => (this.isError = true))
-
         this.mainItemList = rankHistories
         this.rankList = ranks
-        this.orderOwnerList = orderOwners
       } catch (e) {
         this.isError = true
       } finally {
@@ -395,7 +394,7 @@ export default {
       return this.rankList.results
     },
     orderedOrderOwners() {
-      return this.orderOwnerList.results
+      return this.orderOwnersList.results
     },
   },
   watch: {},

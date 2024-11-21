@@ -818,38 +818,41 @@
                 </div>
               </div>
             </div>
-            <RankHistoryCadetComponent :cadet-id="$route.params.id" />
+            <RankHistoryCadetComponent
+              :cadet-id="$route.params.id"
+              :order-owners-list="orderOwners"
+            />
             <EducationHistoryCadetComponent :cadet-id="$route.params.id" />
             <ForeignLanguagesCadetComponent :cadet-id="$route.params.id" />
             <ScientificWorksCadetComponent :cadet-id="$route.params.id" />
             <JobCadetComponent :cadet-id="$route.params.id" />
             <ArmyServiceCadetComponent
               :cadet-id="$route.params.id"
-              :order-owners-list="orderOwnerList"
+              :order-owners-list="orderOwners"
             />
             <MVDServiceCadetComponent
               :cadet-id="$route.params.id"
-              :order-owners-list="orderOwnerList"
+              :order-owners-list="orderOwners"
             />
             <RewardCadetComponent
               :cadet-id="$route.params.id"
-              :order-owners-list="orderOwnerList"
+              :order-owners-list="orderOwners"
             />
             <EncouragementCadetComponent
               :cadet-id="$route.params.id"
-              :order-owners-list="orderOwnerList"
+              :order-owners-list="orderOwners"
             />
             <PunishmentCadetComponent
               :cadet-id="$route.params.id"
-              :order-owners-list="orderOwnerList"
+              :order-owners-list="orderOwners"
             />
             <PositionCadetComponent
               :cadet-id="$route.params.id"
-              :order-owners-list="orderOwnerList"
+              :order-owners-list="orderOwners"
             />
             <SpecialityCadetComponent
               :cadet-id="$route.params.id"
-              :order-owners-list="orderOwnerList"
+              :order-owners-list="orderOwners"
             />
             <RelativesCadetComponent :cadet-id="$route.params.id" />
           </div>
@@ -946,7 +949,6 @@ import getRewardHistoryAPIInstance from "@/api/cadet/rewardHistoryAPI"
 import getArmyHistoryAPIInstance from "@/api/cadet/armyHistoryAPI"
 import getMVDHistoryAPIInstance from "@/api/cadet/mvdHistoryAPI"
 import getCadetCategoryAPIAPIInstance from "@/api/cadet/cadetCategoryAPI"
-import getOrderOwnerAPIInstance from "@/api/cadet/orderOwnerAPI"
 import getSubdivisionAPIInstance from "@/api/cadet/subdivisionAPI"
 import getGroupAPIInstance from "@/api/cadet/groupAPI"
 import getPassportIssueAuthorityAPIInstance from "@/api/cadet/passportIssueAuthorityAPI"
@@ -970,9 +972,10 @@ import { SpecialityCadetComponent } from "@/components/cadet/speciality"
 import RelativesCadetComponent from "@/components/cadet/relatives/RelativesCadetComponent.vue"
 
 import { getLoadListFunction } from "../../../utils"
-
+import { controller } from "@/api/auth/authAPI"
 import "vue-select/dist/vue-select.css"
-
+import { mapGetters } from "vuex"
+import axios from "axios"
 export default {
   name: "CadetUpdateView",
   components: {
@@ -1075,10 +1078,7 @@ export default {
         is_employee: "",
       },
       cadetCategoryList: { count: "", results: [], previous: null, next: null },
-      subdivisionList: { count: "", results: [], previous: null, next: null },
-      groupList: { count: "", results: [], previous: null, next: null },
       encouragementList: { count: "", results: [], previous: null, next: null },
-      orderOwnerList: { count: "", results: [], previous: null, next: null },
       encouragementKindList: {
         count: "",
         results: [],
@@ -1087,7 +1087,6 @@ export default {
       },
       punishmentList: { count: "", results: [], previous: null, next: null },
       rankHistoryList: { count: "", results: [], previous: null, next: null },
-      rankList: { count: "", results: [], previous: null, next: null },
       positionHistoryList: {
         count: "",
         results: [],
@@ -1156,7 +1155,6 @@ export default {
       rewardHistoryAPIInstance: getRewardHistoryAPIInstance(),
       armyHistoryAPIInstance: getArmyHistoryAPIInstance(),
       mvdHistoryAPIInstance: getMVDHistoryAPIInstance(),
-      orderOwnerAPIInstance: getOrderOwnerAPIInstance(),
       subdivisionAPIInstance: getSubdivisionAPIInstance(),
       groupAPIInstance: getGroupAPIInstance(),
       passportIssueAuthorityAPIInstance: getPassportIssueAuthorityAPIInstance(),
@@ -1165,33 +1163,28 @@ export default {
   async created() {
     await this.loadData(this.$route.params.id)
   },
+  beforeUnmount() {
+    console.log("before unmount")
+    // controller.abort()
+  },
   methods: {
     async loadData(cadetId) {
       const listFunction = getLoadListFunction.bind(this)
       const [
         cadet,
         cadetCategories,
-        orderOwners,
-        subdivisions,
-        groups,
         passportIssueAuthorities,
         specializations,
         directionsOrd,
       ] = await Promise.all([
         this.getCadetData(cadetId),
         listFunction("cadetCategory")(cadetId, 1000),
-        listFunction("orderOwner")(null, 1000),
-        listFunction("subdivision")(null, 1000),
-        listFunction("group")(null, 1000),
         listFunction("passportIssueAuthority")(null, 1000),
         listFunction("specialization")(null, 1000),
         listFunction("directionOrd")(null, 1000),
       ]).catch(() => (this.isError = true))
       this.currentCadetData = cadet
       this.cadetCategoryList = cadetCategories
-      this.orderOwnerList = orderOwners
-      this.subdivisionList = subdivisions
-      this.groupList = groups
       this.passportIssueAuthorityList = passportIssueAuthorities
       this.specializationList = specializations
       this.directionOrdList = directionsOrd
@@ -1234,16 +1227,10 @@ export default {
       return this.cadetCategoryList.results
     },
     orderedSubdivisions() {
-      return this.subdivisionList.results
+      return this.subdivisions.results
     },
     orderedGroups() {
-      return this.groupList.results
-    },
-    orderedRanks() {
-      return this.rankList.results
-    },
-    orderedOrderOwners() {
-      return this.orderOwnerList.results
+      return this.groups.results
     },
     orderedSpecializations() {
       return this.specializationList.results
@@ -1254,6 +1241,14 @@ export default {
     orderedPassportIssueAuthorities() {
       return this.passportIssueAuthorityList.results
     },
+    ...mapGetters({
+      groups: "common/getGroups",
+      ranks: "common/getRanks",
+      subdivisions: "common/getSubdivisions",
+      specialities: "common/getSpecialities",
+      positions: "common/getPositions",
+      orderOwners: "common/getOrderOwners",
+    }),
   },
   watch: {
     currentCadetData: {

@@ -460,7 +460,6 @@
 <script>
 import getEncouragementAPIInstance from "@/api/cadet/encouragementAPI"
 import getEncouragementKindAPIInstance from "@/api/cadet/encouragementKindAPI"
-import getOrderOwnerAPIInstance from "@/api/cadet/orderOwnerAPI"
 import getCadetAPIInstance from "@/api/cadet/cadetAPI"
 
 import BaseListLayout from "@/components/layouts/BaseListLayout.vue"
@@ -483,6 +482,7 @@ import {
   updateMainItemInList,
 } from "../../../../utils"
 import EncouragementModalForCadetUpdate from "@/components/cadet/encouragement/modals/EncouragementModalForCadetUpdate.vue"
+import { mapGetters } from "vuex"
 
 export default {
   name: "EncouragementListView",
@@ -508,11 +508,9 @@ export default {
         previous: null,
         next: null,
       },
-      orderOwnerList: { count: "", results: [], previous: null, next: null },
       cadetList: { count: "", results: [], previous: null, next: null },
       mainItemAPIInstance: getEncouragementAPIInstance(),
       encouragementKindAPIInstance: getEncouragementKindAPIInstance(),
-      orderOwnerAPIInstance: getOrderOwnerAPIInstance(),
       cadetAPIInstance: getCadetAPIInstance(),
       itemForm: Object.assign({}, getEncouragementAPIInstance().formData),
       searchForm: Object.assign({}, getEncouragementAPIInstance().searchObj),
@@ -535,11 +533,9 @@ export default {
           await Promise.all([
             listFunction("mainItem")(this.cadetId),
             listFunction("encouragementKind")(null, 1000),
-            listFunction("orderOwner")(null, 1000),
           ])
         this.mainItemList = encouragements
         this.encouragementKindList = encouragementKinds
-        this.orderOwnerList = orderOwners
       } catch (e) {
         this.isError = true
       } finally {
@@ -614,8 +610,11 @@ export default {
       return this.cadetList.results
     },
     orderedOrderOwners() {
-      return this.orderOwnerList.results
+      return this.orderOwners.results
     },
+    ...mapGetters({
+      orderOwners: "common/getOrderOwners",
+    }),
   },
   watch: {
     searchForm: {

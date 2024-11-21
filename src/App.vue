@@ -2,6 +2,14 @@
   <router-view />
 </template>
 
+<script>
+export default {
+  async created() {
+    await this.$store.dispatch("common/actionGetCommonLists", {})
+  },
+}
+</script>
+
 <style scoped>
 >>> {
   --vs-controls-color: #664cc3;

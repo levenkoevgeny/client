@@ -703,6 +703,8 @@ import { debounce } from "lodash/function"
 import { getLoadListFunction } from "../../../utils"
 import BaseListLayoutForCadetUpdate from "@/components/layouts/BaseListLayoutForCadetUpdate.vue"
 
+import { mapGetters } from "vuex"
+
 export default {
   name: "CadetList",
   components: {
@@ -714,11 +716,6 @@ export default {
     return {
       cadetList: { count: "", results: [], previous: null, next: null },
       cadetCategoryList: { count: "", results: [], previous: null, next: null },
-      subdivisionList: { count: "", results: [], previous: null, next: null },
-      groupList: { count: "", results: [], previous: null, next: null },
-      rankList: { count: "", results: [], previous: null, next: null },
-      specialityList: { count: "", results: [], previous: null, next: null },
-      positionList: { count: "", results: [], previous: null, next: null },
       isLoading: true,
       isError: false,
       BACKEND_PROTOCOL: process.env.VUE_APP_BACKEND_PROTOCOL,
@@ -748,30 +745,13 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [
-          cadetCategories,
-          cadets,
-          subdivisions,
-          groups,
-          ranks,
-          specialities,
-          positions,
-        ] = await Promise.all([
-          listFunction("cadetCategory")(null, 1000),
-          listFunction("cadet")(),
-          listFunction("subdivision")(null, 1000),
-          listFunction("group")(null, 1000),
-          listFunction("rank")(null, 1000),
-          listFunction("speciality")(null, 1000),
-          listFunction("position")(null, 1000),
-        ]).catch(() => (this.isError = true))
+        const [cadetCategories, cadets, specialities, positions] =
+          await Promise.all([
+            listFunction("cadetCategory")(null, 1000),
+            listFunction("cadet")(),
+          ]).catch(() => (this.isError = true))
         this.cadetCategoryList = cadetCategories
         this.cadetList = cadets
-        this.subdivisionList = subdivisions
-        this.groupList = groups
-        this.rankList = ranks
-        this.specialityList = specialities
-        this.positionList = positions
       } catch (e) {
         this.isError = true
       } finally {
@@ -849,20 +829,27 @@ export default {
       return this.cadetList.results
     },
     orderedSubdivisions() {
-      return this.subdivisionList.results
+      return this.subdivisions.results
     },
     orderedGroups() {
-      return this.groupList.results
+      return this.groups.results
     },
     orderedRanks() {
-      return this.rankList.results
+      return this.ranks.results
     },
     orderedSpecialities() {
-      return this.specialityList.results
+      return this.specialities.results
     },
     orderedPositions() {
-      return this.positionList.results
+      return this.positions.results
     },
+    ...mapGetters({
+      groups: "common/getGroups",
+      ranks: "common/getRanks",
+      subdivisions: "common/getSubdivisions",
+      specialities: "common/getSpecialities",
+      positions: "common/getPositions",
+    }),
   },
   watch: {
     searchForm: {
