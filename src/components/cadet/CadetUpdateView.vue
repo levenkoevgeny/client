@@ -149,102 +149,6 @@
                       <div class="row">
                         <div class="col-lg-4">
                           <div class="mb-3">
-                            <label class="form-label" for="id_last_name_bel"
-                              >Фамилия (бел):</label
-                            >
-                            <input
-                              type="text"
-                              class="form-control"
-                              name="last_name_bel"
-                              maxlength="30"
-                              id="id_last_name_bel"
-                              v-model="currentCadetData.last_name_bel"
-                            />
-                          </div>
-                        </div>
-                        <div class="col-lg-4">
-                          <div class="mb-3">
-                            <label class="form-label" for="id_first_name_bel"
-                              >Имя (бел):</label
-                            >
-                            <input
-                              type="text"
-                              class="form-control"
-                              name="first_name_bel"
-                              maxlength="30"
-                              id="id_first_name_bel"
-                              v-model="currentCadetData.first_name_bel"
-                            />
-                          </div>
-                        </div>
-                        <div class="col-lg-4">
-                          <div class="mb-3">
-                            <label class="form-label" for="id_patronymic_bel"
-                              >Отчество (бел):</label
-                            >
-                            <input
-                              type="text"
-                              class="form-control"
-                              name="patronymic_bel"
-                              maxlength="30"
-                              id="id_patronymic_bel"
-                              v-model="currentCadetData.patronymic_bel"
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="row">
-                        <div class="col-lg-4">
-                          <div class="mb-3">
-                            <label class="form-label" for="id_last_name_en"
-                              >Фамилия (англ):</label
-                            >
-                            <input
-                              type="text"
-                              class="form-control"
-                              name="last_name_en"
-                              maxlength="30"
-                              id="id_last_name_en"
-                              v-model="currentCadetData.last_name_en"
-                            />
-                          </div>
-                        </div>
-                        <div class="col-lg-4">
-                          <div class="mb-3">
-                            <label class="form-label" for="id_first_name_en"
-                              >Имя (англ):</label
-                            >
-                            <input
-                              type="text"
-                              class="form-control"
-                              name="first_name_en"
-                              maxlength="30"
-                              id="id_first_name_en"
-                              v-model="currentCadetData.first_name_en"
-                            />
-                          </div>
-                        </div>
-                        <div class="col-lg-4">
-                          <div class="mb-3">
-                            <label class="form-label" for="id_patronymic_en"
-                              >Отчество (англ):</label
-                            >
-                            <input
-                              type="text"
-                              class="form-control"
-                              name="patronymic_en"
-                              maxlength="30"
-                              id="id_patronymic_en"
-                              v-model="currentCadetData.patronymic_en"
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="row">
-                        <div class="col-lg-4">
-                          <div class="mb-3">
                             <label class="form-label" for="id_date_of_birth"
                               >Дата рождения:</label
                             >
@@ -563,7 +467,7 @@
                         />
                       </div>
                     </div>
-                    <div class="col-8">
+                    <div class="col-4">
                       <div class="mb-3">
                         <label class="form-label" for="id_category"
                           >Отношение военного комиссариата</label
@@ -575,6 +479,29 @@
                           "
                           rows="1"
                         />
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="mb-3">
+                        <label class="form-label" for="id_military_office"
+                          >Военкомат</label
+                        >
+
+                        <select
+                          class="form-select"
+                          name="subdivision"
+                          id="id_military_office"
+                          v-model="currentCadetData.military_office"
+                        >
+                          <option value="" selected>---------</option>
+                          <option
+                            v-for="militaryOffice in orderedMilitaryOffices"
+                            :value="militaryOffice.id"
+                            :key="militaryOffice.id"
+                          >
+                            {{ militaryOffice.military_office }}
+                          </option>
+                        </select>
                       </div>
                     </div>
                   </div>
@@ -954,6 +881,7 @@ import getGroupAPIInstance from "@/api/cadet/groupAPI"
 import getPassportIssueAuthorityAPIInstance from "@/api/cadet/passportIssueAuthorityAPI"
 import getSpecializationAPIInstance from "@/api/cadet/specializationAPI"
 import getDirectionOrdAPIInstance from "@/api/cadet/directionOrdAPI"
+import getMilitaryOfficeAPIInstance from "@/api/cadet/militaryOfficeAPI"
 import { debounce } from "lodash/function"
 import { RankHistoryCadetComponent } from "@/components/cadet/rank"
 import { EncouragementCadetComponent } from "@/components/cadet/encouragement"
@@ -972,10 +900,8 @@ import { SpecialityCadetComponent } from "@/components/cadet/speciality"
 import RelativesCadetComponent from "@/components/cadet/relatives/RelativesCadetComponent.vue"
 
 import { getLoadListFunction } from "../../../utils"
-import { controller } from "@/api/auth/authAPI"
 import "vue-select/dist/vue-select.css"
 import { mapGetters } from "vuex"
-import axios from "axios"
 export default {
   name: "CadetUpdateView",
   components: {
@@ -1141,6 +1067,12 @@ export default {
         previous: null,
         next: null,
       },
+      militaryOfficeList: {
+        count: "",
+        results: [],
+        previous: null,
+        next: null,
+      },
       cadetAPIInstance: getCadetAPIInstance(),
       cadetCategoryAPIInstance: getCadetCategoryAPIAPIInstance(),
       encouragementAPIInstance: getEncouragementAPIInstance(),
@@ -1158,6 +1090,7 @@ export default {
       subdivisionAPIInstance: getSubdivisionAPIInstance(),
       groupAPIInstance: getGroupAPIInstance(),
       passportIssueAuthorityAPIInstance: getPassportIssueAuthorityAPIInstance(),
+      militaryOfficeAPIInstance: getMilitaryOfficeAPIInstance(),
     }
   },
   async created() {
@@ -1176,18 +1109,21 @@ export default {
         passportIssueAuthorities,
         specializations,
         directionsOrd,
+        militaryOffices,
       ] = await Promise.all([
         this.getCadetData(cadetId),
-        listFunction("cadetCategory")(cadetId, 1000),
+        listFunction("cadetCategory")(null, 1000),
         listFunction("passportIssueAuthority")(null, 1000),
         listFunction("specialization")(null, 1000),
         listFunction("directionOrd")(null, 1000),
+        listFunction("militaryOffice")(null, 1000),
       ]).catch(() => (this.isError = true))
       this.currentCadetData = cadet
       this.cadetCategoryList = cadetCategories
       this.passportIssueAuthorityList = passportIssueAuthorities
       this.specializationList = specializations
       this.directionOrdList = directionsOrd
+      this.militaryOfficeList = militaryOffices
     },
     async fetchOptions(search, loading) {
       if (search.length) {
@@ -1241,6 +1177,10 @@ export default {
     orderedPassportIssueAuthorities() {
       return this.passportIssueAuthorityList.results
     },
+    orderedMilitaryOffices() {
+      return this.militaryOfficeList.results
+    },
+
     ...mapGetters({
       groups: "common/getGroups",
       ranks: "common/getRanks",

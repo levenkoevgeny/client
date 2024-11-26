@@ -23,6 +23,8 @@ import { faPeopleRoof } from "@fortawesome/free-solid-svg-icons"
 import { faDiamondTurnRight } from "@fortawesome/free-solid-svg-icons"
 import { faPencil } from "@fortawesome/free-solid-svg-icons"
 import { faStar } from "@fortawesome/free-regular-svg-icons"
+import { faFileWord } from "@fortawesome/free-regular-svg-icons"
+import { faFileExcel } from "@fortawesome/free-regular-svg-icons"
 import vSelect from "vue-select"
 
 library.add(faUserGraduate)
@@ -43,6 +45,8 @@ library.add(faStairs)
 library.add(faPeopleRoof)
 library.add(faDiamondTurnRight)
 library.add(faPencil)
+library.add(faFileWord)
+library.add(faFileExcel)
 
 createApp(App)
   .component("font-awesome-icon", FontAwesomeIcon)

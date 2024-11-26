@@ -12,9 +12,43 @@
         >
       </li>
     </ul>
-
-    <div style="max-height: 78vh; overflow: auto">
-      <table class="table table-hover">
+    <div class="my-4">
+      <h3>Панель экспорта</h3>
+      <div class="d-flex flex-row align-items-center justify-content-start">
+        <div class="me-4">
+          <select
+            class="form-select"
+            aria-label="Default select example"
+            style="max-width: 300px"
+          >
+            <option selected>Выбор полей для экспорта</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+        </div>
+        <div style="font-size: 1.7rem">
+          <button
+            class="btn btn-link text-primary"
+            style="font-size: inherit"
+            title="Экспорт в Word"
+            @click="exportData('word')"
+          >
+            <font-awesome-icon :icon="['far', 'file-word']" />
+          </button>
+          <button
+            class="btn btn-link text-success"
+            style="font-size: inherit; color: inherit"
+            title="Экспорт в Excel"
+            @click="exportData('excel')"
+          >
+            <font-awesome-icon :icon="['far', 'file-excel']" />
+          </button>
+        </div>
+      </div>
+    </div>
+    <div style="max-height: 68vh; overflow: auto">
+      <table class="table table-hover table-responsive">
         <thead>
           <tr>
             <th scope="col">id</th>
@@ -26,31 +60,13 @@
               <nobr>Пол</nobr>
             </th>
             <th scope="col">
-              <nobr>Фамилия (рус)</nobr>
+              <nobr>Фамилия</nobr>
             </th>
             <th scope="col">
-              <nobr>Имя (рус)</nobr>
+              <nobr>Имя</nobr>
             </th>
             <th scope="col">
-              <nobr>Отчество (рус)</nobr>
-            </th>
-            <th scope="col">
-              <nobr>Фамилия (бел)</nobr>
-            </th>
-            <th scope="col">
-              <nobr>Имя (бел)</nobr>
-            </th>
-            <th scope="col">
-              <nobr>Отчество (бел)</nobr>
-            </th>
-            <th scope="col">
-              <nobr>Фамилия (анг)</nobr>
-            </th>
-            <th scope="col">
-              <nobr>Имя (анг)</nobr>
-            </th>
-            <th scope="col">
-              <nobr>Отчество (анг)</nobr>
+              <nobr>Отчество</nobr>
             </th>
             <th scope="col">
               <nobr>Факультет</nobr>
@@ -160,23 +176,25 @@
             <th scope="col">
               <nobr>Комплектующий орган</nobr>
             </th>
+            <th scope="col">
+              <nobr>Снятие с воинского учета</nobr>
+            </th>
+            <th scope="col">
+              <nobr>Военкомат</nobr>
+            </th>
+            <th></th>
           </tr>
           <tr>
-            <th>
-              <input type="text" class="form-control" />
-            </th>
+            <th></th>
             <th scope="col"></th>
-            <th>
-              <select class="form-select" v-model="searchForm.category">
-                <option selected value="">-------</option>
-                <option
-                  v-for="category in orderedCadetCategories"
-                  :value="category.id"
-                  :key="category.id"
-                >
-                  {{ category.category }}
-                </option>
-              </select>
+            <th style="min-width: 200px; z-index: 10000">
+              <v-select
+                v-model="searchForm.category__in"
+                :options="orderedCadetCategories"
+                label="category"
+                :reduce="(category) => category.id"
+                multiple
+              />
             </th>
             <th>
               <select class="form-select" v-model="searchForm.gender">
@@ -199,60 +217,30 @@
                 v-model="searchForm.first_name_rus__icontains"
               />
             </th>
-            <th></th>
             <th>
               <input
                 type="text"
                 class="form-control"
-                v-model="searchForm.last_name_bel__icontains"
+                v-model="searchForm.patronymic_rus__icontains"
               />
             </th>
-            <th>
-              <input
-                type="text"
-                class="form-control"
-                v-model="searchForm.first_name_bel__icontains"
+            <th style="min-width: 200px">
+              <v-select
+                v-model="searchForm.subdivision__in"
+                :options="orderedSubdivisions"
+                label="subdivision_short_name"
+                :reduce="(subdivision) => subdivision.id"
+                multiple
               />
             </th>
-            <th></th>
-            <th>
-              <input
-                type="text"
-                class="form-control"
-                v-model="searchForm.last_name_en__icontains"
+            <th style="min-width: 200px">
+              <v-select
+                v-model="searchForm.group__in"
+                :options="orderedGroups"
+                label="group_name"
+                :reduce="(group) => group.id"
+                multiple
               />
-            </th>
-            <th>
-              <input
-                type="text"
-                class="form-control"
-                v-model="searchForm.first_name_en__icontains"
-              />
-            </th>
-            <th></th>
-            <th>
-              <select class="form-select" v-model="searchForm.subdivision">
-                <option selected value="">-------</option>
-                <option
-                  v-for="subdivision in orderedSubdivisions"
-                  :value="subdivision.id"
-                  :key="subdivision.id"
-                >
-                  {{ subdivision.subdivision_short_name }}
-                </option>
-              </select>
-            </th>
-            <th>
-              <select class="form-select" v-model="searchForm.group">
-                <option selected value="">-------</option>
-                <option
-                  v-for="group in orderedGroups"
-                  :value="group.id"
-                  :key="group.id"
-                >
-                  {{ group.group_name }}
-                </option>
-              </select>
             </th>
             <th>
               <div class="d-flex justify-content-center align-items-center">
@@ -351,19 +339,15 @@
               </div>
             </th>
             <th>
-              <select
-                class="form-select"
-                v-model="searchForm.passport_issue_authority"
-              >
-                <option selected value="">-------</option>
-                <option
-                  v-for="passportIssueAuthority in orderedPassportIssueAuthorities"
-                  :value="passportIssueAuthority.id"
-                  :key="passportIssueAuthority.id"
-                >
-                  {{ passportIssueAuthority.passport_issue_authority }}
-                </option>
-              </select>
+              <v-select
+                v-model="searchForm.passport_issue_authority__in"
+                :options="orderedPassportIssueAuthorities"
+                label="passport_issue_authority"
+                :reduce="
+                  (passport_issue_authority) => passport_issue_authority.id
+                "
+                multiple
+              />
             </th>
             <th>
               <input
@@ -444,80 +428,84 @@
               </div>
             </th>
             <th>
-              <select class="form-select" v-model="searchForm.specialization">
-                <option selected value="">-------</option>
-                <option
-                  v-for="specialization in orderedSpecializations"
-                  :value="specialization.id"
-                  :key="specialization.id"
-                >
-                  {{ specialization.specialization_name }}
-                </option>
-              </select>
+              <v-select
+                v-model="searchForm.specialization__in"
+                :options="orderedSpecializations"
+                label="specialization_name"
+                :reduce="(specialization) => specialization.id"
+                multiple
+              />
             </th>
             <th>
-              <select class="form-select" v-model="searchForm.direction_ord">
-                <option selected value="">-------</option>
-                <option
-                  v-for="direction_ord in orderedDirectionOrds"
-                  :value="direction_ord.id"
-                  :key="direction_ord.id"
-                >
-                  {{ direction_ord.direction_name }}
-                </option>
-              </select>
+              <v-select
+                v-model="searchForm.direction_ord__in"
+                :options="orderedDirectionOrds"
+                label="direction_name"
+                :reduce="(direction_ord) => direction_ord.id"
+                multiple
+              />
             </th>
             <th>
-              <select class="form-select" v-model="searchForm.current_rank">
-                <option selected value="">-------</option>
-                <option
-                  v-for="rank in orderedRanks"
-                  :value="rank.id"
-                  :key="rank.id"
-                >
-                  {{ rank.rank }}
-                </option>
-              </select>
+              <v-select
+                v-model="searchForm.current_rank__in"
+                :options="orderedRanks"
+                label="rank"
+                :reduce="(rank) => rank.id"
+                multiple
+              />
             </th>
             <th>
-              <select class="form-select" v-model="searchForm.current_position">
-                <option selected value="">-------</option>
-                <option
-                  v-for="position in orderedPositions"
-                  :value="position.id"
-                  :key="position.id"
-                >
-                  {{ position.position }}
-                </option>
-              </select>
+              <v-select
+                v-model="searchForm.current_position__in"
+                :options="orderedPositions"
+                label="position"
+                :reduce="(current_position) => current_position.id"
+                multiple
+              />
             </th>
             <th>
-              <select
-                class="form-select"
-                v-model="searchForm.current_speciality"
-              >
-                <option selected value="">-------</option>
-                <option
-                  v-for="speciality in orderedSpecialities"
-                  :value="speciality.id"
-                  :key="speciality.id"
-                >
-                  {{ speciality.speciality_name }}
-                </option>
-              </select>
+              <v-select
+                v-model="searchForm.current_speciality__in"
+                :options="orderedSpecialities"
+                label="speciality_name"
+                :reduce="(current_speciality) => current_speciality.id"
+                multiple
+              />
             </th>
             <th>
-              <select class="form-select" v-model="searchForm.component_organ">
-                <option selected value="">-------</option>
-                <option
-                  v-for="component_organ in orderedComponentOrgans"
-                  :value="component_organ.id"
-                  :key="component_organ.id"
-                >
-                  {{ component_organ.component_name }}
-                </option>
-              </select>
+              <v-select
+                v-model="searchForm.component_organ__in"
+                :options="orderedComponentOrgans"
+                label="component_name"
+                :reduce="(component_organ) => component_organ.id"
+                multiple
+              />
             </th>
+
+            <th>
+              <div class="d-flex justify-content-center align-items-center">
+                <input
+                  type="date"
+                  class="form-control me-2"
+                  v-model="searchForm.removed_from_military_registration__gte"
+                />
+                <input
+                  type="date"
+                  class="form-control"
+                  v-model="searchForm.removed_from_military_registration__lte"
+                />
+              </div>
+            </th>
+            <th style="min-width: 300px">
+              <v-select
+                v-model="searchForm.military_office__in"
+                :options="orderedMilitaryOffices"
+                label="military_office"
+                :reduce="(military_office) => military_office.id"
+                multiple
+              />
+            </th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -544,12 +532,6 @@
             <td>{{ cadet.last_name_rus }}</td>
             <td>{{ cadet.first_name_rus }}</td>
             <td>{{ cadet.patronymic_rus }}</td>
-            <td>{{ cadet.last_name_bel }}</td>
-            <td>{{ cadet.first_name_bel }}</td>
-            <td>{{ cadet.patronymic_bel }}</td>
-            <td>{{ cadet.last_name_en }}</td>
-            <td>{{ cadet.first_name_en }}</td>
-            <td>{{ cadet.patronymic_en }}</td>
             <td>{{ cadet.get_subdivision }}</td>
             <td>{{ cadet.get_group }}</td>
             <td>{{ cadet.date_of_birth }}</td>
@@ -586,6 +568,10 @@
             <td>{{ cadet.get_position?.position || "" }}</td>
             <td>{{ cadet.get_speciality?.speciality_name || "" }}</td>
             <td>{{ cadet.component_organ }}</td>
+            <td>{{ cadet.removed_from_military_registration }}</td>
+            <td>
+              <nobr>{{ cadet.get_military_office }}</nobr>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -610,6 +596,7 @@ import getDirectionOrdAPIInstance from "@/api/cadet/directionOrdAPI"
 import getComponentOrganAPIInstance from "@/api/cadet/componentOrganAPI"
 import getPassportIssueAuthorityAPIInstance from "@/api/cadet/passportIssueAuthorityAPI"
 import getForeignLanguageAPIInstance from "@/api/cadet/foreignLanguageAPI"
+import getMilitaryOfficeAPIInstance from "@/api/cadet/militaryOfficeAPI"
 import { debounce } from "lodash/function"
 import { PaginatorView } from "@/components/common"
 import { mapGetters } from "vuex"
@@ -669,9 +656,13 @@ export default {
         previous: null,
         next: null,
       },
-
+      militaryOfficeList: {
+        count: "",
+        results: [],
+        previous: null,
+        next: null,
+      },
       searchForm: Object.assign({}, getCadetAPIInstance().searchObj),
-
       cadetAPIInstance: getCadetAPIInstance(),
       cadetCategoryAPIInstance: getCadetCategoryAPIAPIInstance(),
       maritalStatusAPIInstance: getMaritalStatusAPIInstance(),
@@ -680,6 +671,10 @@ export default {
       componentOrganAPIInstance: getComponentOrganAPIInstance(),
       passportIssueAuthorityAPIInstance: getPassportIssueAuthorityAPIInstance(),
       foreignLanguageAPIInstance: getForeignLanguageAPIInstance(),
+      militaryOfficeAPIInstance: getMilitaryOfficeAPIInstance(),
+      BACKEND_PROTOCOL: process.env.VUE_APP_BACKEND_PROTOCOL,
+      BACKEND_HOST: process.env.VUE_APP_BACKEND_HOST,
+      BACKEND_PORT: process.env.VUE_APP_BACKEND_PORT,
     }
   },
   async created() {
@@ -700,15 +695,17 @@ export default {
           components,
           passportIssueAuthorities,
           foreignLanguages,
+          militaryOffices,
         ] = await Promise.all([
-          listFunction("cadet")(this.cadetId),
-          listFunction("cadetCategory")(),
-          listFunction("maritalStatus")(),
-          listFunction("specialization")(),
-          listFunction("directionOrd")(),
-          listFunction("componentOrgan")(),
-          listFunction("passportIssueAuthority")(),
-          listFunction("foreignLanguage")(),
+          listFunction("cadet")(),
+          listFunction("cadetCategory")(null, 1000),
+          listFunction("maritalStatus")(null, 1000),
+          listFunction("specialization")(null, 1000),
+          listFunction("directionOrd")(null, 1000),
+          listFunction("componentOrgan")(null, 1000),
+          listFunction("passportIssueAuthority")(null, 1000),
+          listFunction("foreignLanguage")(null, 1000),
+          listFunction("militaryOffice")(null, 1000),
         ])
         this.cadetList = cadets
         this.cadetCategoryList = categories
@@ -718,11 +715,22 @@ export default {
         this.componentOrganList = components
         this.passportIssueAuthorityList = passportIssueAuthorities
         this.foreignLanguageList = foreignLanguages
+        this.militaryOfficeList = militaryOffices
       } catch (e) {
         this.isError = true
       } finally {
         this.isLoading = false
       }
+    },
+    exportData(destination) {
+      let queryString = "?"
+      for (let key in this.searchForm) {
+        queryString = queryString + `${key}=${this.searchForm[key]}&`
+      }
+      window.open(
+        `${this.BACKEND_PROTOCOL}://${this.BACKEND_HOST}:${this.BACKEND_PORT}/api/list-export${queryString}`,
+        "_blank",
+      )
     },
     debouncedSearch: debounce(async function () {
       this.isLoading = true
@@ -792,6 +800,9 @@ export default {
     orderedForeignLanguages() {
       return this.foreignLanguageList.results
     },
+    orderedMilitaryOffices() {
+      return this.militaryOfficeList.results
+    },
     ...mapGetters({
       groups: "common/getGroups",
       ranks: "common/getRanks",
@@ -814,12 +825,16 @@ export default {
 <style scoped>
 th,
 td {
-  min-width: 100px;
+  min-width: 200px;
   text-align: start;
   vertical-align: middle;
 }
 thead {
   position: sticky;
   top: 0;
+}
+input,
+select {
+  min-width: 200px;
 }
 </style>
