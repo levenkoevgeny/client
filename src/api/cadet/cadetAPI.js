@@ -39,6 +39,7 @@ export default function getCadetAPIInstance() {
     foreign_language_was: "",
     foreign_language_will_be: "",
     subdivision: "",
+    subdivision__in: "",
     group: "",
     group__in: "",
     academy_start_date__gte: "",

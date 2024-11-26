@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLoading">Loading...</div>
+  <div v-if="isLoading">Загрузка...</div>
   <div v-else>
     <div class="container">
       <div class="mb-4"></div>
@@ -13,7 +13,6 @@
               alt="..."
               style="width: 100%"
             />
-
             <img
               v-else
               src="../../assets/without_photo.jpg"
@@ -30,7 +29,8 @@
                 {{ currentCadet.last_name_rus || "Нет данных" }}
                 {{ currentCadet.first_name_rus || "Нет данных" }}
                 {{ currentCadet.patronymic_rus || "Нет данных" }}
-              </h1><br>
+              </h1>
+              <br />
               <h5 class="my-0">
                 Дата рождения - {{ currentCadet.date_of_birth || "Нет данных" }}
               </h5>
@@ -43,9 +43,7 @@
                 Пасспорт - {{ currentCadet.passport_number || "Нет данных" }},
                 выдан -
                 <span v-if="currentCadet.passport_issue_authority">
-                  {{
-                    currentCadet.get_passport_issue_authority
-                  }}
+                  {{ currentCadet.get_passport_issue_authority }}
                 </span>
                 <span v-else>Нет данных</span>
               </h5>
@@ -63,13 +61,19 @@
                 <font-awesome-icon :icon="['fas', 'user-graduate']" />
                 Обучение в Академии МВД
               </h5>
-              Начало обучения - {{ currentCadet.academy_start_date || "Нет данных" }}<br />
-              Окончание обучения - {{ currentCadet.academy_end_date || "Нет данных" }}<br />
-              Факультет - {{ currentCadet.get_subdivision || "Нет данных" }}<br />
+              Начало обучения -
+              {{ currentCadet.academy_start_date || "Нет данных" }}<br />
+              Окончание обучения -
+              {{ currentCadet.academy_end_date || "Нет данных" }}<br />
+              Факультет - {{ currentCadet.get_subdivision || "Нет данных"
+              }}<br />
               Группа - {{ currentCadet.get_group || "Нет данных" }}<br />
-              Специальность - {{ currentCadet.get_speciality || "Нет данных" }}<br />
-              Специализация - {{ currentCadet.get_specialization || "Нет данных" }}<br />
-              Направление ОРД - {{ currentCadet.get_direction_ord || "Нет данных" }}<br />
+              Специальность - {{ currentCadet.get_speciality || "Нет данных"
+              }}<br />
+              Специализация -
+              {{ currentCadet.get_specialization || "Нет данных" }}<br />
+              Направление ОРД -
+              {{ currentCadet.get_direction_ord || "Нет данных" }}<br />
             </div>
           </div>
         </div>
@@ -154,8 +158,8 @@
               aria-controls="languages-tab-pane"
               aria-selected="true"
             >
-              <font-awesome-icon :icon="['fas', 'language']" />&nbsp;
-              Владение иностранными языками
+              <font-awesome-icon :icon="['fas', 'language']" />&nbsp; Владение
+              иностранными языками
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -169,8 +173,8 @@
               aria-controls="scientific-works-tab-pane"
               aria-selected="true"
             >
-              <font-awesome-icon :icon="['fas', 'flask']" />&nbsp;
-              Научные труды и изобретения
+              <font-awesome-icon :icon="['fas', 'flask']" />&nbsp; Научные труды
+              и изобретения
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -184,8 +188,8 @@
               aria-controls="job-tab-pane"
               aria-selected="true"
             >
-              <font-awesome-icon :icon="['fas', 'briefcase']" />&nbsp;
-              Трудовая деятельность
+              <font-awesome-icon :icon="['fas', 'briefcase']" />&nbsp; Трудовая
+              деятельность
             </button>
           </li>
         </ul>
@@ -205,32 +209,34 @@
                 >
                   <table class="table table-hover">
                     <thead>
-                    <tr>
-                      <th>Звание</th>
-                      <th>С какого числа присвоено звание</th>
-                      <th>Дата приказа</th>
-                      <th>Номер приказа</th>
-                      <th>Чей приказ</th>
-                      <th>Доп. информация</th>
-                    </tr>
+                      <tr>
+                        <th>Звание</th>
+                        <th>С какого числа присвоено звание</th>
+                        <th>Дата приказа</th>
+                        <th>Номер приказа</th>
+                        <th>Чей приказ</th>
+                        <th>Доп. информация</th>
+                      </tr>
                     </thead>
                     <tbody>
-                    <tr
-                      v-for="rankHistory in orderedRankHistory"
-                      :key="rankHistory.id"
-                      class="align-baseline"
-                    >
-                      <td>
-                        {{ rankHistory.get_rank_str || "Нет данных" }}
-                      </td>
-                      <td>{{ rankHistory.rank_date }}</td>
-                      <td>
-                        {{ rankHistory.rank_order_date || "Нет данных" }}
-                      </td>
-                      <td>{{ rankHistory.rank_order_number }}</td>
-                      <td>{{ rankHistory.get_rank_order_owner_str }}</td>
-                      <td>{{ rankHistory.rank_extra_data || "Нет данных" }}</td>
-                    </tr>
+                      <tr
+                        v-for="rankHistory in orderedRankHistory"
+                        :key="rankHistory.id"
+                        class="align-baseline"
+                      >
+                        <td>
+                          {{ rankHistory.get_rank_str || "Нет данных" }}
+                        </td>
+                        <td>{{ rankHistory.rank_date }}</td>
+                        <td>
+                          {{ rankHistory.rank_order_date || "Нет данных" }}
+                        </td>
+                        <td>{{ rankHistory.rank_order_number }}</td>
+                        <td>{{ rankHistory.get_rank_order_owner_str }}</td>
+                        <td>
+                          {{ rankHistory.rank_extra_data || "Нет данных" }}
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -259,53 +265,75 @@
                 >
                   <table class="table table-hover">
                     <thead style="position: sticky; top: 0">
-                    <tr>
-                      <th>Уровень</th>
-                      <th>Вид учреждения образования</th>
-                      <th>Уровень образования</th>
-                      <th>Наименование учебного учреждения</th>
-                      <th>Начало обучения</th>
-                      <th>Окончание обучекния</th>
-                      <th>Средний бал</th>
-                    </tr>
+                      <tr>
+                        <th>Уровень</th>
+                        <th>Вид учреждения образования</th>
+                        <th>Уровень образования</th>
+                        <th>Наименование учебного учреждения</th>
+                        <th>Начало обучения</th>
+                        <th>Окончание обучекния</th>
+                        <th>Средний бал</th>
+                      </tr>
                     </thead>
                     <tbody>
-                    <tr
-                      v-for="educationHistory in orderedEducationHistory"
-                      :key="educationHistory.id"
-                      class="align-baseline"
-                    >
-                      <td>
-                        {{ educationHistory.get_education_level_str || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{ educationHistory.get_education_kind_str || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{ educationHistory.get_education_level_str || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{ educationHistory.education_graduated || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{
-                          educationHistory.education_graduating_start_year || "Нет данных"
-                        }}
-                      </td>
-                      <td>
-                        {{ educationHistory.education_graduating_end_year || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{ educationHistory.education_average_score || "Нет данных" }}
-                      </td>
-                    </tr>
+                      <tr
+                        v-for="educationHistory in orderedEducationHistory"
+                        :key="educationHistory.id"
+                        class="align-baseline"
+                      >
+                        <td>
+                          {{
+                            educationHistory.get_education_level_str ||
+                            "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            educationHistory.get_education_kind_str ||
+                            "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            educationHistory.get_education_level_str ||
+                            "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            educationHistory.education_graduated || "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            educationHistory.education_graduating_start_year ||
+                            "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            educationHistory.education_graduating_end_year ||
+                            "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            educationHistory.education_average_score ||
+                            "Нет данных"
+                          }}
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                   <PaginatorView
-                    :update-paginator="getPaginatorUpdateFunction('educationHistory')"
+                    :update-paginator="
+                      getPaginatorUpdateFunction('educationHistory')
+                    "
                     :list-next="educationHistoryList.next"
                     :list-previous="educationHistoryList.previous"
-                    v-if="educationHistoryList.previous || educationHistoryList.next"
+                    v-if="
+                      educationHistoryList.previous || educationHistoryList.next
+                    "
                   />
                 </div>
                 <div class="fs-5" v-else>Записей нет</div>
@@ -327,31 +355,39 @@
                 >
                   <table class="table table-hover">
                     <thead style="position: sticky; top: 0">
-                    <tr>
-                      <th>Язык</th>
-                      <th>Уровень владения</th>
-                    </tr>
+                      <tr>
+                        <th>Язык</th>
+                        <th>Уровень владения</th>
+                      </tr>
                     </thead>
                     <tbody>
-                    <tr
-                      v-for="forLang in orderedCadetForeignLanguageLevel"
-                      :key="forLang.id"
-                      class="align-baseline"
-                    >
-                      <td>
-                        {{ forLang.get_foreign_language_str || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{ forLang.get_foreign_language_level_str || "Нет данных" }}
-                      </td>
-                    </tr>
+                      <tr
+                        v-for="forLang in orderedCadetForeignLanguageLevel"
+                        :key="forLang.id"
+                        class="align-baseline"
+                      >
+                        <td>
+                          {{ forLang.get_foreign_language_str || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{
+                            forLang.get_foreign_language_level_str ||
+                            "Нет данных"
+                          }}
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                   <PaginatorView
-                    :update-paginator="getPaginatorUpdateFunction('cadetForeignLanguageLevel')"
+                    :update-paginator="
+                      getPaginatorUpdateFunction('cadetForeignLanguageLevel')
+                    "
                     :list-next="cadetForeignLanguageLevelList.next"
                     :list-previous="cadetForeignLanguageLevelList.previous"
-                    v-if="cadetForeignLanguageLevelList.previous || cadetForeignLanguageLevelList.next"
+                    v-if="
+                      cadetForeignLanguageLevelList.previous ||
+                      cadetForeignLanguageLevelList.next
+                    "
                   />
                 </div>
                 <div class="fs-5" v-else>Записей нет</div>
@@ -419,32 +455,32 @@
                 >
                   <table class="table table-hover">
                     <thead>
-                    <tr>
-                      <th scope="col">Должность</th>
-                      <th scope="col">Начало работы</th>
-                      <th scope="col">Окончание работы</th>
-                      <th scope="col">Организация</th>
-                    </tr>
+                      <tr>
+                        <th scope="col">Должность</th>
+                        <th scope="col">Начало работы</th>
+                        <th scope="col">Окончание работы</th>
+                        <th scope="col">Организация</th>
+                      </tr>
                     </thead>
                     <tbody>
-                    <tr
-                      v-for="jobHistory in orderedJobHistory"
-                      :key="jobHistory.id"
-                      class="align-baseline"
-                    >
-                      <td>
-                        {{ jobHistory.job_position || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{ jobHistory.job_start_year || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{ jobHistory.job_end_year || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{ jobHistory.organisation_name || "Нет данных" }}
-                      </td>
-                    </tr>
+                      <tr
+                        v-for="jobHistory in orderedJobHistory"
+                        :key="jobHistory.id"
+                        class="align-baseline"
+                      >
+                        <td>
+                          {{ jobHistory.job_position || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ jobHistory.job_start_year || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ jobHistory.job_end_year || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ jobHistory.organisation_name || "Нет данных" }}
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -472,8 +508,9 @@
               aria-controls="army-tab-pane"
               aria-selected="true"
             >
-              <font-awesome-icon :icon="['fas', 'person-military-rifle']" />&nbsp;
-              Прохождение службы в ВС РБ
+              <font-awesome-icon
+                :icon="['fas', 'person-military-rifle']"
+              />&nbsp; Прохождение службы в ВС РБ
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -487,8 +524,9 @@
               aria-controls="mvd-tab-pane"
               aria-selected="true"
             >
-              <font-awesome-icon :icon="['fas', 'person-military-rifle']" />&nbsp;
-              Прохождение службы в МВД РБ
+              <font-awesome-icon
+                :icon="['fas', 'person-military-rifle']"
+              />&nbsp; Прохождение службы в МВД РБ
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -502,8 +540,7 @@
               aria-controls="reward-tab-pane"
               aria-selected="true"
             >
-              <font-awesome-icon :icon="['fas', 'medal']" />&nbsp;
-              Награды
+              <font-awesome-icon :icon="['fas', 'medal']" />&nbsp; Награды
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -555,41 +592,45 @@
                 >
                   <table class="table table-hover">
                     <thead>
-                    <tr>
-                      <th>С какого времени</th>
-                      <th>По какое время</th>
-                      <th>Должность</th>
-                      <th>Место прохождения службы</th>
-                      <th>Чей приказ</th>
-                      <th>Номер приказа и дата</th>
-                    </tr>
+                      <tr>
+                        <th>С какого времени</th>
+                        <th>По какое время</th>
+                        <th>Должность</th>
+                        <th>Место прохождения службы</th>
+                        <th>Чей приказ</th>
+                        <th>Номер приказа и дата</th>
+                      </tr>
                     </thead>
                     <tbody>
-                    <tr
-                      v-for="armyService in orderedArmyHistory"
-                      :key="armyService.id"
-                      class="align-baseline"
-                    >
-                      <td>
-                        {{ armyService.military_service_start || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{ armyService.military_service_end || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{ armyService.position || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{ armyService.military_organization || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{ armyService.get_order_owner_str || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{ armyService.order_number || "" }} от
-                        {{ armyService.order_date || "" }}
-                      </td>
-                    </tr>
+                      <tr
+                        v-for="armyService in orderedArmyHistory"
+                        :key="armyService.id"
+                        class="align-baseline"
+                      >
+                        <td>
+                          {{
+                            armyService.military_service_start || "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{ armyService.military_service_end || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ armyService.position || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{
+                            armyService.military_organization || "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{ armyService.get_order_owner_str || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ armyService.order_number || "" }} от
+                          {{ armyService.order_date || "" }}
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -618,41 +659,41 @@
                 >
                   <table class="table table-hover">
                     <thead>
-                    <tr>
-                      <th>С какого времени</th>
-                      <th>По какое время</th>
-                      <th>Должность</th>
-                      <th>Место прохождения службы</th>
-                      <th>Чей приказ</th>
-                      <th>Номер приказа и дата</th>
-                    </tr>
+                      <tr>
+                        <th>С какого времени</th>
+                        <th>По какое время</th>
+                        <th>Должность</th>
+                        <th>Место прохождения службы</th>
+                        <th>Чей приказ</th>
+                        <th>Номер приказа и дата</th>
+                      </tr>
                     </thead>
                     <tbody>
-                    <tr
-                      v-for="mvdService in orderedArmyHistory"
-                      :key="mvdService.id"
-                      class="align-baseline"
-                    >
-                      <td>
-                        {{ mvdService.mvd_service_start || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{ mvdService.mvd_service_end || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{ mvdService.position || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{ mvdService.mvd_organization || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{ mvdService.get_order_owner_str || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{ mvdService.order_number || "" }} от
-                        {{ mvdService.order_date || "" }}
-                      </td>
-                    </tr>
+                      <tr
+                        v-for="mvdService in orderedArmyHistory"
+                        :key="mvdService.id"
+                        class="align-baseline"
+                      >
+                        <td>
+                          {{ mvdService.mvd_service_start || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ mvdService.mvd_service_end || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ mvdService.position || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ mvdService.mvd_organization || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ mvdService.get_order_owner_str || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ mvdService.order_number || "" }} от
+                          {{ mvdService.order_date || "" }}
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -681,24 +722,24 @@
                 >
                   <table class="table table-hover">
                     <thead>
-                    <tr>
-                      <th>Чем награжден</th>
-                      <th>За что награжден</th>
-                      <th>Номер приказа</th>
-                      <th>Дата приказа</th>
-                    </tr>
+                      <tr>
+                        <th>Чем награжден</th>
+                        <th>За что награжден</th>
+                        <th>Номер приказа</th>
+                        <th>Дата приказа</th>
+                      </tr>
                     </thead>
                     <tbody>
-                    <tr
-                      v-for="reward in orderedRewardHistory"
-                      :key="reward.id"
-                      class="align-baseline"
-                    >
-                      <td>{{ reward.get_reward_str || "Нет данных" }}</td>
-                      <td>{{ reward.reason || "Нет данных" }}</td>
-                      <td>{{ reward.order_number || "Нет данных" }}</td>
-                      <td>{{ reward.reward_date || "Нет данных" }}</td>
-                    </tr>
+                      <tr
+                        v-for="reward in orderedRewardHistory"
+                        :key="reward.id"
+                        class="align-baseline"
+                      >
+                        <td>{{ reward.get_reward_str || "Нет данных" }}</td>
+                        <td>{{ reward.reason || "Нет данных" }}</td>
+                        <td>{{ reward.order_number || "Нет данных" }}</td>
+                        <td>{{ reward.reward_date || "Нет данных" }}</td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -727,29 +768,34 @@
                 >
                   <table class="table table-hover">
                     <thead style="position: sticky; top: 0">
-                    <tr>
-                      <th>Поощрение</th>
-                      <th>Дата</th>
-                      <th>Приказ</th>
-                      <th>Чей приказ</th>
-                      <th>Фабула</th>
-                    </tr>
+                      <tr>
+                        <th>Поощрение</th>
+                        <th>Дата</th>
+                        <th>Приказ</th>
+                        <th>Чей приказ</th>
+                        <th>Фабула</th>
+                      </tr>
                     </thead>
                     <tbody>
-                    <tr
-                      v-for="encouragement in orderedEncouragements"
-                      :key="encouragement.id"
-                      style="cursor: pointer"
-                      class="align-baseline"
-                    >
-                      <td>
-                        {{ encouragement.get_encouragement_kind_str || "Нет данных" }}
-                      </td>
-                      <td>{{ encouragement.encouragement_date }}</td>
-                      <td>{{ encouragement.encouragement_order_number }}</td>
-                      <td>{{ encouragement.get_encouragement_order_owner }}</td>
-                      <td>{{ encouragement.extra_data || "Нет данных" }}</td>
-                    </tr>
+                      <tr
+                        v-for="encouragement in orderedEncouragements"
+                        :key="encouragement.id"
+                        style="cursor: pointer"
+                        class="align-baseline"
+                      >
+                        <td>
+                          {{
+                            encouragement.get_encouragement_kind_str ||
+                            "Нет данных"
+                          }}
+                        </td>
+                        <td>{{ encouragement.encouragement_date }}</td>
+                        <td>{{ encouragement.encouragement_order_number }}</td>
+                        <td>
+                          {{ encouragement.get_encouragement_order_owner }}
+                        </td>
+                        <td>{{ encouragement.extra_data || "Нет данных" }}</td>
+                      </tr>
                     </tbody>
                   </table>
                   <PaginatorView
@@ -780,46 +826,75 @@
                 >
                   <table class="table table-hover">
                     <thead style="position: sticky; top: 0">
-                    <tr>
-                      <th>Взыскание</th>
-                      <th>Дата наложения</th>
-                      <th>Приказ о наложении</th>
-                      <th>Чей приказ</th>
-                      <th>Фабула</th>
-                      <th>Дата снятия</th>
-                      <th>Приказ о снятии</th>
-                      <th>Чей приказ</th>
-                      <th>Фабула</th>
-                    </tr>
+                      <tr>
+                        <th>Взыскание</th>
+                        <th>Дата наложения</th>
+                        <th>Приказ о наложении</th>
+                        <th>Чей приказ</th>
+                        <th>Фабула</th>
+                        <th>Дата снятия</th>
+                        <th>Приказ о снятии</th>
+                        <th>Чей приказ</th>
+                        <th>Фабула</th>
+                      </tr>
                     </thead>
                     <tbody>
-                    <tr
-                      v-for="punishment in orderedPunishments"
-                      :key="punishment.id"
-                      class="align-baseline"
-                    >
-                      <td>{{ punishment.get_punishment_kind_str || "Нет данных" }}</td>
-                      <td>{{ punishment.punishment_start_date || "Нет данных" }}</td>
-                      <td>
-                        {{ punishment.punishment_start_order_number || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{ punishment.get_punishment_start_order_owner || "Нет данных" }}
-                      </td>
-                      <td>{{ punishment.punishment_start_extra_data || "Нет данных" }}</td>
-                      <td>{{ punishment.punishment_expiration_date || "Нет данных" }}</td>
-                      <td>
-                        {{ punishment.punishment_expiration_order_number || "Нет данных" }}
-                      </td>
-                      <td>
-                        {{
-                          punishment.get_punishment_expiration_order_owner || "Нет данных"
-                        }}
-                      </td>
-                      <td>
-                        {{ punishment.punishment_expiration_extra_data || "Нет данных" }}
-                      </td>
-                    </tr>
+                      <tr
+                        v-for="punishment in orderedPunishments"
+                        :key="punishment.id"
+                        class="align-baseline"
+                      >
+                        <td>
+                          {{
+                            punishment.get_punishment_kind_str || "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{ punishment.punishment_start_date || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{
+                            punishment.punishment_start_order_number ||
+                            "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            punishment.get_punishment_start_order_owner ||
+                            "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            punishment.punishment_start_extra_data ||
+                            "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            punishment.punishment_expiration_date ||
+                            "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            punishment.punishment_expiration_order_number ||
+                            "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            punishment.get_punishment_expiration_order_owner ||
+                            "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            punishment.punishment_expiration_extra_data ||
+                            "Нет данных"
+                          }}
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                   <PaginatorView
@@ -847,8 +922,7 @@
               aria-controls="positions-tab-pane"
               aria-selected="true"
             >
-              <font-awesome-icon :icon="['fas', 'stairs']" />&nbsp;
-              Должности
+              <font-awesome-icon :icon="['fas', 'stairs']" />&nbsp; Должности
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -899,37 +973,52 @@
                 >
                   <table class="table table-hover">
                     <thead>
-                    <tr>
-                      <th>Должность</th>
-                      <th>Дата назначения</th>
-                      <th>Приказ о назначении</th>
-                      <th>Дата приказа</th>
-                      <th>Чей приказ</th>
-                      <th>Фабула</th>
-                    </tr>
+                      <tr>
+                        <th>Должность</th>
+                        <th>Дата назначения</th>
+                        <th>Приказ о назначении</th>
+                        <th>Дата приказа</th>
+                        <th>Чей приказ</th>
+                        <th>Фабула</th>
+                      </tr>
                     </thead>
                     <tbody>
-                    <tr
-                      v-for="position in orderedPositionHistory"
-                      :key="position.id"
-                      class="align-baseline"
-                    >
-                      <td>{{ position.get_position_str || "Нет данных" }}</td>
-                      <td>{{ position.position_date || "Нет данных" }}</td>
-                      <td>{{ position.position_order_number || "Нет данных" }}</td>
-                      <td>{{ position.position_order_date || "Нет данных" }}</td>
-                      <td>{{ position.get_position_order_owner_str || "Нет данных" }}</td>
-                      <td>{{ position.position_extra_data || "Нет данных" }}</td>
-                    </tr>
+                      <tr
+                        v-for="position in orderedPositionHistory"
+                        :key="position.id"
+                        class="align-baseline"
+                      >
+                        <td>{{ position.get_position_str || "Нет данных" }}</td>
+                        <td>{{ position.position_date || "Нет данных" }}</td>
+                        <td>
+                          {{ position.position_order_number || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{ position.position_order_date || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{
+                            position.get_position_order_owner_str ||
+                            "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{ position.position_extra_data || "Нет данных" }}
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
                 <div class="fs-5" v-else>Записей нет</div>
                 <PaginatorView
-                  :update-paginator="getPaginatorUpdateFunction('positionHistory')"
+                  :update-paginator="
+                    getPaginatorUpdateFunction('positionHistory')
+                  "
                   :list-next="positionHistoryList.next"
                   :list-previous="positionHistoryList.previous"
-                  v-if="positionHistoryList.previous || positionHistoryList.next"
+                  v-if="
+                    positionHistoryList.previous || positionHistoryList.next
+                  "
                 />
               </div>
             </div>
@@ -949,37 +1038,54 @@
                 >
                   <table class="table table-hover">
                     <thead>
-                    <tr>
-                      <th>Специальность</th>
-                      <th>Приказ о назначении</th>
-                      <th>Дата приказа</th>
-                      <th>Чей приказ</th>
-                      <th>Фабула</th>
-                    </tr>
+                      <tr>
+                        <th>Специальность</th>
+                        <th>Приказ о назначении</th>
+                        <th>Дата приказа</th>
+                        <th>Чей приказ</th>
+                        <th>Фабула</th>
+                      </tr>
                     </thead>
                     <tbody>
-                    <tr
-                      v-for="speciality in orderedSpecialityHistory"
-                      :key="speciality.id"
-                      class="align-baseline"
-                    >
-                      <td>{{ speciality.get_speciality_str || "Нет данных" }}</td>
-                      <td>{{ speciality.speciality_order_number || "Нет данных" }}</td>
-                      <td>{{ speciality.speciality_order_date || "Нет данных" }}</td>
-                      <td>
-                        {{ speciality.get_speciality_order_owner_str || "Нет данных" }}
-                      </td>
-                      <td>{{ speciality.speciality_extra_data || "Нет данных" }}</td>
-                    </tr>
+                      <tr
+                        v-for="speciality in orderedSpecialityHistory"
+                        :key="speciality.id"
+                        class="align-baseline"
+                      >
+                        <td>
+                          {{ speciality.get_speciality_str || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{
+                            speciality.speciality_order_number || "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{ speciality.speciality_order_date || "Нет данных" }}
+                        </td>
+                        <td>
+                          {{
+                            speciality.get_speciality_order_owner_str ||
+                            "Нет данных"
+                          }}
+                        </td>
+                        <td>
+                          {{ speciality.speciality_extra_data || "Нет данных" }}
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
                 <div class="fs-5" v-else>Записей нет</div>
                 <PaginatorView
-                  :update-paginator="getPaginatorUpdateFunction('specialityHistory')"
+                  :update-paginator="
+                    getPaginatorUpdateFunction('specialityHistory')
+                  "
                   :list-next="specialityHistoryList.next"
                   :list-previous="specialityHistoryList.previous"
-                  v-if="specialityHistoryList.previous || specialityHistoryList.next"
+                  v-if="
+                    specialityHistoryList.previous || specialityHistoryList.next
+                  "
                 />
               </div>
             </div>
@@ -999,32 +1105,36 @@
                 >
                   <table class="table table-hover">
                     <thead>
-                    <tr>
-                      <th>
-                        Фамилия, имя, отчество жены (мужа), детей и лиц, находящихся на
-                        иждивении
-                      </th>
-                      <th>Степень родства</th>
-                      <th>Дата рождения</th>
-                      <th>Место рождения</th>
-                      <th>
-                        Основание: номер и дата свидетельства о браке, о рождении, кем
-                        выдано
-                      </th>
-                    </tr>
+                      <tr>
+                        <th>
+                          Фамилия, имя, отчество жены (мужа), детей и лиц,
+                          находящихся на иждивении
+                        </th>
+                        <th>Степень родства</th>
+                        <th>Дата рождения</th>
+                        <th>Место рождения</th>
+                        <th>
+                          Основание: номер и дата свидетельства о браке, о
+                          рождении, кем выдано
+                        </th>
+                      </tr>
                     </thead>
                     <tbody>
-                    <tr
-                      v-for="relative in orderedRelatives"
-                      :key="relative.id"
-                      class="align-baseline"
-                    >
-                      <td>{{ relative.kinship_data || "Нет данных" }}</td>
-                      <td>{{ relative.get_degree_of_kinship_str || "Нет данных" }}</td>
-                      <td>{{ relative.date_of_birth || "Нет данных" }}</td>
-                      <td>{{ relative.place_of_birth || "Нет данных" }}</td>
-                      <td>{{ relative.document_data || "Нет данных" }}</td>
-                    </tr>
+                      <tr
+                        v-for="relative in orderedRelatives"
+                        :key="relative.id"
+                        class="align-baseline"
+                      >
+                        <td>{{ relative.kinship_data || "Нет данных" }}</td>
+                        <td>
+                          {{
+                            relative.get_degree_of_kinship_str || "Нет данных"
+                          }}
+                        </td>
+                        <td>{{ relative.date_of_birth || "Нет данных" }}</td>
+                        <td>{{ relative.place_of_birth || "Нет данных" }}</td>
+                        <td>{{ relative.document_data || "Нет данных" }}</td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -1039,7 +1149,6 @@
             </div>
           </div>
         </div>
-
       </div>
       <!--     Идеология -->
       <div class="mb-2">
@@ -1241,8 +1350,9 @@ export default {
       rewardHistoryAPIInstance: getRewardHistoryAPIInstance(),
       armyHistoryAPIInstance: getArmyHistoryAPIInstance(),
       mvdHistoryAPIInstance: getMVDHistoryAPIInstance(),
-      cadetForeignLanguageLevelAPIInstance: getCadetForeignLanguageLevelAPIInstance(),
-      relativesAPIInstance: getRelativesAPIInstance()
+      cadetForeignLanguageLevelAPIInstance:
+        getCadetForeignLanguageLevelAPIInstance(),
+      relativesAPIInstance: getRelativesAPIInstance(),
     }
   },
   async created() {

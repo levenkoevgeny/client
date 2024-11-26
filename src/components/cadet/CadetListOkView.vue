@@ -1,7 +1,6 @@
 <template>
   <div class="container-fluid">
     <div class="my-3"></div>
-
     <ul class="nav nav-links my-3 mb-lg-2 mx-n3">
       <li class="nav-item">
         <a class="nav-link active" aria-current="page" href="#"
@@ -13,37 +12,37 @@
       </li>
     </ul>
     <div class="my-4">
-      <h3>Панель экспорта</h3>
-      <div class="d-flex flex-row align-items-center justify-content-start">
-        <div class="me-4">
-          <select
-            class="form-select"
-            aria-label="Default select example"
-            style="max-width: 300px"
-          >
-            <option selected>Выбор полей для экспорта</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </select>
-        </div>
-        <div style="font-size: 1.7rem">
-          <button
-            class="btn btn-link text-primary"
-            style="font-size: inherit"
-            title="Экспорт в Word"
-            @click="exportData('word')"
-          >
-            <font-awesome-icon :icon="['far', 'file-word']" />
-          </button>
-          <button
-            class="btn btn-link text-success"
-            style="font-size: inherit; color: inherit"
-            title="Экспорт в Excel"
-            @click="exportData('excel')"
-          >
-            <font-awesome-icon :icon="['far', 'file-excel']" />
-          </button>
+      <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+        <h3>Панель экспорта</h3>
+        <div class="d-flex flex-row align-items-center justify-content-start">
+          <div class="me-4">
+            <v-select
+              v-model="selectedFieldsForDataExport"
+              :options="fieldsForDataExport"
+              label="fieldName"
+              :reduce="(field) => field.fieldValue"
+              multiple
+              style="min-width: 400px"
+            />
+          </div>
+          <div style="font-size: 1.7rem">
+            <button
+              class="btn btn-link text-primary"
+              style="font-size: inherit"
+              title="Экспорт в Word"
+              @click="exportData('word')"
+            >
+              <font-awesome-icon :icon="['far', 'file-word']" />
+            </button>
+            <button
+              class="btn btn-link text-success"
+              style="font-size: inherit; color: inherit"
+              title="Экспорт в Excel"
+              @click="exportData('excel')"
+            >
+              <font-awesome-icon :icon="['far', 'file-excel']" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -608,6 +607,29 @@ export default {
     return {
       isLoading: true,
       isError: false,
+      fieldsForDataExport: [
+        { fieldName: "Фамилия", fieldValue: "last_name_rus" },
+        { fieldName: "Имя", fieldValue: "first_name_rus" },
+        { fieldName: "Дата рождения", fieldValue: "date_of_birth" },
+        { fieldName: "Место рождения", fieldValue: "place_of_birth" },
+        {
+          fieldName: "Место жительства (проживания)",
+          fieldValue: "address_residence",
+        },
+        {
+          fieldName: "Место жительства (регистрация)",
+          fieldValue: "address_registration",
+        },
+        {
+          fieldName: "Номер телефона",
+          fieldValue: "phone_number",
+        },
+        {
+          fieldName: "Личный номер",
+          fieldValue: "personal_number_mvd",
+        },
+      ],
+      selectedFieldsForDataExport: ["last_name_rus", "first_name_rus"],
       cadetList: {
         count: "",
         results: [],

@@ -196,84 +196,53 @@
       </div>
       <div class="mb-3">
         <label for="subdivision" class="form-label">Факультет</label>
-        <select
-          class="form-select"
-          aria-label="Default select example"
-          v-model="searchForm.subdivision"
-        >
-          <option selected value="">--------</option>
-          <option
-            v-for="subdivision in orderedSubdivisions"
-            :key="subdivision.id"
-            :value="subdivision.id"
-          >
-            {{ subdivision.subdivision_short_name }}
-          </option>
-        </select>
+        <v-select
+          v-model="searchForm.subdivision__in"
+          :options="orderedSubdivisions"
+          label="subdivision_short_name"
+          :reduce="(subdivision) => subdivision.id"
+          multiple
+        />
       </div>
       <div class="mb-3">
         <label for="subdivision" class="form-label">Группа</label>
-        <select
-          class="form-select"
-          aria-label="Default select example"
-          v-model="searchForm.group"
-        >
-          <option selected value="">--------</option>
-          <option
-            v-for="group in orderedGroups"
-            :key="group.id"
-            :value="group.id"
-          >
-            {{ group.group_name }}
-          </option>
-        </select>
+        <v-select
+          v-model="searchForm.group__in"
+          :options="orderedGroups"
+          label="group_name"
+          :reduce="(group) => group.id"
+          multiple
+        />
       </div>
       <div class="mb-3">
         <label for="subdivision" class="form-label">Звание</label>
-        <select
-          class="form-select"
-          aria-label="Default select example"
-          v-model="searchForm.current_rank"
-        >
-          <option selected value="">--------</option>
-          <option v-for="rank in orderedRanks" :key="rank.id" :value="rank.id">
-            {{ rank.rank }}
-          </option>
-        </select>
+        <v-select
+          v-model="searchForm.current_rank__in"
+          :options="orderedRanks"
+          label="rank"
+          :reduce="(rank) => rank.id"
+          multiple
+        />
       </div>
       <div class="mb-3">
         <label for="subdivision" class="form-label">Специальность</label>
-        <select
-          class="form-select"
-          aria-label="Default select example"
-          v-model="searchForm.current_speciality"
-        >
-          <option selected value="">--------</option>
-          <option
-            v-for="speciality in orderedSpecialities"
-            :key="speciality.id"
-            :value="speciality.id"
-          >
-            {{ speciality.speciality_name }}
-          </option>
-        </select>
+        <v-select
+          v-model="searchForm.current_speciality__in"
+          :options="orderedSpecialities"
+          label="speciality_name"
+          :reduce="(speciality) => speciality.id"
+          multiple
+        />
       </div>
       <div class="mb-3">
         <label for="subdivision" class="form-label">Должность</label>
-        <select
-          class="form-select"
-          aria-label="Default select example"
-          v-model="searchForm.current_position"
-        >
-          <option selected value="">--------</option>
-          <option
-            v-for="position in orderedPositions"
-            :key="position.id"
-            :value="position.id"
-          >
-            {{ position.position }}
-          </option>
-        </select>
+        <v-select
+          v-model="searchForm.current_position__in"
+          :options="orderedPositions"
+          label="position"
+          :reduce="(position) => position.id"
+          multiple
+        />
       </div>
       <div class="row">
         <div class="col-6">
