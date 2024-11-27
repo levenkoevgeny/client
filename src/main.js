@@ -25,6 +25,9 @@ import { faPencil } from "@fortawesome/free-solid-svg-icons"
 import { faStar } from "@fortawesome/free-regular-svg-icons"
 import { faFileWord } from "@fortawesome/free-regular-svg-icons"
 import { faFileExcel } from "@fortawesome/free-regular-svg-icons"
+import { faFileExport } from "@fortawesome/free-solid-svg-icons"
+import { faListCheck } from "@fortawesome/free-solid-svg-icons"
+import { faCircleXmark } from "@fortawesome/free-regular-svg-icons"
 import vSelect from "vue-select"
 
 library.add(faUserGraduate)
@@ -47,6 +50,9 @@ library.add(faDiamondTurnRight)
 library.add(faPencil)
 library.add(faFileWord)
 library.add(faFileExcel)
+library.add(faFileExport)
+library.add(faListCheck)
+library.add(faCircleXmark)
 
 createApp(App)
   .component("font-awesome-icon", FontAwesomeIcon)

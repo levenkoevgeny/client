@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <ul class="pagination pagination-md">
+    <ul class="pagination pagination-md my-0">
       <li
         class="page-item"
         :class="{ disabled: !listPrevious }"

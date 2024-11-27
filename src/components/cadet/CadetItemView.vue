@@ -40,7 +40,7 @@
               </h5>
               <br />
               <h5 class="my-0">
-                Пасспорт - {{ currentCadet.passport_number || "Нет данных" }},
+                Паспорт - {{ currentCadet.passport_number || "Нет данных" }},
                 выдан -
                 <span v-if="currentCadet.passport_issue_authority">
                   {{ currentCadet.get_passport_issue_authority }}

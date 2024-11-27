@@ -1,4 +1,79 @@
 <template>
+  <div
+    class="modal fade"
+    id="exportDataModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+    ref="exportDataModal"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5">Экспорт данных</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <div style="font-size: 1.7rem">
+              <button
+                class="btn btn-link text-primary"
+                style="font-size: inherit"
+                title="Экспорт в Word"
+                @click="exportData('word')"
+              >
+                <font-awesome-icon :icon="['far', 'file-word']" />
+              </button>
+              <!--              <button-->
+              <!--                class="btn btn-link text-success"-->
+              <!--                style="font-size: inherit; color: inherit"-->
+              <!--                title="Экспорт в Excel"-->
+              <!--                @click="exportData('excel')"-->
+              <!--              >-->
+              <!--                <font-awesome-icon :icon="['far', 'file-excel']" />-->
+              <!--              </button>-->
+            </div>
+            <div>
+              <div
+                class="d-flex flex-row align-items-center justify-content-start my-2"
+              >
+                <button
+                  class="btn text-primary me-2 p-0"
+                  @click="checkAllFieldsForExport"
+                >
+                  <font-awesome-icon :icon="['fas', 'list-check']" /> Выбрать
+                  все поля
+                </button>
+                <button
+                  class="btn text-primary m-0 p-0"
+                  @click="clearAllFieldsForExport"
+                >
+                  Очистить
+                  <font-awesome-icon :icon="['far', 'circle-xmark']" />
+                </button>
+              </div>
+              <label class="form-label">Выбор полей для экспорта</label>
+
+              <v-select
+                v-model="selectedFieldsForDataExport"
+                :options="fieldsForDataExport"
+                label="fieldName"
+                :reduce="(field) => field.fieldValue"
+                multiple
+                style="min-width: 400px"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="container-fluid">
     <div class="my-3"></div>
     <ul class="nav nav-links my-3 mb-lg-2 mx-n3">
@@ -11,42 +86,30 @@
         >
       </li>
     </ul>
-    <div class="my-4">
-      <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
-        <h3>Панель экспорта</h3>
-        <div class="d-flex flex-row align-items-center justify-content-start">
-          <div class="me-4">
-            <v-select
-              v-model="selectedFieldsForDataExport"
-              :options="fieldsForDataExport"
-              label="fieldName"
-              :reduce="(field) => field.fieldValue"
-              multiple
-              style="min-width: 400px"
-            />
-          </div>
-          <div style="font-size: 1.7rem">
-            <button
-              class="btn btn-link text-primary"
-              style="font-size: inherit"
-              title="Экспорт в Word"
-              @click="exportData('word')"
-            >
-              <font-awesome-icon :icon="['far', 'file-word']" />
-            </button>
-            <button
-              class="btn btn-link text-success"
-              style="font-size: inherit; color: inherit"
-              title="Экспорт в Excel"
-              @click="exportData('excel')"
-            >
-              <font-awesome-icon :icon="['far', 'file-excel']" />
-            </button>
-          </div>
-        </div>
+    <div
+      class="d-flex flex-row align-items-center justify-content-between mb-4"
+    >
+      <div class="m-0 p-0">
+        <PaginatorView
+          :update-paginator="updatePaginator"
+          :list-next="cadetList.next"
+          :list-previous="cadetList.previous"
+          v-if="cadetList.previous || cadetList.next"
+        />
+      </div>
+      <div>
+        <button class="btn btn-secondary me-3" @click="showExportDataModal">
+          Экспорт&nbsp;&nbsp;<font-awesome-icon
+            :icon="['fas', 'file-export']"
+          />
+        </button>
+        <button class="btn btn-primary" @click="clearFilter">
+          Сбросить фильтр
+        </button>
       </div>
     </div>
-    <div style="max-height: 68vh; overflow: auto">
+
+    <div style="max-height: 75vh; overflow: auto">
       <table class="table table-hover table-responsive">
         <thead>
           <tr>
@@ -156,6 +219,12 @@
             </th>
             <th scope="col">
               <nobr>Окончание обучения</nobr>
+            </th>
+            <th scope="col">
+              <nobr>Причина окончания обучения</nobr>
+            </th>
+            <th scope="col">
+              <nobr>Статья окончания обучения</nobr>
             </th>
             <th scope="col">
               <nobr>Специализация</nobr>
@@ -426,6 +495,22 @@
                 />
               </div>
             </th>
+            <th scope="col">
+              <v-select
+                v-model="searchForm.graduation_reason__in"
+                :options="orderedGraduationReasons"
+                label="graduation_reason"
+                :reduce="(graduation_reason) => graduation_reason.id"
+                multiple
+              />
+            </th>
+            <th scope="col">
+              <input
+                type="text"
+                class="form-control"
+                v-model="searchForm.graduation_reason_article__icontains"
+              />
+            </th>
             <th>
               <v-select
                 v-model="searchForm.specialization__in"
@@ -561,6 +646,8 @@
             <td>{{ cadet.foreign_language_will_be }}</td>
             <td>{{ cadet.academy_start_date }}</td>
             <td>{{ cadet.academy_end_date }}</td>
+            <td>{{ cadet.get_graduation_reason }}</td>
+            <td>{{ cadet.graduation_reason_article }}</td>
             <td>{{ cadet.specialization }}</td>
             <td>{{ cadet.direction_ord }}</td>
             <td>{{ cadet.get_rank?.rank || "" }}</td>
@@ -576,12 +663,6 @@
       </table>
     </div>
     <div class="my-3"></div>
-    <PaginatorView
-      :update-paginator="updatePaginator"
-      :list-next="cadetList.next"
-      :list-previous="cadetList.previous"
-      v-if="cadetList.previous || cadetList.next"
-    />
   </div>
 </template>
 
@@ -596,6 +677,7 @@ import getComponentOrganAPIInstance from "@/api/cadet/componentOrganAPI"
 import getPassportIssueAuthorityAPIInstance from "@/api/cadet/passportIssueAuthorityAPI"
 import getForeignLanguageAPIInstance from "@/api/cadet/foreignLanguageAPI"
 import getMilitaryOfficeAPIInstance from "@/api/cadet/militaryOfficeAPI"
+import getGraduationReasonAPIAPIInstance from "@/api/cadet/graduationReasonAPI"
 import { debounce } from "lodash/function"
 import { PaginatorView } from "@/components/common"
 import { mapGetters } from "vuex"
@@ -625,8 +707,100 @@ export default {
           fieldValue: "phone_number",
         },
         {
-          fieldName: "Личный номер",
+          fieldName: "Личный номер (жетон)",
           fieldValue: "personal_number_mvd",
+        },
+        {
+          fieldName: "Семейное положение",
+          fieldValue: "marital_status",
+        },
+        {
+          fieldName: "Номер паспорта",
+          fieldValue: "passport_number",
+        },
+        {
+          fieldName: "Дата выдачи паспорта",
+          fieldValue: "passport_issue_date",
+        },
+        {
+          fieldName: "Срок действия паспорта",
+          fieldValue: "passport_validity_period",
+        },
+        {
+          fieldName: "Орган выдачи паспорта",
+          fieldValue: "get_passport_issue_authority",
+        },
+        {
+          fieldName: "Идентификационный номер",
+          fieldValue: "identification_number",
+        },
+        {
+          fieldName: "Снят с воинского учета",
+          fieldValue: "removed_from_military_registration",
+        },
+        {
+          fieldName: "Отношение военного комиссариата",
+          fieldValue: "military_commissariat_attitude",
+        },
+        {
+          fieldName: "Факультет",
+          fieldValue: "get_subdivision",
+        },
+        {
+          fieldName: "Группа",
+          fieldValue: "get_group",
+        },
+        {
+          fieldName: "Дата поступления",
+          fieldValue: "academy_start_date",
+        },
+        {
+          fieldName: "Дата окончания",
+          fieldValue: "academy_end_date",
+        },
+        {
+          fieldName: "Причина окончания",
+          fieldValue: "get_graduation_reason",
+        },
+        {
+          fieldName: "Причина окончания (Статья)",
+          fieldValue: "graduation_reason_article",
+        },
+        {
+          fieldName: "Причина окончания (доп. данные)",
+          fieldValue: "graduation_extra_data",
+        },
+        {
+          fieldName: "Специализация",
+          fieldValue: "get_specialization",
+        },
+        {
+          fieldName: "Направление ОРД",
+          fieldValue: "get_direction_ord",
+        },
+        {
+          fieldName: "Звание",
+          fieldValue: "get_rank",
+        },
+        {
+          fieldName: "Должность",
+          fieldValue: "get_position",
+        },
+        {
+          fieldName: "Специальность",
+          fieldValue: "get_speciality",
+        },
+        {
+          fieldName: "Комплектующий орган",
+          fieldValue: "get_component_organ",
+        },
+        {
+          fieldName: "Прибыл из ГО-РОВД",
+          fieldValue: "get_arrived_from_go_rovd",
+        },
+        {
+          fieldName: "Военкомат",
+          fieldValue: "get_military_office",
         },
       ],
       selectedFieldsForDataExport: ["last_name_rus", "first_name_rus"],
@@ -684,6 +858,12 @@ export default {
         previous: null,
         next: null,
       },
+      graduationReasonList: {
+        count: "",
+        results: [],
+        previous: null,
+        next: null,
+      },
       searchForm: Object.assign({}, getCadetAPIInstance().searchObj),
       cadetAPIInstance: getCadetAPIInstance(),
       cadetCategoryAPIInstance: getCadetCategoryAPIAPIInstance(),
@@ -694,6 +874,7 @@ export default {
       passportIssueAuthorityAPIInstance: getPassportIssueAuthorityAPIInstance(),
       foreignLanguageAPIInstance: getForeignLanguageAPIInstance(),
       militaryOfficeAPIInstance: getMilitaryOfficeAPIInstance(),
+      graduationReasonAPIInstance: getGraduationReasonAPIAPIInstance(),
       BACKEND_PROTOCOL: process.env.VUE_APP_BACKEND_PROTOCOL,
       BACKEND_HOST: process.env.VUE_APP_BACKEND_HOST,
       BACKEND_PORT: process.env.VUE_APP_BACKEND_PORT,
@@ -718,6 +899,7 @@ export default {
           passportIssueAuthorities,
           foreignLanguages,
           militaryOffices,
+          graduationReasons,
         ] = await Promise.all([
           listFunction("cadet")(),
           listFunction("cadetCategory")(null, 1000),
@@ -728,6 +910,7 @@ export default {
           listFunction("passportIssueAuthority")(null, 1000),
           listFunction("foreignLanguage")(null, 1000),
           listFunction("militaryOffice")(null, 1000),
+          listFunction("graduationReason")(null, 1000),
         ])
         this.cadetList = cadets
         this.cadetCategoryList = categories
@@ -738,20 +921,45 @@ export default {
         this.passportIssueAuthorityList = passportIssueAuthorities
         this.foreignLanguageList = foreignLanguages
         this.militaryOfficeList = militaryOffices
+        this.graduationReasonList = graduationReasons
       } catch (e) {
         this.isError = true
       } finally {
         this.isLoading = false
       }
     },
+    showExportDataModal() {
+      let addModal = this.$refs.exportDataModal
+      let myModal = new bootstrap.Modal(addModal, {
+        keyboard: false,
+      })
+      myModal.show()
+    },
+    checkAllFieldsForExport() {
+      this.selectedFieldsForDataExport = []
+      this.fieldsForDataExport.map((item) => {
+        this.selectedFieldsForDataExport.push(item.fieldValue)
+      })
+    },
+    clearAllFieldsForExport() {
+      this.selectedFieldsForDataExport = []
+    },
     exportData(destination) {
       let queryString = "?"
       for (let key in this.searchForm) {
         queryString = queryString + `${key}=${this.searchForm[key]}&`
       }
+      queryString =
+        queryString + `fields_for_export=${this.selectedFieldsForDataExport}`
       window.open(
         `${this.BACKEND_PROTOCOL}://${this.BACKEND_HOST}:${this.BACKEND_PORT}/api/list-export${queryString}`,
         "_blank",
+      )
+    },
+    clearFilter() {
+      this.searchForm = Object.assign(
+        {},
+        this.cadetAPIInstance.searchObjDefault,
       )
     },
     debouncedSearch: debounce(async function () {
@@ -824,6 +1032,9 @@ export default {
     },
     orderedMilitaryOffices() {
       return this.militaryOfficeList.results
+    },
+    orderedGraduationReasons() {
+      return this.graduationReasonList.results
     },
     ...mapGetters({
       groups: "common/getGroups",

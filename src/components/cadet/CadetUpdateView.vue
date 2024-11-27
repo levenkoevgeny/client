@@ -1,13 +1,11 @@
 <template>
   <div class="container-fluid">
-    <!--    <v-select :options="options" @search="fetchOptions"></v-select>-->
     <br />
     <div>
       <h1 class="my-2 text-decoration-underline">
         Личное дело ({{ currentCadetData.last_name_rus }}
         {{ currentCadetData.first_name_rus }})
       </h1>
-
       <div class="mb-3"></div>
       <div class="row">
         <div class="col-10">
@@ -55,47 +53,8 @@
                       </div>
                     </div>
                     <div class="col-lg-8">
-                      <div class="row">
-                        <div class="col-lg-4">
-                          <div class="mb-3">
-                            <label class="form-label" for="id_category"
-                              >Категория:</label
-                            >
-                            <select
-                              class="form-select"
-                              name="category"
-                              id="id_category"
-                              v-model="currentCadetData.category"
-                            >
-                              <option value="null" selected>---------</option>
-                              <option
-                                v-for="category in orderedCadetCategories"
-                                :value="category.id"
-                                :key="category.id"
-                              >
-                                {{ category.category }}
-                              </option>
-                            </select>
-                          </div>
-                        </div>
-                        <div class="col-lg-8">
-                          <div class="mb-3">
-                            <label
-                              class="form-label"
-                              for="id_personal_number_mvd"
-                              >Личный номер</label
-                            >
-                            <input
-                              type="text"
-                              class="form-control"
-                              name="personal_number_mvd"
-                              id="id_personal_number_mvd"
-                              v-model="currentCadetData.personal_number_mvd"
-                            />
-                          </div>
-                        </div>
-                      </div>
-
+                      <p>{{ getCadetStatus }}</p>
+                      <h3>Возраст - {{ currentCadetData.get_age }} лет</h3>
                       <div class="row">
                         <div class="col-lg-4">
                           <div class="mb-3">
@@ -145,7 +104,118 @@
                           </div>
                         </div>
                       </div>
-
+                      <div class="row">
+                        <div class="col-lg-4">
+                          <div class="mb-3">
+                            <label class="form-label" for="id_category"
+                              >Категория:</label
+                            >
+                            <select
+                              class="form-select"
+                              name="category"
+                              id="id_category"
+                              v-model="currentCadetData.category"
+                            >
+                              <option value="" selected>---------</option>
+                              <option
+                                v-for="category in orderedCadetCategories"
+                                :value="category.id"
+                                :key="category.id"
+                              >
+                                {{ category.category }}
+                              </option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-lg-4">
+                          <div class="mb-3">
+                            <label
+                              class="form-label"
+                              for="id_personal_number_mvd"
+                              >Личный номер (жетон)</label
+                            >
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="personal_number_mvd"
+                              id="id_personal_number_mvd"
+                              v-model="currentCadetData.personal_number_mvd"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-lg-4">
+                          <div class="mb-3">
+                            <label class="form-label" for="id_category"
+                              >Факультет</label
+                            >
+                            <select
+                              class="form-select"
+                              name="subdivision"
+                              id="id_subdivision"
+                              v-model="currentCadetData.subdivision"
+                            >
+                              <option value="" selected>---------</option>
+                              <option
+                                v-for="subdivision in orderedSubdivisions"
+                                :value="subdivision.id"
+                                :key="subdivision.id"
+                              >
+                                {{ subdivision.subdivision_name }}
+                              </option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-4">
+                          <div class="mb-3">
+                            <label class="form-label" for="id_category"
+                              >Группа</label
+                            >
+                            <select
+                              class="form-select"
+                              name="subdivision"
+                              id="id_subdivision"
+                              v-model="currentCadetData.group"
+                            >
+                              <option value="" selected>---------</option>
+                              <option
+                                v-for="group in orderedGroups"
+                                :value="group.id"
+                                :key="group.id"
+                              >
+                                {{ group.group_name }}
+                              </option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-lg-4">
+                          <div class="mb-3">
+                            <label class="form-label" for="id_category"
+                              >Звание</label
+                            >
+                            <input
+                              class="form-control"
+                              type="text"
+                              v-model="currentCadetData.get_rank"
+                              disabled
+                            />
+                          </div>
+                        </div>
+                        <div class="col-lg-4">
+                          <div class="mb-3">
+                            <label class="form-label" for="id_category"
+                              >Должность</label
+                            >
+                            <input
+                              class="form-control"
+                              type="text"
+                              v-model="currentCadetData.get_position"
+                              disabled
+                            />
+                          </div>
+                        </div>
+                      </div>
                       <div class="row">
                         <div class="col-lg-4">
                           <div class="mb-3">
@@ -173,6 +243,38 @@
                               id="id_place_of_birth"
                               v-model="currentCadetData.place_of_birth"
                             />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <div class="mb-3">
+                            <label class="form-label" for="id_place_of_birth"
+                              >Образование</label
+                            >
+                            <input type="text" class="form-control" disabled />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <div class="mb-3">
+                            <label class="form-label" for="id_place_of_birth"
+                              >Действующее дисциплинарное взыскание</label
+                            >
+                            <input type="text" class="form-control" disabled />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <div class="mb-3">
+                            <label class="form-label" for="id_place_of_birth"
+                              >Список поощрений</label
+                            >
+                            <input type="text" class="form-control" disabled />
                           </div>
                         </div>
                       </div>
@@ -327,32 +429,6 @@
                   <div class="row">
                     <div class="col-lg-3">
                       <div class="mb-3">
-                        <label class="form-label" for="id_subdivision"
-                          >Дата начала обучения</label
-                        >
-                        <input
-                          type="date"
-                          class="form-control"
-                          v-model="currentCadetData.academy_start_date"
-                          id="id_subdivision"
-                        />
-                      </div>
-                    </div>
-                    <div class="col-lg-3">
-                      <div class="mb-3">
-                        <label class="form-label" for="id_subdivision"
-                          >Дата окончания обучения</label
-                        >
-                        <input
-                          type="date"
-                          class="form-control"
-                          v-model="currentCadetData.academy_end_date"
-                          id="id_subdivision"
-                        />
-                      </div>
-                    </div>
-                    <div class="col-lg-3">
-                      <div class="mb-3">
                         <label class="form-label" for="id_category"
                           >Факультет</label
                         >
@@ -362,7 +438,7 @@
                           id="id_subdivision"
                           v-model="currentCadetData.subdivision"
                         >
-                          <option value="null" selected>---------</option>
+                          <option value="" selected>---------</option>
                           <option
                             v-for="subdivision in orderedSubdivisions"
                             :value="subdivision.id"
@@ -395,8 +471,6 @@
                         </select>
                       </div>
                     </div>
-                  </div>
-                  <div class="row">
                     <div class="col-lg-3">
                       <div class="mb-3">
                         <label class="form-label" for="id_category"
@@ -439,6 +513,82 @@
                             {{ directionOrd.direction_name }}
                           </option>
                         </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-3">
+                      <div class="mb-3">
+                        <label class="form-label" for="id_subdivision"
+                          >Дата начала обучения</label
+                        >
+                        <input
+                          type="date"
+                          class="form-control"
+                          v-model="currentCadetData.academy_start_date"
+                          id="id_subdivision"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-3">
+                      <div class="mb-3">
+                        <label class="form-label" for="id_subdivision"
+                          >Дата окончания обучения</label
+                        >
+                        <input
+                          type="date"
+                          class="form-control"
+                          v-model="currentCadetData.academy_end_date"
+                          id="id_subdivision"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-3">
+                      <div class="mb-3">
+                        <label class="form-label" for="id_subdivision"
+                          >Причина окончания</label
+                        >
+                        <select
+                          class="form-select"
+                          name="graduation_reason"
+                          id="id_graduation_reason"
+                          v-model="currentCadetData.graduation_reason"
+                        >
+                          <option value="" selected>---------</option>
+                          <option
+                            v-for="graduation_reason in orderedGraduationReasons"
+                            :value="graduation_reason.id"
+                            :key="graduation_reason.id"
+                          >
+                            {{ graduation_reason.graduation_reason }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-lg-3">
+                      <div class="mb-3">
+                        <label class="form-label" for="id_subdivision"
+                          >Статья отчисления</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          v-model="currentCadetData.graduation_reason_article"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="mb-3">
+                        <label class="form-label" for="id_subdivision"
+                          >Дополнительная информация об отчислении</label
+                        >
+                        <textarea
+                          class="form-control"
+                          rows="2"
+                          v-model="currentCadetData.graduation_extra_data"
+                        />
                       </div>
                     </div>
                   </div>
@@ -882,6 +1032,7 @@ import getPassportIssueAuthorityAPIInstance from "@/api/cadet/passportIssueAutho
 import getSpecializationAPIInstance from "@/api/cadet/specializationAPI"
 import getDirectionOrdAPIInstance from "@/api/cadet/directionOrdAPI"
 import getMilitaryOfficeAPIInstance from "@/api/cadet/militaryOfficeAPI"
+import getGraduationReasonAPIAPIInstance from "@/api/cadet/graduationReasonAPI"
 import { debounce } from "lodash/function"
 import { RankHistoryCadetComponent } from "@/components/cadet/rank"
 import { EncouragementCadetComponent } from "@/components/cadet/encouragement"
@@ -902,6 +1053,8 @@ import RelativesCadetComponent from "@/components/cadet/relatives/RelativesCadet
 import { getLoadListFunction } from "../../../utils"
 import "vue-select/dist/vue-select.css"
 import { mapGetters } from "vuex"
+import * as dayjs from "dayjs"
+
 export default {
   name: "CadetUpdateView",
   components: {
@@ -969,6 +1122,9 @@ export default {
         group: "",
         academy_start_date: "",
         academy_end_date: "",
+        graduation_reason: "",
+        graduation_reason_article: "",
+        graduation_extra_data: "",
         specialization: "",
         direction_ord: "",
         component_organ: "",
@@ -1073,6 +1229,12 @@ export default {
         previous: null,
         next: null,
       },
+      graduationReasonList: {
+        count: "",
+        results: [],
+        previous: null,
+        next: null,
+      },
       cadetAPIInstance: getCadetAPIInstance(),
       cadetCategoryAPIInstance: getCadetCategoryAPIAPIInstance(),
       encouragementAPIInstance: getEncouragementAPIInstance(),
@@ -1091,14 +1253,11 @@ export default {
       groupAPIInstance: getGroupAPIInstance(),
       passportIssueAuthorityAPIInstance: getPassportIssueAuthorityAPIInstance(),
       militaryOfficeAPIInstance: getMilitaryOfficeAPIInstance(),
+      graduationReasonAPIInstance: getGraduationReasonAPIAPIInstance(),
     }
   },
   async created() {
     await this.loadData(this.$route.params.id)
-  },
-  beforeUnmount() {
-    console.log("before unmount")
-    // controller.abort()
   },
   methods: {
     async loadData(cadetId) {
@@ -1110,6 +1269,7 @@ export default {
         specializations,
         directionsOrd,
         militaryOffices,
+        graduationReasons,
       ] = await Promise.all([
         this.getCadetData(cadetId),
         listFunction("cadetCategory")(null, 1000),
@@ -1117,6 +1277,7 @@ export default {
         listFunction("specialization")(null, 1000),
         listFunction("directionOrd")(null, 1000),
         listFunction("militaryOffice")(null, 1000),
+        listFunction("graduationReason")(null, 1000),
       ]).catch(() => (this.isError = true))
       this.currentCadetData = cadet
       this.cadetCategoryList = cadetCategories
@@ -1124,19 +1285,7 @@ export default {
       this.specializationList = specializations
       this.directionOrdList = directionsOrd
       this.militaryOfficeList = militaryOffices
-    },
-    async fetchOptions(search, loading) {
-      if (search.length) {
-        loading(true)
-        this.cadetAPIInstance.searchObj.last_name_rus__icontains = search
-        const res = await this.cadetAPIInstance.getItemsList("token is here!!!")
-        const data = await res.data.results
-        let data_str = []
-        data.map((item) => data_str.push(item.last_name_rus))
-        console.log("data", data_str)
-        this.options = data_str
-        loading(false)
-      }
+      this.graduationReasonList = graduationReasons
     },
     async getCadetData(cadetId) {
       const res = await this.cadetAPIInstance.getItemData(
@@ -1180,7 +1329,16 @@ export default {
     orderedMilitaryOffices() {
       return this.militaryOfficeList.results
     },
-
+    orderedGraduationReasons() {
+      return this.graduationReasonList.results
+    },
+    getCadetStatus() {
+      if (dayjs().isBefore(dayjs(this.currentCadetData.academy_end_date))) {
+        return "Обучается"
+      } else
+        return `Дата окончания обучения - ${this.currentCadetData.academy_end_date}, причина - ${this.currentCadetData.get_graduation_reason || "Нет данных"},
+        статья - ${this.currentCadetData.graduation_reason_article || "Нет данных"}`
+    },
     ...mapGetters({
       groups: "common/getGroups",
       ranks: "common/getRanks",
