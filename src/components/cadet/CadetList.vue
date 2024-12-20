@@ -660,7 +660,7 @@
 
 <script>
 import { globalCadetAPIInstance } from "@/api/cadet/cadetAPI"
-import getCadetCategoryAPIAPIInstance from "@/api/cadet/cadetCategoryAPI"
+
 import getSubdivisionAPIInstance from "@/api/cadet/subdivisionAPI"
 import getGroupAPIInstance from "@/api/cadet/groupAPI"
 import getRankAPIInstance from "@/api/cadet/rankAPI"
@@ -684,14 +684,12 @@ export default {
   data() {
     return {
       cadetList: { count: "", results: [], previous: null, next: null },
-      cadetCategoryList: { count: "", results: [], previous: null, next: null },
       isLoading: true,
       isError: false,
       BACKEND_PROTOCOL: process.env.VUE_APP_BACKEND_PROTOCOL,
       BACKEND_HOST: process.env.VUE_APP_BACKEND_HOST,
       BACKEND_PORT: process.env.VUE_APP_BACKEND_PORT,
       cadetAPIInstance: globalCadetAPIInstance,
-      cadetCategoryAPIInstance: getCadetCategoryAPIAPIInstance(),
       subdivisionAPIInstance: getSubdivisionAPIInstance(),
       groupAPIInstance: getGroupAPIInstance(),
       rankAPIInstance: getRankAPIInstance(),
@@ -714,12 +712,9 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [cadetCategories, cadets, specialities, positions] =
-          await Promise.all([
-            listFunction("cadetCategory")(null, 1000),
-            listFunction("cadet")(),
-          ]).catch(() => (this.isError = true))
-        this.cadetCategoryList = cadetCategories
+        const [cadets] = await Promise.all([listFunction("cadet")()]).catch(
+          () => (this.isError = true),
+        )
         this.cadetList = cadets
       } catch (e) {
         this.isError = true
@@ -792,7 +787,7 @@ export default {
 
   computed: {
     orderedCadetCategories() {
-      return this.cadetCategoryList.results
+      return this.categories.results
     },
     orderedCadets() {
       return this.cadetList.results
@@ -818,6 +813,7 @@ export default {
       subdivisions: "common/getSubdivisions",
       specialities: "common/getSpecialities",
       positions: "common/getPositions",
+      categories: "common/getCadetCategories",
     }),
   },
   watch: {

@@ -54,7 +54,16 @@
                     </div>
                     <div class="col-lg-8">
                       <p>{{ getCadetStatus }}</p>
-                      <h3>Возраст - {{ currentCadetData.get_age }} лет</h3>
+                      <div class="d-flex flex-row">
+                        <h3 class="me-3">
+                          Возраст - {{ currentCadetData.get_age }} лет
+                        </h3>
+                        <h3 v-if="currentCadetData.get_next_rank_time">
+                          Следующее звание
+                          {{ currentCadetData.get_next_rank_time }}
+                        </h3>
+                      </div>
+
                       <div class="row">
                         <div class="col-lg-4">
                           <div class="mb-3">

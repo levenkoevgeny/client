@@ -72,6 +72,7 @@ export default function getCadetAPIInstance() {
     removed_from_military_registration__gte: "",
     removed_from_military_registration__lte: "",
     extra_data__icontains: "",
+    ordering: null,
   })
 }
 export const globalCadetAPIInstance = getCadetAPIInstance()

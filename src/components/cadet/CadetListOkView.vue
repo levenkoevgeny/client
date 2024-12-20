@@ -46,8 +46,8 @@
                   class="btn text-primary me-2 p-0"
                   @click="checkAllFieldsForExport"
                 >
-                  <font-awesome-icon :icon="['fas', 'list-check']" /> Выбрать
-                  все поля
+                  <font-awesome-icon :icon="['fas', 'list-check']" />
+                  Выбрать все поля
                 </button>
                 <button
                   class="btn text-primary m-0 p-0"
@@ -90,12 +90,12 @@
       class="d-flex flex-row align-items-center justify-content-between mb-4"
     >
       <div class="m-0 p-0">
-        <PaginatorView
-          :update-paginator="updatePaginator"
-          :list-next="cadetList.next"
-          :list-previous="cadetList.previous"
-          v-if="cadetList.previous || cadetList.next"
-        />
+        <!--        <PaginatorView-->
+        <!--          :update-paginator="updatePaginator"-->
+        <!--          :list-next="cadetList.next"-->
+        <!--          :list-previous="cadetList.previous"-->
+        <!--          v-if="cadetList.previous || cadetList.next"-->
+        <!--        />-->
       </div>
       <div>
         <button class="btn btn-secondary me-3" @click="showExportDataModal">
@@ -109,8 +109,12 @@
       </div>
     </div>
 
-    <div style="max-height: 75vh; overflow: auto">
-      <table class="table table-hover table-responsive">
+    <div
+      style="max-height: 75vh; overflow: auto"
+      @scroll="loadMoreData"
+      ref="infinite_list"
+    >
+      <table class="table table-hover table-responsive" style="overflow: auto">
         <thead>
           <tr>
             <th scope="col">id</th>
@@ -122,10 +126,44 @@
               <nobr>Пол</nobr>
             </th>
             <th scope="col">
-              <nobr>Фамилия</nobr>
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Фамилия</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('last_name_rus')"
+                      >
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('-last_name_rus')"
+                      >
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </th>
             <th scope="col">
               <nobr>Имя</nobr>
+              <button class="btn" @click="setOrdering('first_name_rus')">
+                <font-awesome-icon :icon="['fas', 'caret-up']" />
+              </button>
+              <button class="btn" @click="setOrdering('-first_name_rus')">
+                <font-awesome-icon :icon="['fas', 'caret-down']" />
+              </button>
             </th>
             <th scope="col">
               <nobr>Отчество</nobr>
@@ -662,6 +700,18 @@
         </tbody>
       </table>
     </div>
+
+    <!--    <div class="my-3">-->
+    <!--      <label class="form-label">Количество записей на странице</label>-->
+    <!--      <input-->
+    <!--        type="number"-->
+    <!--        class="form-control"-->
+    <!--        v-model="searchForm.limit"-->
+    <!--        min="1"-->
+    <!--        max="500"-->
+    <!--      />-->
+    <!--    </div>-->
+
     <div class="my-3"></div>
   </div>
 </template>
@@ -669,15 +719,6 @@
 <script>
 import getCadetAPIInstance from "@/api/cadet/cadetAPI"
 import { getLoadListFunction } from "../../../utils"
-import getCadetCategoryAPIAPIInstance from "@/api/cadet/cadetCategoryAPI"
-import getMaritalStatusAPIInstance from "@/api/cadet/maritalStatusAPI"
-import getSpecializationAPIInstance from "@/api/cadet/specializationAPI"
-import getDirectionOrdAPIInstance from "@/api/cadet/directionOrdAPI"
-import getComponentOrganAPIInstance from "@/api/cadet/componentOrganAPI"
-import getPassportIssueAuthorityAPIInstance from "@/api/cadet/passportIssueAuthorityAPI"
-import getForeignLanguageAPIInstance from "@/api/cadet/foreignLanguageAPI"
-import getMilitaryOfficeAPIInstance from "@/api/cadet/militaryOfficeAPI"
-import getGraduationReasonAPIAPIInstance from "@/api/cadet/graduationReasonAPI"
 import { debounce } from "lodash/function"
 import { PaginatorView } from "@/components/common"
 import { mapGetters } from "vuex"
@@ -810,71 +851,8 @@ export default {
         previous: null,
         next: null,
       },
-      cadetCategoryList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      maritalStatusList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      specializationList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      directionOrdList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      componentOrganList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      passportIssueAuthorityList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      foreignLanguageList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      militaryOfficeList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      graduationReasonList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
       searchForm: Object.assign({}, getCadetAPIInstance().searchObj),
       cadetAPIInstance: getCadetAPIInstance(),
-      cadetCategoryAPIInstance: getCadetCategoryAPIAPIInstance(),
-      maritalStatusAPIInstance: getMaritalStatusAPIInstance(),
-      specializationAPIInstance: getSpecializationAPIInstance(),
-      directionOrdAPIInstance: getDirectionOrdAPIInstance(),
-      componentOrganAPIInstance: getComponentOrganAPIInstance(),
-      passportIssueAuthorityAPIInstance: getPassportIssueAuthorityAPIInstance(),
-      foreignLanguageAPIInstance: getForeignLanguageAPIInstance(),
-      militaryOfficeAPIInstance: getMilitaryOfficeAPIInstance(),
-      graduationReasonAPIInstance: getGraduationReasonAPIAPIInstance(),
       BACKEND_PROTOCOL: process.env.VUE_APP_BACKEND_PROTOCOL,
       BACKEND_HOST: process.env.VUE_APP_BACKEND_HOST,
       BACKEND_PORT: process.env.VUE_APP_BACKEND_PORT,
@@ -889,39 +867,8 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [
-          cadets,
-          categories,
-          maritalStatuses,
-          specializations,
-          directions,
-          components,
-          passportIssueAuthorities,
-          foreignLanguages,
-          militaryOffices,
-          graduationReasons,
-        ] = await Promise.all([
-          listFunction("cadet")(),
-          listFunction("cadetCategory")(null, 1000),
-          listFunction("maritalStatus")(null, 1000),
-          listFunction("specialization")(null, 1000),
-          listFunction("directionOrd")(null, 1000),
-          listFunction("componentOrgan")(null, 1000),
-          listFunction("passportIssueAuthority")(null, 1000),
-          listFunction("foreignLanguage")(null, 1000),
-          listFunction("militaryOffice")(null, 1000),
-          listFunction("graduationReason")(null, 1000),
-        ])
+        const [cadets] = await Promise.all([listFunction("cadet")()])
         this.cadetList = cadets
-        this.cadetCategoryList = categories
-        this.maritalStatusList = maritalStatuses
-        this.specializationList = specializations
-        this.directionOrdList = directions
-        this.componentOrganList = components
-        this.passportIssueAuthorityList = passportIssueAuthorities
-        this.foreignLanguageList = foreignLanguages
-        this.militaryOfficeList = militaryOffices
-        this.graduationReasonList = graduationReasons
       } catch (e) {
         this.isError = true
       } finally {
@@ -952,7 +899,7 @@ export default {
       queryString =
         queryString + `fields_for_export=${this.selectedFieldsForDataExport}`
       window.open(
-        `${this.BACKEND_PROTOCOL}://${this.BACKEND_HOST}:${this.BACKEND_PORT}/api/list-export${queryString}`,
+        `${this.BACKEND_PROTOCOL}://${this.BACKEND_HOST}:${this.BACKEND_PORT}/api/list-export/${queryString}`,
         "_blank",
       )
     },
@@ -989,13 +936,68 @@ export default {
         this.isLoading = false
       }
     },
+    setOrdering(fieldName) {
+      this.searchForm.ordering = fieldName
+
+      // let orderingArray = []
+      // if (this.searchForm.ordering) {
+      //   orderingArray = this.searchForm.ordering.split(",")
+      // }
+      // console.log("orderingArray", orderingArray)
+      // let orderingArrayWithoutFieldName = orderingArray.filter(
+      //   (item) => !item.includes(fieldName.replace("-", "")),
+      // )
+      // console.log(
+      //   "orderingArrayWithoutFieldName",
+      //   orderingArrayWithoutFieldName,
+      // )
+      // orderingArrayWithoutFieldName.unshift(fieldName)
+      // this.searchForm.ordering = orderingArrayWithoutFieldName.toString()
+      // console.log("searchForm.ordering", this.searchForm.ordering)
+    },
+    async loadMoreData() {
+      const listElem = this.$refs["infinite_list"]
+
+      console.log(
+        listElem.scrollTop + listElem.clientHeight,
+        listElem.scrollHeight,
+      )
+
+      if (
+        listElem.scrollTop + listElem.clientHeight >=
+        listElem.scrollHeight - 1
+      ) {
+        if (this.cadetList.next) {
+          this.isLoading = true
+          try {
+            const response = await this.cadetAPIInstance.updateList(
+              this.cadetList.next,
+              "this.userToken",
+            )
+
+            const newData = await response.data
+            console.log("newData", newData)
+            this.cadetList.results = [
+              ...this.cadetList.results,
+              ...newData.results,
+            ]
+            this.cadetList.next = newData.next
+            this.cadetList.previous = newData.previous
+          } catch (error) {
+            this.isError = true
+          } finally {
+            this.isLoading = false
+          }
+        }
+      }
+    },
   },
   computed: {
     orderedMainList() {
       return this.cadetList.results
     },
     orderedCadetCategories() {
-      return this.cadetCategoryList.results
+      return this.categories.results
     },
     orderedSubdivisions() {
       return this.subdivisions.results
@@ -1013,28 +1015,28 @@ export default {
       return this.positions.results
     },
     orderedMaritalStatuses() {
-      return this.maritalStatusList.results
+      return this.maritalStatuses.results
     },
     orderedSpecializations() {
-      return this.specializationList.results
+      return this.specializations.results
     },
     orderedDirectionOrds() {
-      return this.directionOrdList.results
+      return this.directionsOrd.results
     },
     orderedComponentOrgans() {
-      return this.componentOrganList.results
+      return this.componentOrgans.results
     },
     orderedPassportIssueAuthorities() {
-      return this.passportIssueAuthorityList.results
+      return this.passportIssueAuthorities.results
     },
     orderedForeignLanguages() {
-      return this.foreignLanguageList.results
+      return this.foreignLanguages.results
     },
     orderedMilitaryOffices() {
-      return this.militaryOfficeList.results
+      return this.militaryOffices.results
     },
     orderedGraduationReasons() {
-      return this.graduationReasonList.results
+      return this.graduationReasons.results
     },
     ...mapGetters({
       groups: "common/getGroups",
@@ -1042,6 +1044,15 @@ export default {
       subdivisions: "common/getSubdivisions",
       specialities: "common/getSpecialities",
       positions: "common/getPositions",
+      categories: "common/getCadetCategories",
+      maritalStatuses: "common/getMaritalStatuses",
+      specializations: "common/getSpecializations",
+      directionsOrd: "common/getDirectionsOrd",
+      componentOrgans: "common/getComponentOrgans",
+      passportIssueAuthorities: "common/getPassportIssueAuthorities",
+      foreignLanguages: "common/getForeignLanguages",
+      militaryOffices: "common/getMilitaryOffices",
+      graduationReasons: "common/getGraduationReasons",
     }),
   },
   watch: {
@@ -1062,10 +1073,12 @@ td {
   text-align: start;
   vertical-align: middle;
 }
+
 thead {
   position: sticky;
   top: 0;
 }
+
 input,
 select {
   min-width: 200px;
