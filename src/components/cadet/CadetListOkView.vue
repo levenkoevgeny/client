@@ -73,7 +73,6 @@
       </div>
     </div>
   </div>
-
   <div class="container-fluid">
     <div class="my-3"></div>
     <ul class="nav nav-links my-3 mb-lg-2 mx-n3">
@@ -89,14 +88,7 @@
     <div
       class="d-flex flex-row align-items-center justify-content-between mb-4"
     >
-      <div class="m-0 p-0">
-        <!--        <PaginatorView-->
-        <!--          :update-paginator="updatePaginator"-->
-        <!--          :list-next="cadetList.next"-->
-        <!--          :list-previous="cadetList.previous"-->
-        <!--          v-if="cadetList.previous || cadetList.next"-->
-        <!--        />-->
-      </div>
+      <div class="m-0 p-0"></div>
       <div>
         <button class="btn btn-secondary me-3" @click="showExportDataModal">
           Экспорт&nbsp;&nbsp;<font-awesome-icon
@@ -117,13 +109,94 @@
       <table class="table table-hover table-responsive" style="overflow: auto">
         <thead>
           <tr>
-            <th scope="col">id</th>
+            <th scope="col">
+              <div class="d-flex flex-row align-items-center">
+                <nobr>id</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button class="dropdown-item" @click="setOrdering('id')">
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button class="dropdown-item" @click="setOrdering('-id')">
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </th>
+            <th scope="col">№п.п.</th>
             <th scope="col">Фото</th>
             <th scope="col">
-              <nobr>Категория</nobr>
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Категория</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('category__category')"
+                      >
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('-category__category')"
+                      >
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </th>
             <th scope="col">
-              <nobr>Пол</nobr>
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Пол</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('gender')"
+                      >
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('-gender')"
+                      >
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </th>
             <th scope="col">
               <div class="d-flex flex-row align-items-center">
@@ -157,25 +230,131 @@
               </div>
             </th>
             <th scope="col">
-              <nobr>Имя</nobr>
-              <button class="btn" @click="setOrdering('first_name_rus')">
-                <font-awesome-icon :icon="['fas', 'caret-up']" />
-              </button>
-              <button class="btn" @click="setOrdering('-first_name_rus')">
-                <font-awesome-icon :icon="['fas', 'caret-down']" />
-              </button>
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Имя</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('first_name_rus')"
+                      >
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('-first_name_rus')"
+                      >
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </th>
             <th scope="col">
               <nobr>Отчество</nobr>
             </th>
             <th scope="col">
-              <nobr>Факультет</nobr>
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Факультет</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('subdivision__subdivision_name')"
+                      >
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('-subdivision__subdivision_name')"
+                      >
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </th>
             <th scope="col">
-              <nobr>Группа</nobr>
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Группа</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('group__group_name')"
+                      >
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('-group__group_name')"
+                      >
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </th>
             <th scope="col">
-              <nobr>Дата рождения</nobr>
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Дата рождения</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('date_of_birth')"
+                      >
+                        меньш. -> больш.
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('-date_of_birth')"
+                      >
+                        больш. -> меньш.
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </th>
             <th scope="col">
               <nobr>Место рождения</nobr>
@@ -265,28 +444,234 @@
               <nobr>Статья окончания обучения</nobr>
             </th>
             <th scope="col">
-              <nobr>Специализация</nobr>
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Специализация</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="
+                          setOrdering('specialization__specialization_name')
+                        "
+                      >
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="
+                          setOrdering('-specialization__specialization_name')
+                        "
+                      >
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </th>
             <th scope="col">
-              <nobr>Направление ОРД</nobr>
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Направление ОРД</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('direction_ord__direction_name')"
+                      >
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('-direction_ord__direction_name')"
+                      >
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </th>
             <th scope="col">
-              <nobr>Звание</nobr>
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Звание</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('current_rank__rank')"
+                      >
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('-current_rank__rank')"
+                      >
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </th>
             <th scope="col">
-              <nobr>Должность</nobr>
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Должность</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('current_position__position')"
+                      >
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('-current_position__position')"
+                      >
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </th>
             <th scope="col">
-              <nobr>Специальность</nobr>
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Специальность</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="
+                          setOrdering('current_speciality__speciality_name')
+                        "
+                      >
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="
+                          setOrdering('-current_speciality__speciality_name')
+                        "
+                      >
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </th>
             <th scope="col">
-              <nobr>Комплектующий орган</nobr>
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Комплектующий орган</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('component_organ__component_name')"
+                      >
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('-component_organ__component_name')"
+                      >
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </th>
             <th scope="col">
               <nobr>Снятие с воинского учета</nobr>
             </th>
             <th scope="col">
-              <nobr>Военкомат</nobr>
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Военкомат</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('military_office__military_office')"
+                      >
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="
+                          setOrdering('-military_office__military_office')
+                        "
+                      >
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </th>
             <th></th>
           </tr>
@@ -633,6 +1018,7 @@
         <tbody>
           <tr v-for="cadet in orderedMainList" :key="cadet.id">
             <td>{{ cadet.id }}</td>
+            <td>{{ cadet.serial_number }}</td>
             <td>
               <img
                 v-if="cadet.photo"
@@ -649,7 +1035,7 @@
                 style="width: 50px"
               />
             </td>
-            <td>{{ cadet.category }}</td>
+            <td>{{ cadet.get_category }}</td>
             <td>{{ cadet.gender }}</td>
             <td>{{ cadet.last_name_rus }}</td>
             <td>{{ cadet.first_name_rus }}</td>
@@ -662,7 +1048,7 @@
             <td>{{ cadet.address_residence }}</td>
             <td>{{ cadet.phone_number }}</td>
             <td>{{ cadet.personal_number_mvd }}</td>
-            <td>{{ cadet.marital_status }}</td>
+            <td>{{ cadet.get_marital_status }}</td>
             <td>{{ cadet.passport_number }}</td>
             <td>{{ cadet.passport_issue_date }}</td>
             <td>{{ cadet.passport_validity_period }}</td>
@@ -680,18 +1066,18 @@
             <td>{{ cadet.mother_date_of_birth }}</td>
             <td>{{ cadet.mother_place_of_work }}</td>
             <td>{{ cadet.mother_phone_number }}</td>
-            <td>{{ cadet.foreign_language_was }}</td>
-            <td>{{ cadet.foreign_language_will_be }}</td>
+            <td>{{ cadet.get_foreign_language_was }}</td>
+            <td>{{ cadet.get_foreign_language_will_be }}</td>
             <td>{{ cadet.academy_start_date }}</td>
             <td>{{ cadet.academy_end_date }}</td>
             <td>{{ cadet.get_graduation_reason }}</td>
             <td>{{ cadet.graduation_reason_article }}</td>
-            <td>{{ cadet.specialization }}</td>
-            <td>{{ cadet.direction_ord }}</td>
+            <td>{{ cadet.get_specialization }}</td>
+            <td>{{ cadet.get_direction_ord }}</td>
             <td>{{ cadet.get_rank?.rank || "" }}</td>
             <td>{{ cadet.get_position?.position || "" }}</td>
             <td>{{ cadet.get_speciality?.speciality_name || "" }}</td>
-            <td>{{ cadet.component_organ }}</td>
+            <td>{{ cadet.get_component_organ }}</td>
             <td>{{ cadet.removed_from_military_registration }}</td>
             <td>
               <nobr>{{ cadet.get_military_office }}</nobr>
@@ -869,6 +1255,7 @@ export default {
       try {
         const [cadets] = await Promise.all([listFunction("cadet")()])
         this.cadetList = cadets
+        this.setSerialNumbers()
       } catch (e) {
         this.isError = true
       } finally {
@@ -916,6 +1303,7 @@ export default {
         const cadetAResponse =
           await this.cadetAPIInstance.getItemsList("token is here!!!")
         this.cadetList = await cadetAResponse.data
+        this.setSerialNumbers()
       } catch (e) {
         this.isError = true
       } finally {
@@ -957,12 +1345,6 @@ export default {
     },
     async loadMoreData() {
       const listElem = this.$refs["infinite_list"]
-
-      console.log(
-        listElem.scrollTop + listElem.clientHeight,
-        listElem.scrollHeight,
-      )
-
       if (
         listElem.scrollTop + listElem.clientHeight >=
         listElem.scrollHeight - 1
@@ -976,13 +1358,13 @@ export default {
             )
 
             const newData = await response.data
-            console.log("newData", newData)
             this.cadetList.results = [
               ...this.cadetList.results,
               ...newData.results,
             ]
             this.cadetList.next = newData.next
             this.cadetList.previous = newData.previous
+            this.setSerialNumbers()
           } catch (error) {
             this.isError = true
           } finally {
@@ -990,6 +1372,13 @@ export default {
           }
         }
       }
+    },
+    setSerialNumbers() {
+      let i = 1
+      this.cadetList.results.forEach((item) => {
+        item.serial_number = i
+        i++
+      })
     },
   },
   computed: {

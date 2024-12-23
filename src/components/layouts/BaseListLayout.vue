@@ -29,7 +29,9 @@
             <slot name="table-mode-button"></slot>
             <div
               class="table-responsive"
-              style="max-height: 70vh; overflow-y: auto"
+              style="max-height: 68vh; overflow-y: auto"
+              @scroll="loadMoreData"
+              id="infinite_list"
             >
               <table class="table table-hover">
                 <thead style="position: sticky; top: 0">
@@ -48,7 +50,7 @@
       </div>
       <div class="col-4">
         <h3 class="my-3">Поиск по критериям</h3>
-        <div style="max-height: 90vh; overflow-y: auto; overflow-x: hidden">
+        <div style="">
           <slot name="search-form"></slot>
         </div>
       </div>
@@ -70,6 +72,7 @@ export default {
       default: 0,
     },
     title: { type: String, required: false, default: "Заголовок" },
+    loadMoreData: { type: Function, required: false, default: () => {} },
   },
   components: {},
   data() {
