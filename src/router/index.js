@@ -8,6 +8,7 @@ import { EntranceMainView } from "@/components/entrance_campaign"
 import { SpecialityHistoryView } from "@/components/cadet/speciality"
 import { CadetUpdateView } from "@/components/cadet"
 import { CadetListOkView } from "@/components/cadet"
+import { FiredCadetComponent } from "@/components/cadet/fired"
 import NavigationPage from "@/components/NavigationPage.vue"
 
 import {
@@ -68,6 +69,11 @@ const routes = [
         path: "specialities",
         component: SpecialityHistoryView,
         name: "specialities",
+      },
+      {
+        path: "fired",
+        component: FiredCadetComponent,
+        name: "fired",
       },
     ],
   },

@@ -6,7 +6,7 @@ export default function getRankHistoryAPIInstance() {
   return new RankHistoryAPI(
     "rank-history",
     {
-      cadet: "",
+      cadet__last_name_rus__icontains: "",
       rank: "",
       rank_date__gte: "",
       rank_date__lte: "",

@@ -677,6 +677,7 @@
           </tr>
           <tr>
             <th></th>
+            <th></th>
             <th scope="col"></th>
             <th style="min-width: 200px; z-index: 10000">
               <v-select

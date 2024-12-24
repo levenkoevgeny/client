@@ -64,6 +64,11 @@
                     Перевод на специальности
                   </router-link>
                 </li>
+                <li class="nav-item">
+                  <router-link class="nav-link" :to="{ name: 'fired' }">
+                    Уволенные
+                  </router-link>
+                </li>
               </ul>
             </li>
           </ul>

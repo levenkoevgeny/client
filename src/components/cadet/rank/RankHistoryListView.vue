@@ -305,7 +305,9 @@
             />
           </div>
         </td>
-        <td>{{ rankHistory.get_cadet_str }}</td>
+        <td>
+          <nobr>{{ rankHistory.get_cadet_str }}</nobr>
+        </td>
         <td>
           {{ rankHistory.get_rank_str }}
         </td>
@@ -314,7 +316,6 @@
         <td>{{ rankHistory.rank_order_number }}</td>
         <td>{{ rankHistory.get_rank_order_owner_str }}</td>
         <td>{{ rankHistory.rank_extra_data }}</td>
-
         <td>
           <div class="d-flex align-items-end justify-content-end">
             <button
@@ -330,6 +331,16 @@
       </tr>
     </template>
     <template v-slot:search-form>
+      <div class="mb-3">
+        <label for="cadet" class="form-label">Курсант</label>
+        <input
+          type="text"
+          class="form-control"
+          id="cadet__last_name_rus__icontains"
+          v-model="searchForm.cadet__last_name_rus__icontains"
+        />
+      </div>
+
       <div class="mb-3">
         <label for="subdivision" class="form-label">Звание</label>
         <select
