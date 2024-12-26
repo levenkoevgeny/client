@@ -330,6 +330,29 @@
     </template>
     <template v-slot:search-form>
       <div class="mb-3">
+        <label for="id_encouragement_kind" class="form-label">Курсант</label>
+        <v-select
+          v-model="searchForm.cadet"
+          :options="orderedCadets"
+          :reduce="(cadet) => cadet.id"
+          label="get_full_name"
+          :filterable="false"
+          @search="onSearch"
+        >
+          <template slot="no-options"> Поиск по фамилии...</template>
+          <template slot="option" slot-scope="option">
+            <div class="d-center">
+              {{ option }}
+            </div>
+          </template>
+          <template slot="selected-option" slot-scope="option">
+            <div class="selected d-center">
+              {{ option }}
+            </div>
+          </template>
+        </v-select>
+      </div>
+      <div class="mb-3">
         <label for="subdivision" class="form-label">Специальность</label>
         <select
           class="form-select"
