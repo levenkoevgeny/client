@@ -73,6 +73,64 @@
       </div>
     </div>
   </div>
+
+  <!-- check terms modal-->
+
+  <div
+    class="modal fade"
+    id="mainItemUpdateModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+    ref="termsModal"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">
+            Проверка сроков присвоения званий
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">ФИО</th>
+                  <th scope="col">Группа</th>
+                  <th scope="col">Текущее звание</th>
+                  <th scope="col">Должность</th>
+                  <th scope="col">
+                    Планируемая дата присвоения очередного звания
+                  </th>
+                  <th scope="col">Количество дней до присвоения</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="cadet in rankTermsList" :key="cadet.id">
+                  <th scope="row">
+                    <nobr>{{ cadet.get_full_name }}</nobr>
+                  </th>
+                  <th scope="row">{{ cadet.group }}</th>
+                  <th scope="row">{{ cadet.get_rank }}</th>
+                  <th scope="row">{{ cadet.get_position }}</th>
+                  <th scope="row">{{ cadet.get_next_rank_time }}</th>
+                  <th scope="row">{{ cadet.get_days_count_to_next_rank }}</th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="container-fluid">
     <div class="my-3"></div>
     <ul class="nav nav-links my-3 mb-lg-2 mx-n3">
@@ -89,12 +147,29 @@
       class="d-flex flex-row align-items-center justify-content-between mb-4"
     >
       <div class="m-0 p-0"></div>
-      <div>
+      <div class="d-flex flex-row">
         <button class="btn btn-secondary me-3" @click="showExportDataModal">
           Экспорт&nbsp;&nbsp;<font-awesome-icon
             :icon="['fas', 'file-export']"
           />
         </button>
+        <div class="dropdown">
+          <button
+            class="btn btn-secondary dropdown-toggle me-2"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Доп. меню
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+              <button class="dropdown-item" @click="checkTerms">
+                Проверить сроки по званиям
+              </button>
+            </li>
+          </ul>
+        </div>
         <button class="btn btn-primary" @click="clearFilter">
           Сбросить фильтр
         </button>
@@ -105,6 +180,7 @@
       style="max-height: 75vh; overflow: auto"
       @scroll="loadMoreData"
       ref="infinite_list"
+      id="infinite_list"
     >
       <table class="table table-hover table-responsive" style="overflow: auto">
         <thead>
@@ -1109,6 +1185,7 @@ import { getLoadListFunction } from "../../../utils"
 import { debounce } from "lodash/function"
 import { PaginatorView } from "@/components/common"
 import { mapGetters } from "vuex"
+import axios from "axios"
 
 export default {
   name: "CadetListOkView",
@@ -1243,6 +1320,7 @@ export default {
       BACKEND_PROTOCOL: process.env.VUE_APP_BACKEND_PROTOCOL,
       BACKEND_HOST: process.env.VUE_APP_BACKEND_HOST,
       BACKEND_PORT: process.env.VUE_APP_BACKEND_PORT,
+      rankTermsList: [],
     }
   },
   async created() {
@@ -1282,7 +1360,18 @@ export default {
     exportData(destination) {
       let queryString = "?"
       for (let key in this.searchForm) {
-        queryString = queryString + `${key}=${this.searchForm[key]}&`
+        if (key.includes("__in")) {
+          if (typeof this.searchForm[key] === "object") {
+            const valArray = this.searchForm[key]
+            let keyVal = ""
+            valArray.forEach((val) => {
+              keyVal = keyVal + `${key}=${val}&`
+            })
+            queryString = queryString + keyVal
+          }
+        } else {
+          queryString = queryString + `${key}=${this.searchForm[key]}&`
+        }
       }
       queryString =
         queryString + `fields_for_export=${this.selectedFieldsForDataExport}`
@@ -1381,6 +1470,32 @@ export default {
         i++
       })
     },
+    async checkTerms() {
+      let queryString = "?"
+      for (let key in this.searchForm) {
+        if (key.includes("__in")) {
+          if (typeof this.searchForm[key] === "object") {
+            const valArray = this.searchForm[key]
+            let keyVal = ""
+            valArray.forEach((val) => {
+              keyVal = keyVal + `${key}=${val}&`
+            })
+            queryString = queryString + keyVal
+          }
+        } else {
+          queryString = queryString + `${key}=${this.searchForm[key]}&`
+        }
+      }
+      const response = await axios.get(
+        `${this.BACKEND_PROTOCOL}://${this.BACKEND_HOST}:${this.BACKEND_PORT}/api/ranks-terms/${queryString}`,
+      )
+      this.rankTermsList = await response.data
+      let termsModal = this.$refs.termsModal
+      let myModal = new bootstrap.Modal(termsModal, {
+        keyboard: false,
+      })
+      myModal.show()
+    },
   },
   computed: {
     orderedMainList() {
@@ -1457,7 +1572,7 @@ export default {
 </script>
 
 <style scoped>
-th,
+#infinite_list th,
 td {
   min-width: 200px;
   text-align: start;

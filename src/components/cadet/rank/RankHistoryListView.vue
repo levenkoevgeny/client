@@ -332,13 +332,31 @@
     </template>
     <template v-slot:search-form>
       <div class="mb-3">
-        <label for="cadet" class="form-label">Курсант</label>
-        <input
-          type="text"
-          class="form-control"
-          id="cadet__last_name_rus__icontains"
-          v-model="searchForm.cadet__last_name_rus__icontains"
-        />
+        <div class="mb-3">
+          <label for="id_encouragement_kind" class="form-label"
+            >Курсант (курсанты)</label
+          >
+          <v-select
+            v-model="searchForm.cadet"
+            :options="orderedCadets"
+            :reduce="(cadet) => cadet.id"
+            label="get_full_name"
+            :filterable="false"
+            @search="onSearch"
+          >
+            <template slot="no-options"> Поиск по фамилии...</template>
+            <template slot="option" slot-scope="option">
+              <div class="d-center">
+                {{ option }}
+              </div>
+            </template>
+            <template slot="selected-option" slot-scope="option">
+              <div class="selected d-center">
+                {{ option }}
+              </div>
+            </template>
+          </v-select>
+        </div>
       </div>
 
       <div class="mb-3">
@@ -492,6 +510,7 @@ import {
   updateMainItemInList,
 } from "../../../../utils"
 import PunishmentModalForCadetUpdate from "@/components/cadet/punishment/modals/PunishmentModalForCadetUpdate.vue"
+import axios from "axios"
 
 export default {
   name: "RankHistoryListView",
@@ -528,6 +547,9 @@ export default {
       searchForm: Object.assign({}, getRankHistoryAPIInstance().searchObj),
       selectedItems: [],
       deleteItemId: "",
+      BACKEND_PROTOCOL: process.env.VUE_APP_BACKEND_PROTOCOL,
+      BACKEND_HOST: process.env.VUE_APP_BACKEND_HOST,
+      BACKEND_PORT: process.env.VUE_APP_BACKEND_PORT,
     }
   },
   async created() {
