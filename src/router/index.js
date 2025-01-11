@@ -9,6 +9,13 @@ import { SpecialityHistoryView } from "@/components/cadet/speciality"
 import { CadetUpdateView } from "@/components/cadet"
 import { CadetListOkView } from "@/components/cadet"
 import { FiredCadetComponent } from "@/components/cadet/fired"
+
+import {
+  EmployeeList,
+  EmployeeItemView,
+  EmployeeUpdateView,
+} from "@/components/employee"
+
 import NavigationPage from "@/components/NavigationPage.vue"
 
 import {
@@ -74,6 +81,21 @@ const routes = [
         path: "fired",
         component: FiredCadetComponent,
         name: "fired",
+      },
+      {
+        path: "employee",
+        component: EmployeeList,
+        name: "employee",
+      },
+      {
+        path: "employee/:id",
+        component: EmployeeItemView,
+        name: "employee-view",
+      },
+      {
+        path: "employee/:id/update",
+        component: EmployeeUpdateView,
+        name: "employee-update",
       },
     ],
   },

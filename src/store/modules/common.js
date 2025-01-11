@@ -1,6 +1,7 @@
 import getGroupAPIInstance from "@/api/cadet/groupAPI"
 import getRankAPIInstance from "@/api/cadet/rankAPI"
 import getSubdivisionAPIInstance from "@/api/cadet/subdivisionAPI"
+import getEmployeeSubdivisionAPIInstance from "@/api/employee/employeeSubdivisionAPI"
 import getSpecialityAPIInstance from "@/api/cadet/specialityAPI"
 import getPositionAPIInstance from "@/api/cadet/positionAPI"
 import getOrderOwnerAPIInstance from "@/api/cadet/orderOwnerAPI"
@@ -20,6 +21,7 @@ const limit = 1000
 const groupAPIInstance = getGroupAPIInstance()
 const rankAPIInstance = getRankAPIInstance()
 const subdivisionAPIInstance = getSubdivisionAPIInstance()
+const employeeSubdivisionAPIInstance = getEmployeeSubdivisionAPIInstance()
 const specialityAPIInstance = getSpecialityAPIInstance()
 const positionAPIInstance = getPositionAPIInstance()
 const orderOwnerAPIInstance = getOrderOwnerAPIInstance()
@@ -55,6 +57,7 @@ const state = () => ({
   groups: { count: "", results: [], previous: null, next: null },
   ranks: { count: "", results: [], previous: null, next: null },
   subdivisions: { count: "", results: [], previous: null, next: null },
+  employeeSubdivisions: { count: "", results: [], previous: null, next: null },
   specialities: { count: "", results: [], previous: null, next: null },
   positions: { count: "", results: [], previous: null, next: null },
   orderOwners: { count: "", results: [], previous: null, next: null },
@@ -83,6 +86,9 @@ const getters = {
   },
   getSubdivisions(state) {
     return state.subdivisions
+  },
+  getEmployeeSubdivisions(state) {
+    return state.employeeSubdivisions
   },
   getSpecialities(state) {
     return state.specialities
@@ -136,6 +142,10 @@ const actions = {
       const responseSubdivisions =
         await subdivisionAPIInstance.getItemsList("token is here!!!")
       commit("setSubdivisions", await responseSubdivisions.data)
+
+      const responseEmployeeSubdivisions =
+        await employeeSubdivisionAPIInstance.getItemsList("token is here!!!")
+      commit("setEmployeeSubdivisions", await responseEmployeeSubdivisions.data)
 
       const responseSpecialities =
         await specialityAPIInstance.getItemsList("token is here!!!")
@@ -202,6 +212,9 @@ const mutations = {
   },
   setSubdivisions(state, payload) {
     state.subdivisions = payload
+  },
+  setEmployeeSubdivisions(state, payload) {
+    state.employeeSubdivisions = payload
   },
   setSpecialities(state, payload) {
     state.specialities = payload

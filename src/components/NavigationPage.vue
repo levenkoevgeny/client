@@ -1,5 +1,5 @@
 <template>
-<navigation-layout></navigation-layout>
+  <navigation-layout></navigation-layout>
   <div class="container">
     <h1 class="my-4">Навигация по разделам</h1>
     <div class="d-flex flex-row flex-wrap">
@@ -19,7 +19,7 @@
             Комплексная информационная система "Сотрудники и гражданский
             персонал"
           </p>
-          <router-link class="btn btn-primary" :to="{ name: 'navigation' }">
+          <router-link class="btn btn-primary" :to="{ name: 'employee' }">
             Перейти
           </router-link>
         </div>
@@ -74,7 +74,7 @@
 import NavigationLayout from "@/components/layouts/NavigationLayout.vue"
 export default {
   name: "NavigationPage",
-  components: {NavigationLayout},
+  components: { NavigationLayout },
   data() {
     return {}
   },

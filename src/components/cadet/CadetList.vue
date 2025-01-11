@@ -186,8 +186,8 @@
           v-model="searchForm.gender"
         >
           <option selected value="">--------</option>
-          <option value="0">Мужской</option>
-          <option value="1">Женский</option>
+          <option value="1">Мужской</option>
+          <option value="0">Женский</option>
         </select>
       </div>
       <div class="mb-3">
