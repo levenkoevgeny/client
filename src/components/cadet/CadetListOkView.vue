@@ -1151,7 +1151,7 @@
             <td>{{ cadet.graduation_reason_article }}</td>
             <td>{{ cadet.get_specialization }}</td>
             <td>{{ cadet.get_direction_ord }}</td>
-            <td>{{ cadet.get_rank?.rank || "" }}</td>
+            <td>{{ cadet?.get_rank || "" }}</td>
             <td>{{ cadet.get_position?.position || "" }}</td>
             <td>{{ cadet.get_speciality?.speciality_name || "" }}</td>
             <td>{{ cadet.get_component_organ }}</td>
