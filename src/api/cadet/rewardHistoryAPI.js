@@ -4,7 +4,7 @@ class rewardHistoryAPI extends BaseAPI {}
 
 export default function getRewardHistoryAPIInstance() {
   return new rewardHistoryAPI(
-    "reward-history",
+    "reward-history-cadet",
     {
       cadet: "",
       reward: "",

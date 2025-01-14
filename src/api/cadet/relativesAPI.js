@@ -4,7 +4,7 @@ class relativesAPI extends BaseAPI {}
 
 export default function getRelativesAPIInstance() {
   return new relativesAPI(
-    "relatives",
+    "relatives-cadet",
     {
       cadet: "",
       degree_of_kinship: "",

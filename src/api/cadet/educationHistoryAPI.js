@@ -4,7 +4,7 @@ class educationHistoryAPI extends BaseAPI {}
 
 export default function getEducationHistoryAPIInstance() {
   return new educationHistoryAPI(
-    "education-history",
+    "education-history-cadet",
     {
       cadet: "",
       education_kind: "",

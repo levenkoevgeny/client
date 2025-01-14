@@ -4,7 +4,7 @@ class RankHistoryAPI extends BaseAPI {}
 
 export default function getRankHistoryAPIInstance() {
   return new RankHistoryAPI(
-    "rank-history",
+    "rank-history-cadet",
     {
       cadet: "",
       rank: "",

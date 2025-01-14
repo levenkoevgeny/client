@@ -4,7 +4,7 @@ class PositionHistoryAPI extends BaseAPI {}
 
 export default function getPositionHistoryAPIInstance() {
   return new PositionHistoryAPI(
-    "position-history",
+    "position-history-cadet",
     {
       cadet: "",
       position: "",

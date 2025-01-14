@@ -4,7 +4,7 @@ class armyHistoryAPI extends BaseAPI {}
 
 export default function getArmyHistoryAPIInstance() {
   return new armyHistoryAPI(
-    "army-history",
+    "army-history-cadet",
     {
       cadet: "",
       mvd_organization__icontains: "",

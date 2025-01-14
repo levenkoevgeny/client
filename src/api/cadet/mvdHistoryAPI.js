@@ -4,7 +4,7 @@ class mvdHistoryAPI extends BaseAPI {}
 
 export default function getMVDHistoryAPIInstance() {
   return new mvdHistoryAPI(
-    "mvd-history",
+    "mvd-history-cadet",
     {
       cadet: "",
       mvd_organization__icontains: "",

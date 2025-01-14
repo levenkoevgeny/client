@@ -1152,8 +1152,8 @@
             <td>{{ cadet.get_specialization }}</td>
             <td>{{ cadet.get_direction_ord }}</td>
             <td>{{ cadet?.get_rank || "" }}</td>
-            <td>{{ cadet.get_position?.position || "" }}</td>
-            <td>{{ cadet.get_speciality?.speciality_name || "" }}</td>
+            <td>{{ cadet.get_position || "" }}</td>
+            <td>{{ cadet.get_speciality || "" }}</td>
             <td>{{ cadet.get_component_organ }}</td>
             <td>{{ cadet.removed_from_military_registration }}</td>
             <td>
@@ -1505,7 +1505,7 @@ export default {
       return this.categories.results
     },
     orderedSubdivisions() {
-      return this.subdivisions.results
+      return this.subdivisions.results.filter(subdivision => subdivision.subdivision_category == "1")
     },
     orderedGroups() {
       return this.groups.results
@@ -1517,7 +1517,7 @@ export default {
       return this.specialities.results
     },
     orderedPositions() {
-      return this.positions.results
+      return this.positions.results.filter(position => position.position_category == "1")
     },
     orderedMaritalStatuses() {
       return this.maritalStatuses.results

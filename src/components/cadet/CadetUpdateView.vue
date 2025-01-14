@@ -1322,7 +1322,7 @@ export default {
       return this.cadetCategoryList.results
     },
     orderedSubdivisions() {
-      return this.subdivisions.results
+      return this.subdivisions.results.filter(subdivision => subdivision.subdivision_category == "1")
     },
     orderedGroups() {
       return this.groups.results

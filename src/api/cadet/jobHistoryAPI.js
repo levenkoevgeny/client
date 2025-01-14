@@ -4,7 +4,7 @@ class jobHistoryAPI extends BaseAPI {}
 
 export default function getJobHistoryAPIInstance() {
   return new jobHistoryAPI(
-    "job-history",
+    "job-history-cadet",
     {
       cadet: "",
       job_position__icontains: "",

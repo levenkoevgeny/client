@@ -397,7 +397,7 @@ export default {
       return this.mainItemList.results
     },
     orderedPositionList() {
-      return this.positionList.results
+      return this.positionList.results.filter(position => position.position_category == "1")
     },
     orderedOrderOwnerList() {
       return this.orderOwnersList.results

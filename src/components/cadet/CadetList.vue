@@ -467,7 +467,7 @@ export default {
       return this.cadetList.results
     },
     orderedSubdivisions() {
-      return this.subdivisions.results
+      return this.subdivisions.results.filter(subdivision => subdivision.subdivision_category == "1")
     },
     orderedGroups() {
       return this.groups.results
@@ -479,7 +479,7 @@ export default {
       return this.specialities.results
     },
     orderedPositions() {
-      return this.positions.results
+      return this.positions.results.filter(position => position.position_category == "1")
     },
     ...mapGetters({
       groups: "common/getGroups",

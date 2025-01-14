@@ -4,7 +4,7 @@ class CadetForeignLanguageLevelAPI extends BaseAPI {}
 
 export default function getCadetForeignLanguageLevelAPIInstance() {
   return new CadetForeignLanguageLevelAPI(
-    "cadet-foreign-language-level",
+    "foreign-language-level-cadet",
     {
       cadet: "",
       foreign_language: "",
