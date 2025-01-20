@@ -293,7 +293,7 @@
 </template>
 
 <script>
-import getRankHistoryAPIInstance from "@/api/cadet/rankHistoryAPI"
+import getRankHistoryAPIInstance from "@/api/employee/rankHistoryAPI"
 import getRankAPIInstance from "@/api/cadet/rankAPI"
 import {
   getLoadListFunction,
@@ -315,14 +315,14 @@ import BaseListLayoutForCadetUpdate from "@/components/layouts/BaseListLayoutFor
 import { PaginatorView } from "@/components/common"
 
 export default {
-  name: "RankHistoryCadetComponent",
+  name: "RankHistoryEmployeeComponent",
   components: {
     BaseListLayoutForCadetUpdate,
     RankHistoryModalForCadetUpdate,
     PaginatorView,
   },
   props: {
-    cadetId: {
+    employeeId: {
       type: String,
       required: true,
     },
@@ -355,7 +355,7 @@ export default {
       this.isError = false
       try {
         const [rankHistories, ranks] = await Promise.all([
-          listFunction("mainItem")(this.cadetId),
+          listFunction("mainItem")(this.employeeId),
           listFunction("rank")(),
         ]).catch((e) => (this.isError = true))
         this.mainItemList = rankHistories

@@ -31,6 +31,7 @@ import { faCircleXmark } from "@fortawesome/free-regular-svg-icons"
 import vSelect from "vue-select"
 import { faCaretUp } from "@fortawesome/free-solid-svg-icons"
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
+import { faCakeCandles } from "@fortawesome/free-solid-svg-icons"
 
 library.add(faUserGraduate)
 library.add(faPersonBreastfeeding)
@@ -57,6 +58,7 @@ library.add(faListCheck)
 library.add(faCircleXmark)
 library.add(faCaretUp)
 library.add(faCaretDown)
+library.add(faCakeCandles)
 
 createApp(App)
   .component("font-awesome-icon", FontAwesomeIcon)

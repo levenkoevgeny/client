@@ -37,35 +37,47 @@
               </a>
               <ul class="dropdown-menu">
                 <li class="nav-item">
-                  <router-link class="nav-link" :to="{ name: 'encouragement' }">
+                  <router-link
+                    class="nav-link"
+                    :to="{ name: 'cadet-encouragement' }"
+                  >
                     Поощрения
                   </router-link>
                 </li>
                 <li class="nav-item">
-                  <router-link class="nav-link" :to="{ name: 'punishment' }">
+                  <router-link
+                    class="nav-link"
+                    :to="{ name: 'cadet-punishment' }"
+                  >
                     Взыскания
                   </router-link>
                 </li>
                 <li class="nav-item">
-                  <router-link class="nav-link" :to="{ name: 'positions' }">
+                  <router-link
+                    class="nav-link"
+                    :to="{ name: 'cadet-positions' }"
+                  >
                     Назначения на должности
                   </router-link>
                 </li>
                 <li class="nav-item">
                   <router-link
                     class="nav-link"
-                    :to="{ name: 'rank-histories' }"
+                    :to="{ name: 'cadet-rank-histories' }"
                   >
                     Присвоение званий
                   </router-link>
                 </li>
                 <li class="nav-item">
-                  <router-link class="nav-link" :to="{ name: 'specialities' }">
+                  <router-link
+                    class="nav-link"
+                    :to="{ name: 'cadet-specialities' }"
+                  >
                     Перевод на специальности
                   </router-link>
                 </li>
                 <li class="nav-item">
-                  <router-link class="nav-link" :to="{ name: 'fired' }">
+                  <router-link class="nav-link" :to="{ name: 'cadet-fired' }">
                     Уволенные
                   </router-link>
                 </li>
@@ -75,7 +87,9 @@
         </div>
       </template>
     </navigation-layout>
-
+    <div class="container-fluid">
+      <h2 class="mt-3">КИС "Курсант"</h2>
+    </div>
     <router-view></router-view>
   </div>
 </template>
@@ -85,20 +99,6 @@ import NavigationLayout from "@/components/layouts/NavigationLayout.vue"
 export default {
   name: "CadetMainView",
   components: { NavigationLayout },
-  data() {
-    return {}
-  },
-  async created() {},
-  methods: {
-    showAddNewEncouragementModal() {
-      let addModal = this.$refs.myModal
-      let myModal = new bootstrap.Modal(addModal, {
-        keyboard: false,
-      })
-      myModal.show()
-    },
-  },
-  computed: {},
 }
 </script>
 

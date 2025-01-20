@@ -2,9 +2,52 @@
   <base-list-layout
     :is-loading="isLoading"
     :main-list-length="employeeList.count"
-    title="Сотрудники и гражданский персонал"
+    title="Главная"
     :load-more-data="null"
   >
+    <template v-slot:modals>
+      <div
+        class="modal fade"
+        id="birthdayTodayModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+        ref="birthdayTodayModal"
+      >
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                День рождения сегодня
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div class="modal-body">
+              <table class="table" v-if="birthDays.length > 0">
+                <tbody>
+                  <tr v-for="employee in birthDays" :key="employee.id">
+                    <td>{{ employee.last_name_rus }}</td>
+                    <td>{{ employee.first_name_rus }}</td>
+                    <td>{{ employee.patronymic_rus }}</td>
+                    <td>{{ employee.get_subdivision }}</td>
+                    <td>{{ employee.get_age }} (лет)</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p v-else>Список пуст</p>
+            </div>
+            <div class="modal-footer"></div>
+          </div>
+        </div>
+      </div>
+    </template>
+
     <template v-slot:thead>
       <tr>
         <th scope="col"></th>
@@ -50,13 +93,34 @@
             {{ employee.first_name_rus }}<br />{{ employee.patronymic_rus }}
           </router-link>
         </td>
-        <td>{{ employee.date_of_birth }}</td>
-        <td>{{ employee.current_rank }}</td>
-        <td>{{ employee.current_position }}</td>
+        <td>
+          {{
+            new Date(employee.date_of_birth).toLocaleString("ru-RU", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })
+          }}
+        </td>
+        <td>{{ employee.get_rank }}</td>
+        <td>{{ employee.get_position }}</td>
       </tr>
     </template>
 
     <template v-slot:search-form>
+      <div class="mb-3">
+        <label for="last_name_rus" class="form-label">Активная запись</label>
+
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          v-model="searchForm.is_active"
+        >
+          <option selected value="">Все</option>
+          <option value="1">Да</option>
+          <option value="0">Нет</option>
+        </select>
+      </div>
       <div class="mb-3">
         <label for="last_name_rus" class="form-label">Фамилия</label>
         <input
@@ -72,7 +136,7 @@
         <v-select
           v-model="searchForm.subdivision__in"
           :options="orderedEmployeeSubdivisions"
-          label="subdivision_short_name"
+          label="subdivision_name"
           :reduce="(subdivision) => subdivision.id"
           multiple
         />
@@ -80,6 +144,17 @@
 
       <button type="button" class="btn btn-primary" @click="clearFilter">
         Сбросить фильтр
+      </button>
+    </template>
+
+    <template v-slot:table-mode-button>
+      <button
+        type="button"
+        class="btn btn-warning"
+        title="ДР сегодня"
+        @click="showBirthdaysModal"
+      >
+        <font-awesome-icon :icon="['fas', 'cake-candles']" />
       </button>
     </template>
   </base-list-layout>
@@ -94,6 +169,7 @@ import BaseListLayoutForCadetUpdate from "@/components/layouts/BaseListLayoutFor
 import { PaginatorView } from "@/components/common"
 import { getLoadListFunction } from "../../../utils"
 import { debounce } from "lodash/function"
+import axios from "axios"
 
 export default {
   name: "EmployeeList",
@@ -105,6 +181,7 @@ export default {
   data() {
     return {
       employeeList: { count: "", results: [], previous: null, next: null },
+      birthDays: [],
       isLoading: true,
       isError: false,
       BACKEND_PROTOCOL: process.env.VUE_APP_BACKEND_PROTOCOL,
@@ -158,16 +235,29 @@ export default {
         this.employeeAPIInstance.searchObjDefault,
       )
     },
+    async showBirthdaysModal() {
+      const response = await axios.get(
+        `${this.BACKEND_PROTOCOL}://${this.BACKEND_HOST}:${this.BACKEND_PORT}/api/birthdays/`,
+      )
+      this.birthDays = await response.data
+      let addModal = this.$refs.birthdayTodayModal
+      let myModal = new bootstrap.Modal(addModal, {
+        keyboard: false,
+      })
+      myModal.show()
+    },
   },
   computed: {
     orderedEmployees() {
       return this.employeeList.results
     },
     orderedEmployeeSubdivisions() {
-      return this.employeeSubdivisions.results
+      return this.subdivisions.results.filter(
+        (subdivision) => subdivision.subdivision_category == "2",
+      )
     },
     ...mapGetters({
-      employeeSubdivisions: "common/getEmployeeSubdivisions",
+      subdivisions: "common/getSubdivisions",
     }),
   },
   watch: {

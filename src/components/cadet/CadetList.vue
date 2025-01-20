@@ -2,7 +2,7 @@
   <base-list-layout
     :is-loading="isLoading"
     :main-list-length="cadetList.count"
-    title="Курсанты"
+    title="Главная"
     :load-more-data="loadMoreData"
   >
     <template v-slot:add-button>
@@ -467,7 +467,9 @@ export default {
       return this.cadetList.results
     },
     orderedSubdivisions() {
-      return this.subdivisions.results.filter(subdivision => subdivision.subdivision_category == "1")
+      return this.subdivisions.results.filter(
+        (subdivision) => subdivision.subdivision_category == "1",
+      )
     },
     orderedGroups() {
       return this.groups.results
@@ -479,7 +481,9 @@ export default {
       return this.specialities.results
     },
     orderedPositions() {
-      return this.positions.results.filter(position => position.position_category == "1")
+      return this.positions.results.filter(
+        (position) => position.position_category == "1",
+      )
     },
     ...mapGetters({
       groups: "common/getGroups",

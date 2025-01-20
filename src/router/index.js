@@ -11,6 +11,7 @@ import { CadetListOkView } from "@/components/cadet"
 import { FiredCadetComponent } from "@/components/cadet/fired"
 
 import {
+  EmployeeMainView,
   EmployeeList,
   EmployeeItemView,
   EmployeeUpdateView,
@@ -28,74 +29,106 @@ const routes = [
   { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFoundView },
   { path: "", name: "navigation", component: NavigationPage },
   {
-    path: "/kis",
-    name: "kis-main",
+    path: "/cadet",
+    name: "cadet-main",
     component: CadetMainView,
     children: [
       {
-        path: "cadet",
+        path: "",
         component: CadetListView,
         name: "cadet",
       },
       {
-        path: "cadet-full",
+        path: "full",
         component: CadetListOkView,
         name: "cadet-full",
       },
       {
-        path: "cadet/:id",
+        path: ":id",
         component: CadetItemView,
         name: "cadet-view",
       },
       {
-        path: "cadet/:id/update",
+        path: ":id/update",
         component: CadetUpdateView,
         name: "cadet-update",
       },
       {
         path: "encouragement",
         component: EncouragementListView,
-        name: "encouragement",
+        name: "cadet-encouragement",
       },
       {
         path: "punishment",
         component: PunishmentListView,
-        name: "punishment",
+        name: "cadet-punishment",
       },
       {
         path: "positions",
         component: PositionListView,
-        name: "positions",
+        name: "cadet-positions",
       },
       {
         path: "rank-histories",
         component: RankHistoryListView,
-        name: "rank-histories",
+        name: "cadet-rank-histories",
       },
       {
         path: "specialities",
         component: SpecialityHistoryView,
-        name: "specialities",
+        name: "cadet-specialities",
+      },
+      {
+        path: "fired",
+        component: FiredCadetComponent,
+        name: "cadet-fired",
+      },
+    ],
+  },
+  {
+    path: "/employee",
+    name: "employee-main",
+    component: EmployeeMainView,
+    children: [
+      {
+        path: "",
+        component: EmployeeList,
+        name: "employee",
+      },
+      {
+        path: ":id",
+        component: EmployeeItemView,
+        name: "employee-view",
+      },
+      {
+        path: ":id/update",
+        component: EmployeeUpdateView,
+        name: "employee-update",
+      },
+      {
+        path: "employee-encouragement",
+        component: EncouragementListView,
+        name: "encouragement",
+      },
+      {
+        path: "employee-punishment",
+        component: PunishmentListView,
+        name: "punishment",
+      },
+      {
+        path: "employee-positions",
+        component: PositionListView,
+        name: "positions",
+      },
+      {
+        path: "employee-rank-histories",
+        component: RankHistoryListView,
+        name: "rank-histories",
       },
       {
         path: "fired",
         component: FiredCadetComponent,
         name: "fired",
-      },
-      {
-        path: "employee",
-        component: EmployeeList,
-        name: "employee",
-      },
-      {
-        path: "employee/:id",
-        component: EmployeeItemView,
-        name: "employee-view",
-      },
-      {
-        path: "employee/:id/update",
-        component: EmployeeUpdateView,
-        name: "employee-update",
       },
     ],
   },
