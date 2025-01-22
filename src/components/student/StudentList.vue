@@ -170,6 +170,7 @@
           id="last_name_rus"
           class="form-control"
           v-model="searchForm.last_name_rus__icontains"
+          autocomplete="false"
         />
       </div>
 
@@ -382,14 +383,8 @@ export default {
   },
 
   computed: {
-    orderedStudentCategories() {
-      return this.categories.results
-    },
     orderedStudents() {
       return this.studentList.results
-    },
-    orderedSubdivisions() {
-      return this.subdivisions.results
     },
     orderedGroups() {
       return this.groups.results
@@ -397,19 +392,10 @@ export default {
     orderedRanks() {
       return this.ranks.results
     },
-    orderedSpecialities() {
-      return this.specialities.results
-    },
-    orderedPositions() {
-      return this.positions.results
-    },
     ...mapGetters({
       groups: "common/getGroups",
       ranks: "common/getRanks",
-      subdivisions: "common/getSubdivisions",
-      specialities: "common/getSpecialities",
       positions: "common/getPositions",
-      categories: "common/getCadetCategories",
     }),
   },
   watch: {

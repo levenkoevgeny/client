@@ -110,48 +110,57 @@
                           </div>
                         </div>
                       </div>
+
                       <div class="row">
                         <div class="col-lg-4">
                           <div class="mb-3">
-                            <label
-                              class="form-label"
-                              for="id_personal_number_mvd"
-                              >Личный номер (жетон)</label
+                            <label class="form-label" for="id_last_name_bel"
+                              >Фамилия (бел):</label
                             >
                             <input
                               type="text"
                               class="form-control"
-                              name="personal_number_mvd"
-                              id="id_personal_number_mvd"
-                              v-model="currentStudentData.personal_number_mvd"
+                              name="last_name_rus"
+                              maxlength="30"
+                              required
+                              id="id_last_name_rus"
+                              v-model="currentStudentData.last_name_bel"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-lg-4">
+                          <div class="mb-3">
+                            <label class="form-label" for="id_first_name_bel"
+                              >Имя (бел):</label
+                            >
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="first_name_rus"
+                              maxlength="30"
+                              required
+                              id="id_first_name_rus"
+                              v-model="currentStudentData.first_name_bel"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-lg-4">
+                          <div class="mb-3">
+                            <label class="form-label" for="id_patronymic_bel"
+                              >Отчество (бел):</label
+                            >
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="patronymic_rus"
+                              maxlength="30"
+                              id="id_patronymic_rus"
+                              v-model="currentStudentData.patronymic_bel"
                             />
                           </div>
                         </div>
                       </div>
-                      <div class="row">
-                        <div class="col-lg-4">
-                          <div class="mb-3">
-                            <label class="form-label" for="id_category"
-                              >Группа</label
-                            >
-                            <select
-                              class="form-select"
-                              name="subdivision"
-                              id="id_subdivision"
-                              v-model="currentStudentData.group"
-                            >
-                              <option value="" selected>---------</option>
-                              <option
-                                v-for="group in orderedGroups"
-                                :value="group.id"
-                                :key="group.id"
-                              >
-                                {{ group.group_name }}
-                              </option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
+
                       <div class="row">
                         <div class="col-lg-4">
                           <div class="mb-3">
@@ -177,40 +186,8 @@
                               class="form-control"
                               name="place_of_birth"
                               id="id_place_of_birth"
-                              v-model="currentCadetData.place_of_birth"
+                              v-model="currentStudentData.place_of_birth"
                             />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="row">
-                        <div class="col-lg-12">
-                          <div class="mb-3">
-                            <label class="form-label" for="id_place_of_birth"
-                              >Образование</label
-                            >
-                            <input type="text" class="form-control" disabled />
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-lg-12">
-                          <div class="mb-3">
-                            <label class="form-label" for="id_place_of_birth"
-                              >Действующее дисциплинарное взыскание</label
-                            >
-                            <input type="text" class="form-control" disabled />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="row">
-                        <div class="col-lg-12">
-                          <div class="mb-3">
-                            <label class="form-label" for="id_place_of_birth"
-                              >Список поощрений</label
-                            >
-                            <input type="text" class="form-control" disabled />
                           </div>
                         </div>
                       </div>
@@ -227,7 +204,8 @@
                               name="phone_number"
                               maxlength="30"
                               id="id_phone_number"
-                              v-model="currentCadetData.phone_number"
+                              autocomplete="false"
+                              v-model="currentStudentData.phone_number"
                             />
                           </div>
                         </div>
@@ -241,7 +219,7 @@
                               class="form-control"
                               name="address_residence"
                               id="id_address_residence"
-                              v-model="currentCadetData.address_residence"
+                              v-model="currentStudentData.address_residence"
                             />
                           </div>
                         </div>
@@ -260,7 +238,7 @@
                               class="form-control"
                               name="address_registration"
                               id="id_address_registration"
-                              v-model="currentCadetData.address_registration"
+                              v-model="currentStudentData.address_registration"
                             />
                           </div>
                         </div>
@@ -290,7 +268,7 @@
                           name="passport_number"
                           maxlength="100"
                           id="id_passport_number"
-                          v-model="currentCadetData.passport_number"
+                          v-model="currentStudentData.passport_number"
                         />
                       </div>
                     </div>
@@ -304,7 +282,7 @@
                           class="form-control"
                           name="passport_issue_date"
                           id="id_passport_issue_date"
-                          v-model="currentCadetData.passport_issue_date"
+                          v-model="currentStudentData.passport_issue_date"
                         />
                       </div>
                     </div>
@@ -320,7 +298,7 @@
                           class="form-control"
                           name="passport_validity_period"
                           id="id_passport_validity_period"
-                          v-model="currentCadetData.passport_validity_period"
+                          v-model="currentStudentData.passport_validity_period"
                         />
                       </div>
                     </div>
@@ -335,10 +313,9 @@
                           class="form-select"
                           name="passport_issue_authority"
                           id="id_passport_issue_authority"
-                          v-model="currentCadetData.passport_issue_authority"
+                          v-model="currentStudentData.passport_issue_authority"
                         >
                           <option value="" selected>---------</option>
-
                           <option
                             v-for="passportIssueAuthority in orderedPassportIssueAuthorities"
                             :value="passportIssueAuthority.id"
@@ -362,96 +339,6 @@
               <div class="card">
                 <div class="card-body">
                   <h5 class="card-title">Обучение в Академии МВД</h5>
-                  <div class="row">
-                    <div class="col-lg-3">
-                      <div class="mb-3">
-                        <label class="form-label" for="id_category"
-                          >Факультет</label
-                        >
-                        <select
-                          class="form-select"
-                          name="subdivision"
-                          id="id_subdivision"
-                          v-model="currentCadetData.subdivision"
-                        >
-                          <option value="" selected>---------</option>
-                          <option
-                            v-for="subdivision in orderedSubdivisions"
-                            :value="subdivision.id"
-                            :key="subdivision.id"
-                          >
-                            {{ subdivision.subdivision_name }}
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-lg-3">
-                      <div class="mb-3">
-                        <label class="form-label" for="id_category"
-                          >Группа</label
-                        >
-                        <select
-                          class="form-select"
-                          name="subdivision"
-                          id="id_subdivision"
-                          v-model="currentCadetData.group"
-                        >
-                          <option value="" selected>---------</option>
-                          <option
-                            v-for="group in orderedGroups"
-                            :value="group.id"
-                            :key="group.id"
-                          >
-                            {{ group.group_name }}
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-lg-3">
-                      <div class="mb-3">
-                        <label class="form-label" for="id_category"
-                          >Специализация</label
-                        >
-                        <select
-                          class="form-select"
-                          name="subdivision"
-                          id="id_subdivision"
-                          v-model="currentCadetData.specialization"
-                        >
-                          <option value="" selected>---------</option>
-                          <option
-                            v-for="specialization in orderedSpecializations"
-                            :value="specialization.id"
-                            :key="specialization.id"
-                          >
-                            {{ specialization.specialization_name }}
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-lg-3">
-                      <div class="mb-3">
-                        <label class="form-label" for="id_category"
-                          >Направление ОРД</label
-                        >
-                        <select
-                          class="form-select"
-                          name="subdivision"
-                          id="id_subdivision"
-                          v-model="currentCadetData.direction_ord"
-                        >
-                          <option value="" selected>---------</option>
-                          <option
-                            v-for="directionOrd in orderedDirectionsOrd"
-                            :value="directionOrd.id"
-                            :key="directionOrd.id"
-                          >
-                            {{ directionOrd.direction_name }}
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
                   <div class="row">
                     <div class="col-lg-3">
                       <div class="mb-3">
@@ -509,10 +396,36 @@
                         <input
                           type="text"
                           class="form-control"
-                          v-model="currentCadetData.graduation_reason_article"
+                          v-model="currentStudentData.graduation_reason_article"
                         />
                       </div>
                     </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-3">
+                      <div class="mb-3">
+                        <label class="form-label" for="id_category"
+                          >Группа</label
+                        >
+                        <select
+                          class="form-select"
+                          name="subdivision"
+                          id="id_subdivision"
+                          v-model="currentStudentData.group"
+                        >
+                          <option value="" selected>---------</option>
+                          <option
+                            v-for="group in orderedGroups"
+                            :value="group.id"
+                            :key="group.id"
+                          >
+                            {{ group.group_name }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-lg-3"></div>
+                    <div class="col-lg-3"></div>
                   </div>
                   <div class="row">
                     <div class="col-12">
@@ -523,7 +436,7 @@
                         <textarea
                           class="form-control"
                           rows="2"
-                          v-model="currentCadetData.graduation_extra_data"
+                          v-model="currentStudentData.graduation_extra_data"
                         />
                       </div>
                     </div>
@@ -531,69 +444,7 @@
                 </div>
               </div>
             </div>
-            <div
-              class="shadow p-3 mb-3 bg-body-tertiary rounded"
-              id="simple-list-military-office-data"
-            >
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Воинский учет</h5>
-                  <div class="row">
-                    <div class="col-4">
-                      <div class="mb-3">
-                        <label class="form-label" for="id_category"
-                          >С воинского учета снят</label
-                        >
-                        <input
-                          type="date"
-                          class="form-control"
-                          v-model="
-                            currentCadetData.removed_from_military_registration
-                          "
-                        />
-                      </div>
-                    </div>
-                    <div class="col-4">
-                      <div class="mb-3">
-                        <label class="form-label" for="id_category"
-                          >Отношение военного комиссариата</label
-                        >
-                        <textarea
-                          class="form-control"
-                          v-model="
-                            currentCadetData.military_commissariat_attitude
-                          "
-                          rows="1"
-                        />
-                      </div>
-                    </div>
-                    <div class="col-4">
-                      <div class="mb-3">
-                        <label class="form-label" for="id_military_office"
-                          >Военкомат</label
-                        >
 
-                        <select
-                          class="form-select"
-                          name="subdivision"
-                          id="id_military_office"
-                          v-model="currentCadetData.military_office"
-                        >
-                          <option value="" selected>---------</option>
-                          <option
-                            v-for="militaryOffice in orderedMilitaryOffices"
-                            :value="militaryOffice.id"
-                            :key="militaryOffice.id"
-                          >
-                            {{ militaryOffice.military_office }}
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
             <div
               class="shadow p-3 mb-3 bg-body-tertiary rounded"
               id="simple-list-parents-data"
@@ -617,7 +468,7 @@
                                 type="text"
                                 class="form-control"
                                 name="father_last_name"
-                                v-model="currentCadetData.father_last_name"
+                                v-model="currentStudentData.father_last_name"
                                 id="id_father_last_name"
                               />
                             </div>
@@ -635,7 +486,7 @@
                                 name="father_first_name"
                                 maxlength="30"
                                 id="id_father_first_name"
-                                v-model="currentCadetData.father_first_name"
+                                v-model="currentStudentData.father_first_name"
                               />
                             </div>
                           </div>
@@ -652,7 +503,7 @@
                                 name="father_patronymic"
                                 maxlength="30"
                                 id="id_father_patronymic"
-                                v-model="currentCadetData.father_patronymic"
+                                v-model="currentStudentData.father_patronymic"
                               />
                             </div>
                           </div>
@@ -670,7 +521,9 @@
                                 class="form-control"
                                 name="father_date_of_birth"
                                 id="id_father_date_of_birth"
-                                v-model="currentCadetData.father_date_of_birth"
+                                v-model="
+                                  currentStudentData.father_date_of_birth
+                                "
                               />
                             </div>
                           </div>
@@ -687,7 +540,7 @@
                                 name="father_phone_number"
                                 maxlength="30"
                                 id="id_father_phone_number"
-                                v-model="currentCadetData.father_phone_number"
+                                v-model="currentStudentData.father_phone_number"
                               />
                             </div>
                           </div>
@@ -707,7 +560,9 @@
                                 cols="40"
                                 rows="2"
                                 id="id_father_place_of_work"
-                                v-model="currentCadetData.father_place_of_work"
+                                v-model="
+                                  currentStudentData.father_place_of_work
+                                "
                               />
                             </div>
                           </div>
@@ -731,7 +586,7 @@
                                 name="mother_last_name"
                                 maxlength="30"
                                 id="id_mother_last_name"
-                                v-model="currentCadetData.mother_last_name"
+                                v-model="currentStudentData.mother_last_name"
                               />
                             </div>
                           </div>
@@ -748,7 +603,7 @@
                                 name="mother_first_name"
                                 maxlength="30"
                                 id="id_mother_first_name"
-                                v-model="currentCadetData.mother_first_name"
+                                v-model="currentStudentData.mother_first_name"
                               />
                             </div>
                           </div>
@@ -765,7 +620,7 @@
                                 name="mother_patronymic"
                                 maxlength="30"
                                 id="id_mother_patronymic"
-                                v-model="currentCadetData.mother_patronymic"
+                                v-model="currentStudentData.mother_patronymic"
                               />
                             </div>
                           </div>
@@ -783,7 +638,9 @@
                                 class="form-control"
                                 name="mother_date_of_birth"
                                 id="id_mother_date_of_birth"
-                                v-model="currentCadetData.mother_date_of_birth"
+                                v-model="
+                                  currentStudentData.mother_date_of_birth
+                                "
                               />
                             </div>
                           </div>
@@ -800,7 +657,7 @@
                                 name="mother_phone_number"
                                 maxlength="30"
                                 id="id_mother_phone_number"
-                                v-model="currentCadetData.mother_phone_number"
+                                v-model="currentStudentData.mother_phone_number"
                               />
                             </div>
                           </div>
@@ -820,7 +677,9 @@
                                 cols="40"
                                 rows="2"
                                 id="id_father_place_of_work"
-                                v-model="currentCadetData.mother_place_of_work"
+                                v-model="
+                                  currentStudentData.mother_place_of_work
+                                "
                               />
                             </div>
                           </div>
@@ -850,57 +709,8 @@
                   <a class="p-1 rounded" href="#simple-list-academy-data"
                     >Обучение в Академии МВД</a
                   >
-                  <a
-                    class="p-1 rounded"
-                    href="#simple-list-military-office-data"
-                    >Воинский учет</a
-                  >
                   <a class="p-1 rounded" href="#simple-list-parents-data"
                     >Данные о родителях</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-rank-data"
-                    >Присвоение званий</a
-                  >
-
-                  <a class="p-1 rounded" href="#simple-list-education-data"
-                    >Образование</a
-                  >
-                  <a
-                    class="p-1 rounded"
-                    href="#simple-list-foreign-language-data"
-                    >Иностранные языки</a
-                  >
-                  <a
-                    class="p-1 rounded"
-                    href="#simple-list-scientific-works-data"
-                    >Научные труды и изобретения</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-job-data"
-                    >Трудовая деятельность</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-army-service-data"
-                    >Прохождение службы в ВС РБ</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-mvd-service-data"
-                    >Прохождение службы в МВД РБ</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-rewards-data"
-                    >Награды</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-encouragements-data"
-                    >Поощрения</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-punishments-data"
-                    >Дисциплинарные взыскания</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-positions-data"
-                    >Должности</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-specialities-data"
-                    >Специальности</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-marital-status-data"
-                    >Семейное положение</a
                   >
                 </div>
               </div>
@@ -957,7 +767,6 @@ export default {
   },
   data() {
     return {
-      options: [],
       selected: "",
       isLoading: true,
       isError: false,
@@ -1009,6 +818,12 @@ export default {
         graduation_extra_data: "",
         component_organ: "",
       },
+      passportIssueAuthorityList: {
+        count: "",
+        results: [],
+        previous: null,
+        next: null,
+      },
       studentAPIInstance: getStudentAPIInstance(),
       rankAPIInstance: getRankAPIInstance(),
       jobHistoryAPIInstance: getJobHistoryAPIInstance(),
@@ -1022,10 +837,13 @@ export default {
   },
   methods: {
     async loadData(studentId) {
-      const [student] = await Promise.all([
+      const listFunction = getLoadListFunction.bind(this)
+      const [student, passportIssueAuthorities] = await Promise.all([
         this.getStudentData(studentId),
+        listFunction("passportIssueAuthority")(null, 1000),
       ]).catch(() => (this.isError = true))
       this.currentStudentData = student
+      this.passportIssueAuthorityList = passportIssueAuthorities
     },
     async getStudentData(studentId) {
       const res = await this.studentAPIInstance.getItemData(
@@ -1054,18 +872,16 @@ export default {
     orderedPassportIssueAuthorities() {
       return this.passportIssueAuthorityList.results
     },
-    orderedMilitaryOffices() {
-      return this.militaryOfficeList.results
-    },
     orderedGraduationReasons() {
-      return this.graduationReasonList.results
+      return []
     },
+
     getStudentStatus() {
       if (dayjs().isBefore(dayjs(this.currentStudentData.academy_end_date))) {
         return "Обучается"
       } else
-        return `Дата окончания обучения - ${this.currentCadetData.academy_end_date}, причина - ${this.currentCadetData.get_graduation_reason || "Нет данных"},
-        статья - ${this.currentCadetData.graduation_reason_article || "Нет данных"}`
+        return `Дата окончания обучения - ${this.currentStudentData.academy_end_date}, причина - ${this.currentStudentData.get_graduation_reason || "Нет данных"},
+        статья - ${this.currentStudentData.graduation_reason_article || "Нет данных"}`
     },
     ...mapGetters({
       groups: "common/getGroups",
