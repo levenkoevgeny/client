@@ -28,7 +28,7 @@
         <div class="card-body">
           <h5 class="card-title">КИС Студент</h5>
           <p class="card-text">Комплексная информационная система "Студент"</p>
-          <router-link class="btn btn-primary" :to="{ name: 'navigation' }">
+          <router-link class="btn btn-primary" :to="{ name: 'student' }">
             Перейти
           </router-link>
         </div>

@@ -17,6 +17,13 @@ import {
   EmployeeUpdateView,
 } from "@/components/employee"
 
+import {
+  StudentMainView,
+  StudentList,
+  StudentItemView,
+  StudentUpdateView,
+} from "@/components/student"
+
 import NavigationPage from "@/components/NavigationPage.vue"
 
 import {
@@ -129,6 +136,28 @@ const routes = [
         path: "fired",
         component: FiredCadetComponent,
         name: "fired",
+      },
+    ],
+  },
+  {
+    path: "/student",
+    name: "student-main",
+    component: StudentMainView,
+    children: [
+      {
+        path: "",
+        component: StudentList,
+        name: "student",
+      },
+      {
+        path: ":id",
+        component: StudentItemView,
+        name: "student-view",
+      },
+      {
+        path: ":id/update",
+        component: StudentUpdateView,
+        name: "student-update",
       },
     ],
   },
