@@ -14,6 +14,7 @@ import getPassportIssueAuthorityAPIInstance from "@/api/cadet/passportIssueAutho
 import getForeignLanguageAPIInstance from "@/api/cadet/foreignLanguageAPI"
 import getMilitaryOfficeAPIInstance from "@/api/cadet/militaryOfficeAPI"
 import getGraduationReasonAPIInstance from "@/api/cadet/graduationReasonAPI"
+import getEducationFormAPIInstance from "@/api/student/educationFormAPI"
 
 const limit = 1000
 
@@ -33,6 +34,7 @@ const passportIssueAuthorityAPIInstance = getPassportIssueAuthorityAPIInstance()
 const foreignLanguageAPIInstance = getForeignLanguageAPIInstance()
 const militaryOfficeAPIInstance = getMilitaryOfficeAPIInstance()
 const graduationReasonAPIInstance = getGraduationReasonAPIInstance()
+const educationFormAPIInstance = getEducationFormAPIInstance()
 
 groupAPIInstance.searchObj.limit = limit
 rankAPIInstance.searchObj.limit = limit
@@ -50,6 +52,7 @@ passportIssueAuthorityAPIInstance.limit = limit
 foreignLanguageAPIInstance.limit = limit
 militaryOfficeAPIInstance.limit = limit
 graduationReasonAPIInstance.limit = limit
+educationFormAPIInstance.limit = limit
 
 const state = () => ({
   groups: { count: "", results: [], previous: null, next: null },
@@ -72,6 +75,7 @@ const state = () => ({
   foreignLanguages: { count: "", results: [], previous: null, next: null },
   militaryOffices: { count: "", results: [], previous: null, next: null },
   graduationReasons: { count: "", results: [], previous: null, next: null },
+  educationForms: { count: "", results: [], previous: null, next: null },
 })
 
 const getters = {
@@ -119,6 +123,9 @@ const getters = {
   },
   getGraduationReasons(state) {
     return state.graduationReasons
+  },
+  getEducationForms(state) {
+    return state.educationForms
   },
 }
 
@@ -187,6 +194,10 @@ const actions = {
       const responseGraduationReason =
         await graduationReasonAPIInstance.getItemsList("token is here!!!")
       commit("setGraduationReasons", await responseGraduationReason.data)
+
+      const responseEducationForms =
+        await educationFormAPIInstance.getItemsList("token is here!!!")
+      commit("setEducationForms", await responseEducationForms.data)
     } catch (error) {
       console.log(error)
     }
@@ -238,6 +249,9 @@ const mutations = {
   },
   setGraduationReasons(state, payload) {
     state.graduationReasons = payload
+  },
+  setEducationForms(state, payload) {
+    state.educationForms = payload
   },
 }
 

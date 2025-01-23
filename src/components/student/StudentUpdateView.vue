@@ -64,6 +64,68 @@
                       <div class="row">
                         <div class="col-lg-4">
                           <div class="mb-3">
+                            <div class="form-check">
+                              <input
+                                class="form-check-input"
+                                type="checkbox"
+                                v-model="currentStudentData.is_active"
+                                id="id_is_active"
+                              />
+                              <label
+                                class="form-check-label"
+                                for="id_is_active"
+                              >
+                                Запись активна
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-lg-4">
+                          <div class="mb-3">
+                            <label class="form-label" for="id_id"
+                              >Номер в базе</label
+                            >
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="last_name_rus"
+                              maxlength="30"
+                              required
+                              id="id_id"
+                              v-model="currentStudentData.id"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-lg-4">
+                          <div class="mb-3">
+                            <label class="form-label" for="id_first_name_rus"
+                              >Категория</label
+                            >
+                            <select
+                              class="form-select"
+                              name="subdivision"
+                              id="id_subdivision"
+                              v-model="currentStudentData.category"
+                            >
+                              <option value="" selected>---------</option>
+                              <option
+                                v-for="category in orderedCategories"
+                                :value="category.id"
+                                :key="category.id"
+                              >
+                                {{ category.category }}
+                              </option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-lg-4">
+                          <div class="mb-3">
                             <label class="form-label" for="id_last_name_rus"
                               >Фамилия (рус):</label
                             >
@@ -226,7 +288,26 @@
                       </div>
 
                       <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-4">
+                          <div class="mb-3">
+                            <label
+                              class="form-label"
+                              for="id_address_registration"
+                              >Пол</label
+                            >
+                            <select
+                              name=""
+                              id=""
+                              class="form-select"
+                              v-model="currentStudentData.gender"
+                            >
+                              <option value="">------</option>
+                              <option value="1">мужской</option>
+                              <option value="0">женский</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-lg-8">
                           <div class="mb-3">
                             <label
                               class="form-label"
@@ -340,6 +421,90 @@
                 <div class="card-body">
                   <h5 class="card-title">Обучение в Академии МВД</h5>
                   <div class="row">
+                    <div class="col-lg-4">
+                      <div class="mb-3">
+                        <label class="form-label" for="id_first_name_rus"
+                          >Номер зачетной книжки</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          v-model="
+                            currentStudentData.student_record_book_number
+                          "
+                          id="id_student_record_book_number"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="mb-3">
+                        <label class="form-label" for="id_subdivision"
+                          >Факультет</label
+                        >
+                        <select
+                          class="form-select"
+                          name="subdivision"
+                          id="id_subdivision"
+                          v-model="currentStudentData.subdivision"
+                        >
+                          <option value="" selected>---------</option>
+                          <option
+                            v-for="subdivision in orderedSubdivisions"
+                            :value="subdivision.id"
+                          >
+                            {{ subdivision.subdivision_name }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="mb-3">
+                        <label class="form-label" for="id_first_name_rus"
+                          >Форма обучения</label
+                        >
+                        <select
+                          class="form-select"
+                          name="subdivision"
+                          id="id_subdivision"
+                          v-model="currentStudentData.education_form"
+                        >
+                          <option value="" selected>---------</option>
+                          <option
+                            v-for="education_form in orderedEducationForms"
+                            :value="education_form.id"
+                          >
+                            {{ education_form.education_form }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="mb-3">
+                        <label class="form-label" for="id_first_name_rus"
+                          >Специальность</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="mb-3">
+                        <label class="form-label" for="id_first_name_rus"
+                          >Специализация</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="mb-3">
+                        <label class="form-label" for="id_first_name_rus"
+                          >Направление</label
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
                     <div class="col-lg-3">
                       <div class="mb-3">
                         <label class="form-label" for="id_subdivision"
@@ -401,6 +566,7 @@
                       </div>
                     </div>
                   </div>
+
                   <div class="row">
                     <div class="col-lg-3">
                       <div class="mb-3">
@@ -424,8 +590,55 @@
                         </select>
                       </div>
                     </div>
-                    <div class="col-lg-3"></div>
-                    <div class="col-lg-3"></div>
+
+                    <div class="col-lg-3">
+                      <div class="mb-3">
+                        <label class="form-label" for="id_contract_number"
+                          >Номер договора</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="id_contract_number"
+                          v-model="currentStudentData.contract_number"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                      <div class="mb-3">
+                        <label class="form-label" for="id_year">Курс</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="id_year"
+                          v-model="currentStudentData.year"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-3">
+                      <div class="mb-3">
+                        <label class="form-label" for="id_year_litera"
+                          >Литера</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="id_year_litera"
+                          v-model="currentStudentData.year_litera"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3">
+                      <div class="mb-3">
+                        <label class="form-label" for="id_category"
+                          >Год поступления</label
+                        >
+                      </div>
+                    </div>
                   </div>
                   <div class="row">
                     <div class="col-12">
@@ -690,6 +903,102 @@
                 </div>
               </div>
             </div>
+
+            <div
+              class="shadow p-3 mb-3 bg-body-tertiary rounded"
+              id="simple-list-orders-data"
+            >
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title mb-3">Приказы</h5>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="row mb-3">
+                        <label for="inputEmail3" class="col-lg-4 col-form-label"
+                          >Приказ о зачислении</label
+                        >
+                        <div class="col-lg-4">
+                          <input type="text" class="form-control" />
+                        </div>
+                        <div class="col-lg-4">
+                          <input
+                            type="date"
+                            class="form-control"
+                            id="inputEmail3"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="row mb-3">
+                        <label for="inputEmail3" class="col-lg-4 col-form-label"
+                          >Приказ об отчислении</label
+                        >
+                        <div class="col-lg-4">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="inputEmail3"
+                          />
+                        </div>
+                        <div class="col-lg-4">
+                          <input
+                            type="date"
+                            class="form-control"
+                            id="inputEmail3"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="row mb-3">
+                        <label for="inputEmail3" class="col-lg-4 col-form-label"
+                          >Приказ о восстановлении</label
+                        >
+                        <div class="col-lg-4">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="inputEmail3"
+                          />
+                        </div>
+                        <div class="col-lg-4">
+                          <input
+                            type="date"
+                            class="form-control"
+                            id="inputEmail3"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="row mb-3">
+                        <label for="inputEmail3" class="col-lg-4 col-form-label"
+                          >Приказ о предоставлении отпуска</label
+                        >
+                        <div class="col-lg-4">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="inputEmail3"
+                          />
+                        </div>
+                        <div class="col-lg-4">
+                          <input
+                            type="date"
+                            class="form-control"
+                            id="inputEmail3"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-2">
@@ -711,6 +1020,9 @@
                   >
                   <a class="p-1 rounded" href="#simple-list-parents-data"
                     >Данные о родителях</a
+                  >
+                  <a class="p-1 rounded" href="#simple-list-orders-data"
+                    >Приказы</a
                   >
                 </div>
               </div>
@@ -772,7 +1084,7 @@ export default {
       isError: false,
       currentStudentData: {
         is_active: "",
-        category: null,
+        category: "",
         last_name_rus: "",
         first_name_rus: "",
         patronymic_rus: "",
@@ -817,6 +1129,11 @@ export default {
         graduation_reason_article: "",
         graduation_extra_data: "",
         component_organ: "",
+        student_record_book_number: "",
+        education_form: "",
+        contract_number: "",
+        year: "",
+        year_litera: "",
       },
       passportIssueAuthorityList: {
         count: "",
@@ -875,6 +1192,19 @@ export default {
     orderedGraduationReasons() {
       return []
     },
+    orderedEducationForms() {
+      return this.educationForms.results
+    },
+    orderedCategories() {
+      return this.categories.results.filter(
+        (category) => category.category_group == "3",
+      )
+    },
+    orderedSubdivisions() {
+      return this.subdivisions.results.filter(
+        (subdivision) => subdivision.subdivision_category == "3",
+      )
+    },
 
     getStudentStatus() {
       if (dayjs().isBefore(dayjs(this.currentStudentData.academy_end_date))) {
@@ -886,6 +1216,9 @@ export default {
     ...mapGetters({
       groups: "common/getGroups",
       ranks: "common/getRanks",
+      educationForms: "common/getEducationForms",
+      categories: "common/getCadetCategories",
+      subdivisions: "common/getSubdivisions",
     }),
   },
   watch: {
