@@ -24,6 +24,22 @@ import {
   StudentUpdateView,
 } from "@/components/student"
 
+import {
+  DictionaryMainView,
+  GroupListView,
+  RankListView,
+  EncouragementKindListView,
+  PunishmentKindListView,
+  SubdivisionNameListView,
+  PositionNameListView,
+  MilitaryOfficeListView,
+  GOROVDListView,
+  ComponentOrganView,
+  RewardListView,
+  SpecialityListView,
+  SpecializationListView,
+} from "@/components/dictionaries"
+
 import NavigationPage from "@/components/NavigationPage.vue"
 
 import {
@@ -158,6 +174,73 @@ const routes = [
         path: ":id/update",
         component: StudentUpdateView,
         name: "student-update",
+      },
+    ],
+  },
+  {
+    path: "/dictionaries",
+    name: "dictionaries-main",
+    component: DictionaryMainView,
+    children: [
+      {
+        path: "groups",
+        component: GroupListView,
+        name: "dictionaries-groups",
+      },
+      {
+        path: "ranks",
+        component: RankListView,
+        name: "dictionaries-ranks",
+      },
+      {
+        path: "encouragements",
+        component: EncouragementKindListView,
+        name: "dictionaries-encouragements",
+      },
+      {
+        path: "punishments",
+        component: PunishmentKindListView,
+        name: "dictionaries-punishments",
+      },
+      {
+        path: "subdivisions",
+        component: SubdivisionNameListView,
+        name: "dictionaries-subdivisions",
+      },
+      {
+        path: "positions",
+        component: PositionNameListView,
+        name: "dictionaries-positions",
+      },
+      {
+        path: "militaryoffices",
+        component: MilitaryOfficeListView,
+        name: "dictionaries-militaryoffices",
+      },
+      {
+        path: "go-rovd",
+        component: GOROVDListView,
+        name: "dictionaries-go-rovd",
+      },
+      {
+        path: "component-organs",
+        component: ComponentOrganView,
+        name: "dictionaries-component-organ",
+      },
+      {
+        path: "rewards",
+        component: RewardListView,
+        name: "dictionaries-rewards",
+      },
+      {
+        path: "specialities",
+        component: SpecialityListView,
+        name: "dictionaries-speciality",
+      },
+      {
+        path: "specializations",
+        component: SpecializationListView,
+        name: "dictionaries-specializations",
       },
     ],
   },

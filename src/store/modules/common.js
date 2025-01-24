@@ -15,6 +15,8 @@ import getForeignLanguageAPIInstance from "@/api/cadet/foreignLanguageAPI"
 import getMilitaryOfficeAPIInstance from "@/api/cadet/militaryOfficeAPI"
 import getGraduationReasonAPIInstance from "@/api/cadet/graduationReasonAPI"
 import getEducationFormAPIInstance from "@/api/student/educationFormAPI"
+import getEncouragementKindAPIInstance from "@/api/cadet/encouragementKindAPI"
+import getPunishmentKindAPIInstance from "@/api/cadet/punishmentKindAPI"
 
 const limit = 1000
 
@@ -35,6 +37,8 @@ const foreignLanguageAPIInstance = getForeignLanguageAPIInstance()
 const militaryOfficeAPIInstance = getMilitaryOfficeAPIInstance()
 const graduationReasonAPIInstance = getGraduationReasonAPIInstance()
 const educationFormAPIInstance = getEducationFormAPIInstance()
+const encouragementKindAPIInstance = getEncouragementKindAPIInstance()
+const punishmentKindAPIInstance = getPunishmentKindAPIInstance()
 
 groupAPIInstance.searchObj.limit = limit
 rankAPIInstance.searchObj.limit = limit
@@ -53,6 +57,7 @@ foreignLanguageAPIInstance.limit = limit
 militaryOfficeAPIInstance.limit = limit
 graduationReasonAPIInstance.limit = limit
 educationFormAPIInstance.limit = limit
+encouragementKindAPIInstance.limit = limit
 
 const state = () => ({
   groups: { count: "", results: [], previous: null, next: null },
@@ -76,6 +81,8 @@ const state = () => ({
   militaryOffices: { count: "", results: [], previous: null, next: null },
   graduationReasons: { count: "", results: [], previous: null, next: null },
   educationForms: { count: "", results: [], previous: null, next: null },
+  encouragementKinds: { count: "", results: [], previous: null, next: null },
+  punishmentKinds: { count: "", results: [], previous: null, next: null },
 })
 
 const getters = {
@@ -126,6 +133,12 @@ const getters = {
   },
   getEducationForms(state) {
     return state.educationForms
+  },
+  getEncouragementKinds(state) {
+    return state.encouragementKinds
+  },
+  getPunishmentKinds(state) {
+    return state.punishmentKinds
   },
 }
 
@@ -198,6 +211,14 @@ const actions = {
       const responseEducationForms =
         await educationFormAPIInstance.getItemsList("token is here!!!")
       commit("setEducationForms", await responseEducationForms.data)
+
+      const responseEncouragements =
+        await encouragementKindAPIInstance.getItemsList("token is here!!!")
+      commit("setEncouragementKinds", await responseEncouragements.data)
+
+      const responsePunishments =
+        await punishmentKindAPIInstance.getItemsList("token is here!!!")
+      commit("setPunishmentKinds", await responsePunishments.data)
     } catch (error) {
       console.log(error)
     }
@@ -252,6 +273,12 @@ const mutations = {
   },
   setEducationForms(state, payload) {
     state.educationForms = payload
+  },
+  setEncouragementKinds(state, payload) {
+    state.encouragementKinds = payload
+  },
+  setPunishmentKinds(state, payload) {
+    state.punishmentKinds = payload
   },
 }
 

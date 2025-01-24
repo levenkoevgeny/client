@@ -66,6 +66,28 @@
           </router-link>
         </div>
       </div>
+
+      <div class="card me-4 mb-4" style="width: 24rem">
+        <div class="card-body">
+          <h5 class="card-title">Словари</h5>
+          <p class="card-text">Наполнение выпадающих меню</p>
+          <router-link
+            class="btn btn-primary"
+            :to="{ name: 'dictionaries-main' }"
+          >
+            Перейти
+          </router-link>
+        </div>
+      </div>
+      <div class="card me-4 mb-4" style="width: 24rem">
+        <div class="card-body">
+          <h5 class="card-title">Пользователи</h5>
+          <p class="card-text">Администрирование пользователей</p>
+          <router-link class="btn btn-primary" :to="{ name: 'entrance' }">
+            Перейти
+          </router-link>
+        </div>
+      </div>
     </div>
   </div>
 </template>

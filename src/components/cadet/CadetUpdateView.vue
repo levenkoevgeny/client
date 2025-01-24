@@ -53,7 +53,7 @@
                       </div>
                     </div>
                     <div class="col-lg-8">
-                      <p>{{ getCadetStatus }}</p>
+                      <h1>статус - {{ getCadetStatus }}</h1>
                       <div class="d-flex flex-row">
                         <h3 class="me-3" v-if="currentCadetData.get_age">
                           Возраст - {{ currentCadetData.get_age }} лет
@@ -65,6 +65,44 @@
                         </h3>
                       </div>
 
+                      <div
+                        class="row d-flex justify-content-start align-items-center"
+                      >
+                        <div class="col-lg-4">
+                          <div class="mb-3">
+                            <div class="form-check">
+                              <input
+                                class="form-check-input"
+                                type="checkbox"
+                                v-model="currentCadetData.is_active"
+                                id="id_is_active"
+                              />
+                              <label
+                                class="form-check-label"
+                                for="id_is_active"
+                              >
+                                Запись активна
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-4">
+                          <div class="mb-3">
+                            <label class="form-label" for="id_id"
+                              >Номер в базе</label
+                            >
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="last_name_rus"
+                              maxlength="30"
+                              required
+                              id="id_id"
+                              v-model="currentCadetData.id"
+                            />
+                          </div>
+                        </div>
+                      </div>
                       <div class="row">
                         <div class="col-lg-4">
                           <div class="mb-3">
@@ -624,20 +662,6 @@
                           v-model="
                             currentCadetData.removed_from_military_registration
                           "
-                        />
-                      </div>
-                    </div>
-                    <div class="col-4">
-                      <div class="mb-3">
-                        <label class="form-label" for="id_category"
-                          >Отношение военного комиссариата</label
-                        >
-                        <textarea
-                          class="form-control"
-                          v-model="
-                            currentCadetData.military_commissariat_attitude
-                          "
-                          rows="1"
                         />
                       </div>
                     </div>
@@ -1322,7 +1346,9 @@ export default {
       return this.cadetCategoryList.results
     },
     orderedSubdivisions() {
-      return this.subdivisions.results.filter(subdivision => subdivision.subdivision_category == "1")
+      return this.subdivisions.results.filter(
+        (subdivision) => subdivision.subdivision_category == "1",
+      )
     },
     orderedGroups() {
       return this.groups.results
