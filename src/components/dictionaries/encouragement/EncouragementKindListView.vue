@@ -27,12 +27,18 @@
                 aria-label="Close"
               ></button>
             </div>
-            <form @submit.prevent="">
+            <form @submit.prevent="addNewItem">
               <div class="modal-body">
                 <div class="mb-3">
                   <label for="id_encouragement_kind" class="form-label"
                     >Вид поощрения</label
                   >
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="itemForm.encouragement_kind"
+                    required
+                  />
                 </div>
               </div>
               <div class="modal-footer">
@@ -52,78 +58,58 @@
           </div>
         </div>
       </div>
-
-      <!-- update modal-->
-      <!--      <div-->
-      <!--        class="modal fade"-->
-      <!--        id="mainItemUpdateModal"-->
-      <!--        tabindex="-1"-->
-      <!--        aria-labelledby="exampleModalLabel"-->
-      <!--        aria-hidden="true"-->
-      <!--        ref="mainItemUpdateModal"-->
-      <!--      >-->
-      <!--        <div class="modal-dialog modal-dialog-centered">-->
-      <!--          <div class="modal-content">-->
-      <!--            <div class="modal-header">-->
-      <!--              <h1 class="modal-title fs-5" id="exampleModalLabel">-->
-      <!--                Редактирование записи-->
-      <!--              </h1>-->
-      <!--              <button-->
-      <!--                type="button"-->
-      <!--                class="btn-close"-->
-      <!--                data-bs-dismiss="modal"-->
-      <!--                aria-label="Close"-->
-      <!--              ></button>-->
-      <!--            </div>-->
-
-      <!--            <form @submit.prevent="updateMainItemInList">-->
-      <!--              <div class="modal-body">-->
-      <!--                <div class="mb-3">-->
-      <!--                  <label for="id_encouragement_kind" class="form-label"-->
-      <!--                    >Курсант</label-->
-      <!--                  >-->
-      <!--                  <v-select-->
-      <!--                    v-model="selectedCadet"-->
-      <!--                    :options="orderedCadets"-->
-      <!--                    label="get_full_name"-->
-      <!--                    :filterable="false"-->
-      <!--                    @search="onSearch"-->
-      <!--                  >-->
-      <!--                    <template slot="no-options"> Поиск по фамилии...</template>-->
-      <!--                    <template slot="option" slot-scope="option">-->
-      <!--                      <div class="d-center">-->
-      <!--                        {{ option }}-->
-      <!--                      </div>-->
-      <!--                    </template>-->
-      <!--                    <template slot="selected-option" slot-scope="option">-->
-      <!--                      <div class="selected d-center">-->
-      <!--                        {{ option }}-->
-      <!--                      </div>-->
-      <!--                    </template>-->
-      <!--                  </v-select>-->
-      <!--                </div>-->
-
-      <!--                <EncouragementModalForCadetUpdate-->
-      <!--                  :main-data="itemForm"-->
-      <!--                  :encouragement-kind-list="orderedEncouragementKinds"-->
-      <!--                  :order-owners="orderedOrderOwners"-->
-      <!--                />-->
-      <!--              </div>-->
-      <!--              <div class="modal-footer">-->
-      <!--                <button-->
-      <!--                  type="button"-->
-      <!--                  class="btn btn-secondary"-->
-      <!--                  data-bs-dismiss="modal"-->
-      <!--                  ref="mainItemUpdateModalCloseButton"-->
-      <!--                >-->
-      <!--                  Закрыть-->
-      <!--                </button>-->
-      <!--                <button type="submit" class="btn btn-primary">Сохранить</button>-->
-      <!--              </div>-->
-      <!--            </form>-->
-      <!--          </div>-->
-      <!--        </div>-->
-      <!--      </div>-->
+      <div
+        class="modal fade"
+        id="mainItemUpdateModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+        ref="mainItemUpdateModal"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Редактирование записи
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <form @submit.prevent="updateMainItemInList">
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="id_encouragement_kind" class="form-label"
+                    >Вид поощрения</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="selectedItem.encouragement_kind"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                  ref="mainItemUpdateModalCloseButton"
+                >
+                  Закрыть
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  Добавить запись
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
 
       <!-- delete approve modal-->
 
@@ -351,19 +337,12 @@ import getEncouragementKindAPIInstance from "@/api/cadet/encouragementKindAPI"
 import { mapGetters } from "vuex"
 import BaseListLayout from "@/components/layouts/BaseListLayout.vue"
 import {
-  getLoadListFunction,
   showAddNewMainItemModal,
-  showUpdateMainItemModalInList,
   showDeleteApproveModal,
   showDeleteApproveMultipleModal,
-  updatePaginator,
   checkAllHandler,
   checkedForDeleteCount,
-  deleteItemHandler,
-  deleteCheckedItemsHandler,
   clearFormData,
-  addNewMainItemInList,
-  updateMainItemInList,
 } from "../../../../utils"
 import { debounce } from "lodash/function"
 
@@ -382,6 +361,11 @@ export default {
         {},
         getEncouragementKindAPIInstance().searchObj,
       ),
+      selectedItem: Object.assign(
+        {},
+        getEncouragementKindAPIInstance().formData,
+      ),
+      deleteItemId: "",
     }
   },
   methods: {
@@ -395,19 +379,79 @@ export default {
     checkAllHandler,
     showAddNewMainItemModal,
     clearFormData,
+    showDeleteApproveModal,
+    showDeleteApproveMultipleModal,
     debouncedSearch: debounce(async function () {
-      this.isLoading = true
-      this.mainItemAPIInstance.searchObj = Object.assign({}, this.searchForm)
       try {
-        const encouragementResponse =
-          await this.mainItemAPIInstance.getItemsList("token is here!!!")
-        this.mainItemList = await encouragementResponse.data
+        await this.$store.dispatch(
+          "encouragementKinds/actionGetList",
+          this.searchForm,
+        )
       } catch (e) {
         this.isError = true
       } finally {
         this.isLoading = false
       }
     }, 500),
+    async addNewItem() {
+      try {
+        await this.$store.dispatch("encouragementKinds/actionAddNewItem", {
+          ...this.itemForm,
+        })
+      } catch (error) {
+      } finally {
+        this.clearFormData()
+        this.$refs.mainItemAddModalCloseButton.click()
+      }
+    },
+    async showUpdateMainItemModalInList(id) {
+      try {
+        const response = await this.mainItemAPIInstance.getItemData(
+          "token is here!!!",
+          id,
+        )
+        this.selectedItem = await response.data
+        let updateModal = this.$refs.mainItemUpdateModal
+        let myModal = new bootstrap.Modal(updateModal, {
+          keyboard: false,
+        })
+        myModal.show()
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async updateMainItemInList() {
+      try {
+        await this.$store.dispatch("encouragementKinds/actionUpdateItem", {
+          ...this.selectedItem,
+        })
+      } catch (error) {
+      } finally {
+        this.$refs.mainItemUpdateModalCloseButton.click()
+      }
+    },
+    async deleteItemHandler() {
+      try {
+        await this.$store.dispatch(
+          "encouragementKinds/actionDeleteItem",
+          this.deleteItemId,
+        )
+      } catch (error) {
+      } finally {
+        this.$refs.deleteApproveModalCloseButton.click()
+      }
+    },
+    async deleteCheckedItemsHandler() {
+      this.mainItemList.results.map(async (item) => {
+        if (item.isSelected) {
+          await this.$store.dispatch(
+            "encouragementKinds/actionDeleteItem",
+            item.id,
+          )
+        }
+      })
+      this.$refs.deleteApproveModalMultipleCloseButton.click()
+    },
     clearFilter() {
       this.searchForm = Object.assign(
         {},
@@ -421,7 +465,7 @@ export default {
       return this.mainItemList.results
     },
     ...mapGetters({
-      mainItemList: "common/getEncouragementKinds",
+      mainItemList: "encouragementKinds/getList",
     }),
   },
   watch: {
