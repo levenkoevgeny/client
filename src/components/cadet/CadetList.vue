@@ -486,12 +486,12 @@ export default {
       )
     },
     ...mapGetters({
-      groups: "common/getGroups",
-      ranks: "common/getRanks",
-      subdivisions: "common/getSubdivisions",
-      specialities: "common/getSpecialities",
-      positions: "common/getPositions",
-      categories: "common/getCadetCategories",
+      groups: "groups/getList",
+      ranks: "ranks/getList",
+      subdivisions: "subdivisions/getList",
+      specialities: "specialities/getList",
+      positions: "positions/getList",
+      categories: "personCategories/getList",
     }),
   },
   watch: {

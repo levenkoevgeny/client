@@ -698,12 +698,12 @@ export default {
       return this.passportIssueAuthorityList.results
     },
     ...mapGetters({
-      groups: "common/getGroups",
-      ranks: "common/getRanks",
-      subdivisions: "common/getSubdivisions",
-      specialities: "common/getSpecialities",
-      positions: "common/getPositions",
-      orderOwners: "common/getOrderOwners",
+      groups: "groups/getList",
+      ranks: "ranks/getList",
+      subdivisions: "subdivisions/getList",
+      specialities: "specialities/getList",
+      positions: "positions/getList",
+      orderOwners: "orderOwners/getList",
     }),
   },
 }

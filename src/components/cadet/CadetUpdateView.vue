@@ -1376,12 +1376,12 @@ export default {
         статья - ${this.currentCadetData.graduation_reason_article || "Нет данных"}`
     },
     ...mapGetters({
-      groups: "common/getGroups",
-      ranks: "common/getRanks",
-      subdivisions: "common/getSubdivisions",
-      specialities: "common/getSpecialities",
-      positions: "common/getPositions",
-      orderOwners: "common/getOrderOwners",
+      groups: "groups/getList",
+      ranks: "ranks/getList",
+      subdivisions: "subdivisions/getList",
+      specialities: "specialities/getList",
+      positions: "positions/getList",
+      orderOwners: "orderOwners/getList",
     }),
   },
   watch: {

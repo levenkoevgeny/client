@@ -1214,11 +1214,11 @@ export default {
         статья - ${this.currentStudentData.graduation_reason_article || "Нет данных"}`
     },
     ...mapGetters({
-      groups: "common/getGroups",
-      ranks: "common/getRanks",
-      educationForms: "common/getEducationForms",
-      categories: "common/getCadetCategories",
-      subdivisions: "common/getSubdivisions",
+      groups: "groups/getList",
+      ranks: "ranks/getList",
+      educationForms: "educationForms/getList",
+      categories: "personCategories/getList",
+      subdivisions: "subdivisions/getList",
     }),
   },
   watch: {

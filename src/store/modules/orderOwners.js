@@ -1,4 +1,5 @@
-import getEncouragementKindAPIInstance from "@/api/cadet/encouragementKindAPI"
+import getOrderOwnerAPIInstance from "@/api/cadet/orderOwnerAPI"
+
 import {
   baseState,
   baseGetters,
@@ -9,7 +10,7 @@ import {
   getActionDeleteItem,
 } from "@/store/baseSlice"
 
-const mainAPIInstance = getEncouragementKindAPIInstance()
+const mainAPIInstance = getOrderOwnerAPIInstance()
 
 const state = baseState
 

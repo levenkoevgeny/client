@@ -393,9 +393,9 @@ export default {
       return this.ranks.results
     },
     ...mapGetters({
-      groups: "common/getGroups",
-      ranks: "common/getRanks",
-      positions: "common/getPositions",
+      groups: "groups/getList",
+      ranks: "ranks/getList",
+      positions: "positions/getList",
     }),
   },
   watch: {

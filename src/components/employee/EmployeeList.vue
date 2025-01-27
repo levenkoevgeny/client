@@ -257,7 +257,7 @@ export default {
       )
     },
     ...mapGetters({
-      subdivisions: "common/getSubdivisions",
+      subdivisions: "subdivisions/getList",
     }),
   },
   watch: {

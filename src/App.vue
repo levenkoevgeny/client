@@ -6,7 +6,6 @@
 export default {
   async created() {
     await this.$store.dispatch("common/actionGetCommonLists", {})
-    await this.$store.dispatch("encouragementKinds/actionGetList", {})
   },
 }
 </script>

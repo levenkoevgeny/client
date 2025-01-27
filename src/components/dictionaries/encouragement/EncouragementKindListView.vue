@@ -311,7 +311,7 @@
 
     <template v-slot:search-form>
       <div class="row">
-        <div class="col-6">
+        <div class="col-12">
           <div class="mb-3">
             <label for="encouragement_date__gte" class="form-label"
               >Вид поощрения</label
