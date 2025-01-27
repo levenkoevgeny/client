@@ -3,9 +3,9 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-8">
-        <h5 class="card-title my-4">
+        <h2>
           {{ title }}
-        </h5>
+        </h2>
         <div class="d-flex align-items-center justify-content-end m-4">
           <slot name="add-button">
             <button class="btn btn-warning" :disabled="isLoading" type="button">

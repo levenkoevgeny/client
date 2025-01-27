@@ -762,7 +762,7 @@ export default {
       return this.orderOwners.results
     },
     ...mapGetters({
-      orderOwners: "common/getOrderOwners",
+      orderOwners: "orderOwners/getList",
     }),
   },
   watch: {

@@ -102,9 +102,7 @@
                 >
                   Закрыть
                 </button>
-                <button type="submit" class="btn btn-primary">
-                  Добавить запись
-                </button>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
               </div>
             </form>
           </div>

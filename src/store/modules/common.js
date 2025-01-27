@@ -4,6 +4,7 @@ const actions = {
   async actionGetCommonLists({ dispatch, commit }, payload) {
     try {
       await dispatch("encouragementKinds/actionGetList", null, { root: true })
+      await dispatch("punishmentKinds/actionGetList", null, { root: true })
       await dispatch("ranks/actionGetList", null, { root: true })
       await dispatch("groups/actionGetList", null, { root: true })
       await dispatch("subdivisions/actionGetList", null, { root: true })
@@ -18,6 +19,7 @@ const actions = {
       await dispatch("militaryOffices/actionGetList", null, { root: true })
       await dispatch("graduationReasons/actionGetList", null, { root: true })
       await dispatch("educationForms/actionGetList", null, { root: true })
+      await dispatch("rankGroups/actionGetList", null, { root: true })
     } catch (error) {
       console.log(error)
     }

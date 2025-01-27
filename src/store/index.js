@@ -2,6 +2,7 @@ import { createStore } from "vuex"
 import common from "@/store/modules/common"
 import encouragementKinds from "@/store/modules/encouragementKinds"
 import ranks from "@/store/modules/ranks"
+import rankGroups from "@/store/modules/rankGroups"
 import groups from "@/store/modules/groups"
 import subdivisions from "@/store/modules/subdivisions"
 import positions from "@/store/modules/positions"
@@ -17,12 +18,14 @@ import foreignLanguages from "@/store/modules/foreignLanguages"
 import militaryOffices from "@/store/modules/militaryOffices"
 import graduationReasons from "@/store/modules/graduationReasons"
 import educationForms from "@/store/modules/educationForms"
+import punishmentKinds from "@/store/modules/punishmentKinds"
 
 const store = createStore({
   modules: {
     common,
     encouragementKinds,
     ranks,
+    rankGroups,
     groups,
     subdivisions,
     positions,
@@ -38,6 +41,7 @@ const store = createStore({
     militaryOffices,
     graduationReasons,
     educationForms,
+    punishmentKinds,
   },
 })
 
