@@ -2,7 +2,7 @@
   <base-list-layout
     :is-loading="isLoading"
     :main-list-length="mainItemList.count"
-    title="Должности"
+    title="Подразделения"
   >
     <template v-slot:modals>
       <!-- add modal-->
@@ -31,24 +31,47 @@
               <div class="modal-body">
                 <div class="mb-3">
                   <label for="id_subdivision_name" class="form-label"
-                    >Должность</label
+                    >Наименование (рус.)</label
                   >
                   <input
                     id="id_subdivision_name"
                     type="text"
                     class="form-control"
-                    v-model="itemForm.position"
+                    v-model="itemForm.subdivision_name"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="id_subdivision_name_bel" class="form-label"
+                    >Наименование (бел.)</label
+                  >
+                  <input
+                    id="id_subdivision_name_bel"
+                    type="text"
+                    class="form-control"
+                    v-model="itemForm.subdivision_name_bel"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="id_subdivision_short_name" class="form-label"
+                    >Наименование (короткое)</label
+                  >
+                  <input
+                    id="id_subdivision_short_name"
+                    type="text"
+                    class="form-control"
+                    v-model="itemForm.subdivision_short_name"
                     required
                   />
                 </div>
                 <div class="mb-3">
                   <label for="id_subdivision_category" class="form-label"
-                    >Категория должности</label
+                    >Категория подразделения</label
                   >
                   <select
-                    id="id_subdivision_category"
+                    id="subdivision_category"
                     class="form-select"
-                    v-model="itemForm.position_category"
+                    v-model="itemForm.subdivision_category"
                     required
                   >
                     <option value="">-----</option>
@@ -103,26 +126,52 @@
             <form @submit.prevent="updateMainItemInList">
               <div class="modal-body">
                 <div class="mb-3">
-                  <label for="id_position" class="form-label">Должность</label>
+                  <label for="id_subdivision_name" class="form-label"
+                    >Наименование (рус.)</label
+                  >
                   <input
-                    id="id_position"
+                    id="id_subdivision_name"
                     type="text"
                     class="form-control"
-                    v-model="selectedItem.position"
+                    v-model="selectedItem.subdivision_name"
                     required
                   />
                 </div>
                 <div class="mb-3">
-                  <label for="id_position_category_update" class="form-label"
-                    >Категория должности</label
+                  <label for="id_subdivision_name_bel" class="form-label"
+                    >Наименование (бел.)</label
+                  >
+                  <input
+                    id="id_subdivision_name_bel"
+                    type="text"
+                    class="form-control"
+                    v-model="selectedItem.subdivision_name_bel"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="id_subdivision_short_name" class="form-label"
+                    >Наименование (короткое)</label
+                  >
+                  <input
+                    id="id_subdivision_short_name"
+                    type="text"
+                    class="form-control"
+                    v-model="selectedItem.subdivision_short_name"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="id_subdivision_category" class="form-label"
+                    >Категория подразделения</label
                   >
                   <select
-                    id="id_position_category_update"
+                    id="subdivision_category"
                     class="form-select"
-                    v-model="selectedItem.position_category"
+                    v-model="selectedItem.subdivision_category"
                     required
                   >
                     <option value="">-----</option>
+
                     <option
                       :value="category.id"
                       :key="category.id"
@@ -133,6 +182,7 @@
                   </select>
                 </div>
               </div>
+
               <div class="modal-footer">
                 <button
                   type="button"
@@ -275,7 +325,9 @@
             />
           </div>
         </th>
-        <th>Должность</th>
+        <th>Наименование (рус.)</th>
+        <th>Наименование (бел.)</th>
+        <th>Наименование (короткое)</th>
         <th>Категория</th>
         <th>Дата добавления записи</th>
         <th>Дата последнего редактирования записи</th>
@@ -284,9 +336,9 @@
     </template>
     <template v-slot:tbody>
       <tr
-        v-for="position in orderedMainList"
-        :key="position.id"
-        @dblclick.stop="showUpdateMainItemModalInList(position.id)"
+        v-for="subdivision in orderedMainList"
+        :key="subdivision.id"
+        @dblclick.stop="showUpdateMainItemModalInList(subdivision.id)"
       >
         <td>
           <div
@@ -295,16 +347,17 @@
             <input
               type="checkbox"
               class="form-check-input my-0"
-              v-model="position.isSelected"
+              v-model="subdivision.isSelected"
             />
           </div>
         </td>
-        <td>{{ position.position }}</td>
-        <td>{{ position.get_category }}</td>
-
+        <td>{{ subdivision.subdivision_name }}</td>
+        <td>{{ subdivision.subdivision_name_bel }}</td>
+        <td>{{ subdivision.subdivision_short_name }}</td>
+        <td>{{ subdivision.get_category }}</td>
         <td>
           {{
-            new Date(position.date_time_created).toLocaleString("ru-RU", {
+            new Date(subdivision.date_time_created).toLocaleString("ru-RU", {
               day: "numeric",
               month: "long",
               year: "numeric",
@@ -316,7 +369,7 @@
         </td>
         <td>
           {{
-            new Date(position.date_time_updated).toLocaleString("ru-RU", {
+            new Date(subdivision.date_time_updated).toLocaleString("ru-RU", {
               day: "numeric",
               month: "long",
               year: "numeric",
@@ -331,7 +384,7 @@
             <button
               type="button"
               class="btn btn-outline-danger"
-              @click="trashButtonClick(position.id)"
+              @click="trashButtonClick(subdivision.id)"
               style="padding: 0.25rem 0.5rem"
             >
               <font-awesome-icon :icon="['fas', 'trash']" />
@@ -344,14 +397,14 @@
       <div class="row">
         <div class="col-12">
           <div class="mb-3">
-            <label for="position__icontains" class="form-label"
-              >Должность</label
+            <label for="subdivision_name__icontains" class="form-label"
+              >Название подразделения</label
             >
             <input
               type="text"
               class="form-control"
-              id="position__icontains"
-              v-model="searchForm.position__icontains"
+              id="subdivision_name__icontains"
+              v-model="searchForm.subdivision_name__icontains"
             />
           </div>
         </div>
@@ -364,9 +417,9 @@
             >
             <select
               name=""
-              id="position_category"
+              id="subdivision_category"
               class="form-select"
-              v-model="searchForm.position_category"
+              v-model="searchForm.subdivision_category"
             >
               <option value="">-----</option>
               <option
@@ -388,7 +441,7 @@
 </template>
 
 <script>
-import getPositionAPIInstance from "@/api/cadet/positionAPI"
+import getSubdivisionAPIInstance from "@/api/cadet/subdivisionAPI"
 import { mapGetters } from "vuex"
 import BaseListLayout from "@/components/layouts/BaseListLayout.vue"
 import {
@@ -403,7 +456,7 @@ import {
 import { debounce } from "lodash/function"
 
 export default {
-  name: "PositionNameListView",
+  name: "SubdivisionListView",
   components: {
     BaseListLayout,
   },
@@ -411,10 +464,10 @@ export default {
     return {
       isLoading: false,
       isError: false,
-      mainItemAPIInstance: getPositionAPIInstance(),
-      itemForm: Object.assign({}, getPositionAPIInstance().formData),
-      searchForm: Object.assign({}, getPositionAPIInstance().searchObj),
-      selectedItem: Object.assign({}, getPositionAPIInstance().formData),
+      mainItemAPIInstance: getSubdivisionAPIInstance(),
+      itemForm: Object.assign({}, getSubdivisionAPIInstance().formData),
+      searchForm: Object.assign({}, getSubdivisionAPIInstance().searchObj),
+      selectedItem: Object.assign({}, getSubdivisionAPIInstance().formData),
       deleteItemId: "",
       category_choices: SUBDIVISION_CATEGORY_CHOICES,
     }
@@ -434,7 +487,10 @@ export default {
     showDeleteApproveMultipleModal,
     debouncedSearch: debounce(async function () {
       try {
-        await this.$store.dispatch("positions/actionGetList", this.searchForm)
+        await this.$store.dispatch(
+          "subdivisions/actionGetList",
+          this.searchForm,
+        )
       } catch (e) {
         this.isError = true
       } finally {
@@ -443,7 +499,7 @@ export default {
     }, 500),
     async addNewItem() {
       try {
-        await this.$store.dispatch("positions/actionAddNewItem", {
+        await this.$store.dispatch("subdivisions/actionAddNewItem", {
           ...this.itemForm,
         })
       } catch (error) {
@@ -470,7 +526,7 @@ export default {
     },
     async updateMainItemInList() {
       try {
-        await this.$store.dispatch("positions/actionUpdateItem", {
+        await this.$store.dispatch("subdivisions/actionUpdateItem", {
           ...this.selectedItem,
         })
       } catch (error) {
@@ -481,7 +537,7 @@ export default {
     async deleteItemHandler() {
       try {
         await this.$store.dispatch(
-          "positions/actionDeleteItem",
+          "subdivisions/actionDeleteItem",
           this.deleteItemId,
         )
       } catch (error) {
@@ -492,7 +548,7 @@ export default {
     async deleteCheckedItemsHandler() {
       this.mainItemList.results.map(async (item) => {
         if (item.isSelected) {
-          await this.$store.dispatch("positions/actionDeleteItem", item.id)
+          await this.$store.dispatch("subdivisions/actionDeleteItem", item.id)
         }
       })
       this.$refs.deleteApproveModalMultipleCloseButton.click()
@@ -510,7 +566,7 @@ export default {
       return this.mainItemList.results
     },
     ...mapGetters({
-      mainItemList: "positions/getList",
+      mainItemList: "subdivisions/getList",
     }),
   },
   watch: {

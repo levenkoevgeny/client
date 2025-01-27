@@ -30,7 +30,7 @@ import {
   RankListView,
   EncouragementKindListView,
   PunishmentKindListView,
-  SubdivisionNameListView,
+  SubdivisionListView,
   PositionNameListView,
   MilitaryOfficeListView,
   GOROVDListView,
@@ -204,7 +204,7 @@ const routes = [
       },
       {
         path: "subdivisions",
-        component: SubdivisionNameListView,
+        component: SubdivisionListView,
         name: "dictionaries-subdivisions",
       },
       {

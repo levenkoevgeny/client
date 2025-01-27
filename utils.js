@@ -251,3 +251,12 @@ export async function updateMainItemInList() {
     this.isLoading = false
   }
 }
+
+export const SUBDIVISION_CATEGORY_CHOICES = [
+  { id: "1", category: "Курсанты" },
+  { id: "2", category: "Сотрудники" },
+  {
+    id: "3",
+    category: "Студенты",
+  },
+]
