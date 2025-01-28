@@ -2,7 +2,7 @@
   <base-list-layout
     :is-loading="isLoading"
     :main-list-length="mainItemList.count"
-    title="ГО-РОВД"
+    title="Чей приказ"
   >
     <template v-slot:modals>
       <!-- add modal-->
@@ -30,14 +30,14 @@
             <form @submit.prevent="addNewItem">
               <div class="modal-body">
                 <div class="mb-3">
-                  <label for="id_military_office" class="form-label"
-                    >ГО-РОВД</label
+                  <label for="id_order_owner" class="form-label"
+                    >Чей приказ</label
                   >
                   <input
-                    id="id_military_office"
+                    id="id_order_owner"
                     type="text"
                     class="form-control"
-                    v-model="itemForm.go_rovd_name"
+                    v-model="itemForm.order_owner"
                     required
                   />
                 </div>
@@ -83,14 +83,14 @@
             <form @submit.prevent="updateMainItemInList">
               <div class="modal-body">
                 <div class="mb-3">
-                  <label for="id_military_office" class="form-label"
-                    >ГО-РОВД</label
+                  <label for="id_order_owner" class="form-label"
+                    >Чей приказ</label
                   >
                   <input
-                    id="id_military_office"
+                    id="id_order_owner"
                     type="text"
                     class="form-control"
-                    v-model="selectedItem.go_rovd_name"
+                    v-model="selectedItem.order_owner"
                     required
                   />
                 </div>
@@ -237,7 +237,7 @@
             />
           </div>
         </th>
-        <th>ГО-РОВД</th>
+        <th>Чей приказ</th>
         <th>Дата добавления записи</th>
         <th>Дата последнего редактирования записи</th>
         <th></th>
@@ -245,9 +245,9 @@
     </template>
     <template v-slot:tbody>
       <tr
-        v-for="gorovd in orderedMainList"
-        :key="gorovd.id"
-        @dblclick.stop="showUpdateMainItemModalInList(gorovd.id)"
+        v-for="orderOwner in orderedMainList"
+        :key="orderOwner.id"
+        @dblclick.stop="showUpdateMainItemModalInList(orderOwner.id)"
       >
         <td>
           <div
@@ -256,15 +256,14 @@
             <input
               type="checkbox"
               class="form-check-input my-0"
-              v-model="gorovd.isSelected"
+              v-model="orderOwner.isSelected"
             />
           </div>
         </td>
-        <td>{{ gorovd.go_rovd_name }}</td>
-
+        <td>{{ orderOwner.order_owner }}</td>
         <td>
           {{
-            new Date(gorovd.date_time_created).toLocaleString("ru-RU", {
+            new Date(orderOwner.date_time_created).toLocaleString("ru-RU", {
               day: "numeric",
               month: "long",
               year: "numeric",
@@ -276,7 +275,7 @@
         </td>
         <td>
           {{
-            new Date(gorovd.date_time_updated).toLocaleString("ru-RU", {
+            new Date(orderOwner.date_time_updated).toLocaleString("ru-RU", {
               day: "numeric",
               month: "long",
               year: "numeric",
@@ -291,7 +290,7 @@
             <button
               type="button"
               class="btn btn-outline-danger"
-              @click="trashButtonClick(gorovd.id)"
+              @click="trashButtonClick(orderOwner.id)"
               style="padding: 0.25rem 0.5rem"
             >
               <font-awesome-icon :icon="['fas', 'trash']" />
@@ -304,14 +303,14 @@
       <div class="row">
         <div class="col-12">
           <div class="mb-3">
-            <label for="go_rovd_name__icontains" class="form-label"
-              >Военкомат</label
+            <label for="order_owner__icontains" class="form-label"
+              >Чей приказ</label
             >
             <input
               type="text"
               class="form-control"
-              id="go_rovd_name__icontains"
-              v-model="searchForm.go_rovd_name__icontains"
+              id="order_owner__icontains"
+              v-model="searchForm.order_owner__icontains"
             />
           </div>
         </div>
@@ -324,7 +323,7 @@
 </template>
 
 <script>
-import getGOROVDAPIAPIInstance from "@/api/cadet/gorovdAPI"
+import getOrderOwnerAPIInstance from "@/api/cadet/orderOwnerAPI"
 import { mapGetters } from "vuex"
 import BaseListLayout from "@/components/layouts/BaseListLayout.vue"
 import {
@@ -338,7 +337,7 @@ import {
 import { debounce } from "lodash/function"
 
 export default {
-  name: "GOROVDListView",
+  name: "OrderOwnerListView",
   components: {
     BaseListLayout,
   },
@@ -346,10 +345,10 @@ export default {
     return {
       isLoading: false,
       isError: false,
-      mainItemAPIInstance: getGOROVDAPIAPIInstance(),
-      itemForm: Object.assign({}, getGOROVDAPIAPIInstance().formData),
-      searchForm: Object.assign({}, getGOROVDAPIAPIInstance().searchObj),
-      selectedItem: Object.assign({}, getGOROVDAPIAPIInstance().formData),
+      mainItemAPIInstance: getOrderOwnerAPIInstance(),
+      itemForm: Object.assign({}, getOrderOwnerAPIInstance().formData),
+      searchForm: Object.assign({}, getOrderOwnerAPIInstance().searchObj),
+      selectedItem: Object.assign({}, getOrderOwnerAPIInstance().formData),
       deleteItemId: "",
     }
   },
@@ -368,7 +367,7 @@ export default {
     showDeleteApproveMultipleModal,
     debouncedSearch: debounce(async function () {
       try {
-        await this.$store.dispatch("gorovds/actionGetList", this.searchForm)
+        await this.$store.dispatch("orderOwners/actionGetList", this.searchForm)
       } catch (e) {
         this.isError = true
       } finally {
@@ -377,7 +376,7 @@ export default {
     }, 500),
     async addNewItem() {
       try {
-        await this.$store.dispatch("gorovds/actionAddNewItem", {
+        await this.$store.dispatch("orderOwners/actionAddNewItem", {
           ...this.itemForm,
         })
       } catch (error) {
@@ -404,7 +403,7 @@ export default {
     },
     async updateMainItemInList() {
       try {
-        await this.$store.dispatch("gorovds/actionUpdateItem", {
+        await this.$store.dispatch("orderOwners/actionUpdateItem", {
           ...this.selectedItem,
         })
       } catch (error) {
@@ -415,7 +414,7 @@ export default {
     async deleteItemHandler() {
       try {
         await this.$store.dispatch(
-          "gorovds/actionDeleteItem",
+          "orderOwners/actionDeleteItem",
           this.deleteItemId,
         )
       } catch (error) {
@@ -426,7 +425,7 @@ export default {
     async deleteCheckedItemsHandler() {
       this.mainItemList.results.map(async (item) => {
         if (item.isSelected) {
-          await this.$store.dispatch("gorovds/actionDeleteItem", item.id)
+          await this.$store.dispatch("orderOwners/actionDeleteItem", item.id)
         }
       })
       this.$refs.deleteApproveModalMultipleCloseButton.click()
@@ -444,7 +443,7 @@ export default {
       return this.mainItemList.results
     },
     ...mapGetters({
-      mainItemList: "gorovds/getList",
+      mainItemList: "orderOwners/getList",
     }),
   },
   watch: {

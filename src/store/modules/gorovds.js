@@ -1,4 +1,4 @@
-import getSpecialityAPIInstance from "@/api/cadet/specialityAPI"
+import getGOROVDAPIAPIInstance from "@/api/cadet/gorovdAPI"
 
 import {
   baseState,
@@ -10,7 +10,7 @@ import {
   getActionDeleteItem,
 } from "@/store/baseSlice"
 
-const mainAPIInstance = getSpecialityAPIInstance()
+const mainAPIInstance = getGOROVDAPIAPIInstance()
 
 const state = baseState
 

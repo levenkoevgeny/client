@@ -409,31 +409,31 @@
             <!--            <JobCadetComponent :cadet-id="$route.params.id" />-->
             <!--            <ArmyServiceCadetComponent-->
             <!--              :cadet-id="$route.params.id"-->
-            <!--              :order-owners-list="orderOwners"-->
+            <!--              :order-owners-list="orderOwner"-->
             <!--            />-->
             <!--            <MVDServiceCadetComponent-->
             <!--              :cadet-id="$route.params.id"-->
-            <!--              :order-owners-list="orderOwners"-->
+            <!--              :order-owners-list="orderOwner"-->
             <!--            />-->
             <!--            <RewardCadetComponent-->
             <!--              :cadet-id="$route.params.id"-->
-            <!--              :order-owners-list="orderOwners"-->
+            <!--              :order-owners-list="orderOwner"-->
             <!--            />-->
             <!--            <EncouragementCadetComponent-->
             <!--              :cadet-id="$route.params.id"-->
-            <!--              :order-owners-list="orderOwners"-->
+            <!--              :order-owners-list="orderOwner"-->
             <!--            />-->
             <!--            <PunishmentCadetComponent-->
             <!--              :cadet-id="$route.params.id"-->
-            <!--              :order-owners-list="orderOwners"-->
+            <!--              :order-owners-list="orderOwner"-->
             <!--            />-->
             <!--            <PositionCadetComponent-->
             <!--              :cadet-id="$route.params.id"-->
-            <!--              :order-owners-list="orderOwners"-->
+            <!--              :order-owners-list="orderOwner"-->
             <!--            />-->
             <!--            <SpecialityCadetComponent-->
             <!--              :cadet-id="$route.params.id"-->
-            <!--              :order-owners-list="orderOwners"-->
+            <!--              :order-owners-list="orderOwner"-->
             <!--            />-->
             <!--            <RelativesCadetComponent :cadet-id="$route.params.id" />-->
           </div>

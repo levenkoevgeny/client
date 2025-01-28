@@ -34,10 +34,11 @@ import {
   PositionNameListView,
   MilitaryOfficeListView,
   GOROVDListView,
-  ComponentOrganView,
+  ComponentOrganListView,
   RewardListView,
   SpecialityListView,
   SpecializationListView,
+  OrderOwnerListView,
 } from "@/components/dictionaries"
 
 import NavigationPage from "@/components/NavigationPage.vue"
@@ -213,6 +214,11 @@ const routes = [
         name: "dictionaries-positions",
       },
       {
+        path: "order-owners",
+        component: OrderOwnerListView,
+        name: "order-owners",
+      },
+      {
         path: "militaryoffices",
         component: MilitaryOfficeListView,
         name: "dictionaries-militaryoffices",
@@ -224,7 +230,7 @@ const routes = [
       },
       {
         path: "component-organs",
-        component: ComponentOrganView,
+        component: ComponentOrganListView,
         name: "dictionaries-component-organ",
       },
       {

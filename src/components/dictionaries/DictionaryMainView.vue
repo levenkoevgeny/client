@@ -58,6 +58,10 @@
             Должности
           </router-link>
           <br />
+          <router-link class="" :to="{ name: 'order-owners' }">
+            Чей приказ
+          </router-link>
+          <br />
           <router-link class="" :to="{ name: 'dictionaries-militaryoffices' }">
             Военкоматы
           </router-link>

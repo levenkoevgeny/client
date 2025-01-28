@@ -20,6 +20,9 @@ const actions = {
       await dispatch("graduationReasons/actionGetList", null, { root: true })
       await dispatch("educationForms/actionGetList", null, { root: true })
       await dispatch("rankGroups/actionGetList", null, { root: true })
+      await dispatch("orderOwners/actionGetList", null, { root: true })
+      await dispatch("gorovds/actionGetList", null, { root: true })
+      await dispatch("rewards/actionGetList", null, { root: true })
     } catch (error) {
       console.log(error)
     }

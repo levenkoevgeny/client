@@ -2,7 +2,7 @@
   <base-list-layout
     :is-loading="isLoading"
     :main-list-length="mainItemList.count"
-    title="ГО-РОВД"
+    title="Комплектующие органы"
   >
     <template v-slot:modals>
       <!-- add modal-->
@@ -30,15 +30,24 @@
             <form @submit.prevent="addNewItem">
               <div class="modal-body">
                 <div class="mb-3">
-                  <label for="id_military_office" class="form-label"
-                    >ГО-РОВД</label
+                  <label for="id_encouragement_kind" class="form-label"
+                    >Название</label
                   >
                   <input
-                    id="id_military_office"
                     type="text"
                     class="form-control"
-                    v-model="itemForm.go_rovd_name"
+                    v-model="itemForm.component_name"
                     required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="id_encouragement_kind" class="form-label"
+                    >Название (короткое)</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="itemForm.component_short_name"
                   />
                 </div>
               </div>
@@ -83,15 +92,24 @@
             <form @submit.prevent="updateMainItemInList">
               <div class="modal-body">
                 <div class="mb-3">
-                  <label for="id_military_office" class="form-label"
-                    >ГО-РОВД</label
+                  <label for="id_encouragement_kind" class="form-label"
+                    >Название</label
                   >
                   <input
-                    id="id_military_office"
                     type="text"
                     class="form-control"
-                    v-model="selectedItem.go_rovd_name"
+                    v-model="selectedItem.component_name"
                     required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="id_encouragement_kind" class="form-label"
+                    >Название (короткое)</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="selectedItem.component_short_name"
                   />
                 </div>
               </div>
@@ -237,7 +255,8 @@
             />
           </div>
         </th>
-        <th>ГО-РОВД</th>
+        <th>Комплектующий орган</th>
+        <th>Комплектующий орган (сокращ.)</th>
         <th>Дата добавления записи</th>
         <th>Дата последнего редактирования записи</th>
         <th></th>
@@ -245,9 +264,9 @@
     </template>
     <template v-slot:tbody>
       <tr
-        v-for="gorovd in orderedMainList"
-        :key="gorovd.id"
-        @dblclick.stop="showUpdateMainItemModalInList(gorovd.id)"
+        v-for="componentOrgan in orderedMainList"
+        :key="componentOrgan.id"
+        @dblclick.stop="showUpdateMainItemModalInList(componentOrgan.id)"
       >
         <td>
           <div
@@ -256,15 +275,15 @@
             <input
               type="checkbox"
               class="form-check-input my-0"
-              v-model="gorovd.isSelected"
+              v-model="componentOrgan.isSelected"
             />
           </div>
         </td>
-        <td>{{ gorovd.go_rovd_name }}</td>
-
+        <td>{{ componentOrgan.component_name }}</td>
+        <td>{{ componentOrgan.component_short_name }}</td>
         <td>
           {{
-            new Date(gorovd.date_time_created).toLocaleString("ru-RU", {
+            new Date(componentOrgan.date_time_created).toLocaleString("ru-RU", {
               day: "numeric",
               month: "long",
               year: "numeric",
@@ -276,7 +295,7 @@
         </td>
         <td>
           {{
-            new Date(gorovd.date_time_updated).toLocaleString("ru-RU", {
+            new Date(componentOrgan.date_time_updated).toLocaleString("ru-RU", {
               day: "numeric",
               month: "long",
               year: "numeric",
@@ -291,7 +310,7 @@
             <button
               type="button"
               class="btn btn-outline-danger"
-              @click="trashButtonClick(gorovd.id)"
+              @click="trashButtonClick(componentOrgan.id)"
               style="padding: 0.25rem 0.5rem"
             >
               <font-awesome-icon :icon="['fas', 'trash']" />
@@ -304,14 +323,14 @@
       <div class="row">
         <div class="col-12">
           <div class="mb-3">
-            <label for="go_rovd_name__icontains" class="form-label"
-              >Военкомат</label
+            <label for="rank__icontains" class="form-label"
+              >Комплектующий орган</label
             >
             <input
               type="text"
               class="form-control"
-              id="go_rovd_name__icontains"
-              v-model="searchForm.go_rovd_name__icontains"
+              id="rank__icontains"
+              v-model="searchForm.component_name__icontains"
             />
           </div>
         </div>
@@ -324,7 +343,7 @@
 </template>
 
 <script>
-import getGOROVDAPIAPIInstance from "@/api/cadet/gorovdAPI"
+import getComponentOrganAPIInstance from "@/api/cadet/componentOrganAPI"
 import { mapGetters } from "vuex"
 import BaseListLayout from "@/components/layouts/BaseListLayout.vue"
 import {
@@ -338,7 +357,7 @@ import {
 import { debounce } from "lodash/function"
 
 export default {
-  name: "GOROVDListView",
+  name: "RankListView",
   components: {
     BaseListLayout,
   },
@@ -346,10 +365,10 @@ export default {
     return {
       isLoading: false,
       isError: false,
-      mainItemAPIInstance: getGOROVDAPIAPIInstance(),
-      itemForm: Object.assign({}, getGOROVDAPIAPIInstance().formData),
-      searchForm: Object.assign({}, getGOROVDAPIAPIInstance().searchObj),
-      selectedItem: Object.assign({}, getGOROVDAPIAPIInstance().formData),
+      mainItemAPIInstance: getComponentOrganAPIInstance(),
+      itemForm: Object.assign({}, getComponentOrganAPIInstance().formData),
+      searchForm: Object.assign({}, getComponentOrganAPIInstance().searchObj),
+      selectedItem: Object.assign({}, getComponentOrganAPIInstance().formData),
       deleteItemId: "",
     }
   },
@@ -368,7 +387,10 @@ export default {
     showDeleteApproveMultipleModal,
     debouncedSearch: debounce(async function () {
       try {
-        await this.$store.dispatch("gorovds/actionGetList", this.searchForm)
+        await this.$store.dispatch(
+          "componentOrgans/actionGetList",
+          this.searchForm,
+        )
       } catch (e) {
         this.isError = true
       } finally {
@@ -377,7 +399,7 @@ export default {
     }, 500),
     async addNewItem() {
       try {
-        await this.$store.dispatch("gorovds/actionAddNewItem", {
+        await this.$store.dispatch("componentOrgans/actionAddNewItem", {
           ...this.itemForm,
         })
       } catch (error) {
@@ -404,7 +426,7 @@ export default {
     },
     async updateMainItemInList() {
       try {
-        await this.$store.dispatch("gorovds/actionUpdateItem", {
+        await this.$store.dispatch("componentOrgans/actionUpdateItem", {
           ...this.selectedItem,
         })
       } catch (error) {
@@ -415,7 +437,7 @@ export default {
     async deleteItemHandler() {
       try {
         await this.$store.dispatch(
-          "gorovds/actionDeleteItem",
+          "componentOrgans/actionDeleteItem",
           this.deleteItemId,
         )
       } catch (error) {
@@ -426,7 +448,10 @@ export default {
     async deleteCheckedItemsHandler() {
       this.mainItemList.results.map(async (item) => {
         if (item.isSelected) {
-          await this.$store.dispatch("gorovds/actionDeleteItem", item.id)
+          await this.$store.dispatch(
+            "componentOrgans/actionDeleteItem",
+            item.id,
+          )
         }
       })
       this.$refs.deleteApproveModalMultipleCloseButton.click()
@@ -444,7 +469,7 @@ export default {
       return this.mainItemList.results
     },
     ...mapGetters({
-      mainItemList: "gorovds/getList",
+      mainItemList: "componentOrgans/getList",
     }),
   },
   watch: {

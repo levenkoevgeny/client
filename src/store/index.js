@@ -19,6 +19,8 @@ import militaryOffices from "@/store/modules/militaryOffices"
 import graduationReasons from "@/store/modules/graduationReasons"
 import educationForms from "@/store/modules/educationForms"
 import punishmentKinds from "@/store/modules/punishmentKinds"
+import gorovds from "@/store/modules/gorovds"
+import rewards from "@/store/modules/rewards"
 
 const store = createStore({
   modules: {
@@ -42,6 +44,8 @@ const store = createStore({
     graduationReasons,
     educationForms,
     punishmentKinds,
+    gorovds,
+    rewards,
   },
 })
 
