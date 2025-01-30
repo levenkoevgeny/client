@@ -2,7 +2,7 @@
   <base-list-layout
     :is-loading="isLoading"
     :main-list-length="mainItemList.count"
-    title="Специализации"
+    title="Направления ОРД"
   >
     <template v-slot:modals>
       <!-- add modal-->
@@ -286,9 +286,9 @@
     </template>
     <template v-slot:tbody>
       <tr
-        v-for="specialization in orderedMainList"
-        :key="specialization.id"
-        @dblclick.stop="showUpdateMainItemModalInList(specialization.id)"
+        v-for="direction in orderedMainList"
+        :key="direction.id"
+        @dblclick.stop="showUpdateMainItemModalInList(direction.id)"
       >
         <td>
           <div
@@ -514,7 +514,7 @@ export default {
       return this.mainItemList.results
     },
     ...mapGetters({
-      mainItemList: "specializations/getList",
+      mainItemList: "directionsORD/getList",
     }),
   },
   watch: {

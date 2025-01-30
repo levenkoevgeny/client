@@ -352,7 +352,7 @@
             <button
               type="button"
               class="btn btn-outline-danger"
-              @click="trashButtonClick(encouragementKing.id)"
+              @click="trashButtonClick(rank.id)"
               style="padding: 0.25rem 0.5rem"
             >
               <font-awesome-icon :icon="['fas', 'trash']" />

@@ -28,6 +28,7 @@ import {
   DictionaryMainView,
   GroupListView,
   RankListView,
+  RankGroupsListView,
   EncouragementKindListView,
   PunishmentKindListView,
   SubdivisionListView,
@@ -39,6 +40,13 @@ import {
   SpecialityListView,
   SpecializationListView,
   OrderOwnerListView,
+  PersonCategoriesListView,
+  DirectionsORDListView,
+  MaritalStatusesListView,
+  PassportAuthoritiesListView,
+  ForeignLanguagesListView,
+  GraduationReasonsListView,
+  EducationFormsListView,
 } from "@/components/dictionaries"
 
 import NavigationPage from "@/components/NavigationPage.vue"
@@ -194,6 +202,11 @@ const routes = [
         name: "dictionaries-ranks",
       },
       {
+        path: "rank-groups",
+        component: RankGroupsListView,
+        name: "dictionaries-rank-groups",
+      },
+      {
         path: "encouragements",
         component: EncouragementKindListView,
         name: "dictionaries-encouragements",
@@ -247,6 +260,41 @@ const routes = [
         path: "specializations",
         component: SpecializationListView,
         name: "dictionaries-specializations",
+      },
+      {
+        path: "person-categories",
+        component: PersonCategoriesListView,
+        name: "dictionaries-person-categories",
+      },
+      {
+        path: "ord-directions",
+        component: DirectionsORDListView,
+        name: "dictionaries-ord-directions",
+      },
+      {
+        path: "marital-statuses",
+        component: MaritalStatusesListView,
+        name: "dictionaries-marital-statuses",
+      },
+      {
+        path: "passport-authorities",
+        component: PassportAuthoritiesListView,
+        name: "dictionaries-passport-authorities",
+      },
+      {
+        path: "passport-foreign-languages",
+        component: ForeignLanguagesListView,
+        name: "dictionaries-foreign-languages",
+      },
+      {
+        path: "graduation-reasons",
+        component: GraduationReasonsListView,
+        name: "dictionaries-graduation-reasons",
+      },
+      {
+        path: "education-forms",
+        component: EducationFormsListView,
+        name: "dictionaries-education-forms",
       },
     ],
   },

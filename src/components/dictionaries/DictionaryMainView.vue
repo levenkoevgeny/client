@@ -34,8 +34,19 @@
 
       <div class="row">
         <div class="col-2">
+          <router-link
+            class=""
+            :to="{ name: 'dictionaries-person-categories' }"
+          >
+            Категории сотрудников, курсантов, студентов
+          </router-link>
+          <br />
           <router-link class="" :to="{ name: 'dictionaries-ranks' }">
             Звания
+          </router-link>
+          <br />
+          <router-link class="" :to="{ name: 'dictionaries-rank-groups' }">
+            Категории званий
           </router-link>
           <br />
           <router-link class="" :to="{ name: 'dictionaries-groups' }">
@@ -80,6 +91,43 @@
           <br />
           <router-link class="" :to="{ name: 'dictionaries-speciality' }">
             Специальности
+          </router-link>
+          <br />
+          <router-link class="" :to="{ name: 'dictionaries-specializations' }">
+            Специализации
+          </router-link>
+          <br />
+          <router-link class="" :to="{ name: 'dictionaries-ord-directions' }">
+            Направления ОРД
+          </router-link>
+          <br />
+          <router-link class="" :to="{ name: 'dictionaries-marital-statuses' }">
+            Семейные положения
+          </router-link>
+          <br />
+          <router-link
+            class=""
+            :to="{ name: 'dictionaries-passport-authorities' }"
+          >
+            Органы выдачи пасспорта
+          </router-link>
+          <br />
+          <router-link
+            class=""
+            :to="{ name: 'dictionaries-foreign-languages' }"
+          >
+            Иностранные языки
+          </router-link>
+          <br />
+          <router-link
+            class=""
+            :to="{ name: 'dictionaries-graduation-reasons' }"
+          >
+            Причины отчисления
+          </router-link>
+          <br />
+          <router-link class="" :to="{ name: 'dictionaries-education-forms' }">
+            Формы обучения
           </router-link>
           <br />
         </div>

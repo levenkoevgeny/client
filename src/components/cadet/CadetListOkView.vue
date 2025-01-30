@@ -29,14 +29,14 @@
               >
                 <font-awesome-icon :icon="['far', 'file-word']" />
               </button>
-              <!--              <button-->
-              <!--                class="btn btn-link text-success"-->
-              <!--                style="font-size: inherit; color: inherit"-->
-              <!--                title="Экспорт в Excel"-->
-              <!--                @click="exportData('excel')"-->
-              <!--              >-->
-              <!--                <font-awesome-icon :icon="['far', 'file-excel']" />-->
-              <!--              </button>-->
+              <button
+                class="btn btn-link text-success"
+                style="font-size: inherit; color: inherit"
+                title="Экспорт в Excel"
+                @click="exportData('excel')"
+              >
+                <font-awesome-icon :icon="['far', 'file-excel']" />
+              </button>
             </div>
             <div>
               <div
@@ -1244,10 +1244,6 @@ export default {
           fieldValue: "removed_from_military_registration",
         },
         {
-          fieldName: "Отношение военного комиссариата",
-          fieldValue: "military_commissariat_attitude",
-        },
-        {
           fieldName: "Факультет",
           fieldValue: "get_subdivision",
         },
@@ -1375,6 +1371,7 @@ export default {
       }
       queryString =
         queryString + `fields_for_export=${this.selectedFieldsForDataExport}`
+      queryString = queryString + `&destination=${destination}`
       window.open(
         `${this.BACKEND_PROTOCOL}://${this.BACKEND_HOST}:${this.BACKEND_PORT}/api/list-export/${queryString}`,
         "_blank",
@@ -1505,7 +1502,9 @@ export default {
       return this.categories.results
     },
     orderedSubdivisions() {
-      return this.subdivisions.results.filter(subdivision => subdivision.subdivision_category == "1")
+      return this.subdivisions.results.filter(
+        (subdivision) => subdivision.subdivision_category == "1",
+      )
     },
     orderedGroups() {
       return this.groups.results
@@ -1517,7 +1516,9 @@ export default {
       return this.specialities.results
     },
     orderedPositions() {
-      return this.positions.results.filter(position => position.position_category == "1")
+      return this.positions.results.filter(
+        (position) => position.position_category == "1",
+      )
     },
     orderedMaritalStatuses() {
       return this.maritalStatuses.results
@@ -1544,20 +1545,20 @@ export default {
       return this.graduationReasons.results
     },
     ...mapGetters({
-      groups: "common/getGroups",
-      ranks: "common/getRanks",
-      subdivisions: "common/getSubdivisions",
-      specialities: "common/getSpecialities",
-      positions: "common/getPositions",
-      categories: "common/getCadetCategories",
-      maritalStatuses: "common/getMaritalStatuses",
-      specializations: "common/getSpecializations",
-      directionsOrd: "common/getDirectionsOrd",
-      componentOrgans: "common/getComponentOrgans",
-      passportIssueAuthorities: "common/getPassportIssueAuthorities",
-      foreignLanguages: "common/getForeignLanguages",
-      militaryOffices: "common/getMilitaryOffices",
-      graduationReasons: "common/getGraduationReasons",
+      groups: "groups/getList",
+      ranks: "ranks/getList",
+      subdivisions: "subdivisions/getList",
+      specialities: "specialities/getList",
+      positions: "positions/getList",
+      categories: "personCategories/getList",
+      maritalStatuses: "maritalStatuses/getList",
+      specializations: "specializations/getList",
+      directionsOrd: "directionsORD/getList",
+      componentOrgans: "componentOrgans/getList",
+      passportIssueAuthorities: "passportAuthorities/getList",
+      foreignLanguages: "foreignLanguages/getList",
+      militaryOffices: "militaryOffices/getList",
+      graduationReasons: "graduationReasons/getList",
     }),
   },
   watch: {

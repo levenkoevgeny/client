@@ -2,7 +2,7 @@
   <base-list-layout
     :is-loading="isLoading"
     :main-list-length="mainItemList.count"
-    title="Специализации"
+    title="Категории званий"
   >
     <template v-slot:modals>
       <!-- add modal-->
@@ -31,33 +31,13 @@
               <div class="modal-body">
                 <div class="mb-3">
                   <label for="id_encouragement_kind" class="form-label"
-                    >Специализация</label
+                    >Категория звания</label
                   >
                   <input
                     type="text"
                     class="form-control"
-                    v-model="itemForm.specialization_name"
+                    v-model="itemForm.rank_group"
                     required
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="id_encouragement_kind" class="form-label"
-                    >Специализация (сокращ.)</label
-                  >
-                  <input
-                    type="text"
-                    class="form-control"
-                    v-model="itemForm.specialization_short_name"
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="id_encouragement_kind" class="form-label"
-                    >Специализация (код)</label
-                  >
-                  <input
-                    type="text"
-                    class="form-control"
-                    v-model="itemForm.specialization_code"
                   />
                 </div>
               </div>
@@ -103,33 +83,13 @@
               <div class="modal-body">
                 <div class="mb-3">
                   <label for="id_encouragement_kind" class="form-label"
-                    >Специализация</label
+                    >Категория звания</label
                   >
                   <input
                     type="text"
                     class="form-control"
-                    v-model="selectedItem.specialization_name"
+                    v-model="selectedItem.rank_group"
                     required
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="id_encouragement_kind" class="form-label"
-                    >Специализация (сокращ.)</label
-                  >
-                  <input
-                    type="text"
-                    class="form-control"
-                    v-model="selectedItem.specialization_short_name"
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="id_encouragement_kind" class="form-label"
-                    >Специализация (код)</label
-                  >
-                  <input
-                    type="text"
-                    class="form-control"
-                    v-model="selectedItem.specialization_code"
                   />
                 </div>
               </div>
@@ -276,19 +236,17 @@
             />
           </div>
         </th>
-        <th>Специализация</th>
-        <th>Специализация (сокращ.)</th>
-        <th>Специализация (код)</th>
-        <th>Дата создания записи</th>
+        <th>Категория звания</th>
+        <th>Дата добавления записи</th>
         <th>Дата последнего редактирования записи</th>
         <th></th>
       </tr>
     </template>
     <template v-slot:tbody>
       <tr
-        v-for="specialization in orderedMainList"
-        :key="specialization.id"
-        @dblclick.stop="showUpdateMainItemModalInList(specialization.id)"
+        v-for="rank_group in orderedMainList"
+        :key="rank_group.id"
+        @dblclick.stop="showUpdateMainItemModalInList(rank_group.id)"
       >
         <td>
           <div
@@ -297,16 +255,14 @@
             <input
               type="checkbox"
               class="form-check-input my-0"
-              v-model="specialization.isSelected"
+              v-model="rank_group.isSelected"
             />
           </div>
         </td>
-        <td>{{ specialization.specialization_name }}</td>
-        <td>{{ specialization.specialization_short_name }}</td>
-        <td>{{ specialization.specialization_code }}</td>
+        <td>{{ rank_group.rank_group }}</td>
         <td>
           {{
-            new Date(specialization.date_time_created).toLocaleString("ru-RU", {
+            new Date(rank_group.date_time_created).toLocaleString("ru-RU", {
               day: "numeric",
               month: "long",
               year: "numeric",
@@ -318,7 +274,7 @@
         </td>
         <td>
           {{
-            new Date(specialization.date_time_updated).toLocaleString("ru-RU", {
+            new Date(rank_group.date_time_updated).toLocaleString("ru-RU", {
               day: "numeric",
               month: "long",
               year: "numeric",
@@ -333,7 +289,7 @@
             <button
               type="button"
               class="btn btn-outline-danger"
-              @click="trashButtonClick(specialization.id)"
+              @click="trashButtonClick(rank_group.id)"
               style="padding: 0.25rem 0.5rem"
             >
               <font-awesome-icon :icon="['fas', 'trash']" />
@@ -347,35 +303,13 @@
         <div class="col-12">
           <div class="mb-3">
             <label for="rank_group__icontains" class="form-label"
-              >Специализация</label
+              >Категория</label
             >
             <input
               type="text"
               class="form-control"
               id="rank_group__icontains"
-              v-model="searchForm.specialization_name__icontains"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="rank_group__icontains" class="form-label"
-              >Специализация (сокращ.)</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              id="rank_group__icontains"
-              v-model="searchForm.specialization_short_name__icontains"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="rank_group__icontains" class="form-label"
-              >Специализация (код)</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              id="rank_group__icontains"
-              v-model="searchForm.specialization_code__icontains"
+              v-model="searchForm.rank_group__icontains"
             />
           </div>
         </div>
@@ -388,7 +322,7 @@
 </template>
 
 <script>
-import getSpecializationAPIInstance from "@/api/cadet/specializationAPI"
+import getRankGroupAPIInstance from "@/api/cadet/rankGroupAPI"
 import { mapGetters } from "vuex"
 import BaseListLayout from "@/components/layouts/BaseListLayout.vue"
 import {
@@ -400,9 +334,8 @@ import {
   clearFormData,
 } from "../../../../utils"
 import { debounce } from "lodash/function"
-
 export default {
-  name: "SpecializationListView",
+  name: "RankGroupsListView",
   components: {
     BaseListLayout,
   },
@@ -410,10 +343,10 @@ export default {
     return {
       isLoading: false,
       isError: false,
-      mainItemAPIInstance: getSpecializationAPIInstance(),
-      itemForm: Object.assign({}, getSpecializationAPIInstance().formData),
-      searchForm: Object.assign({}, getSpecializationAPIInstance().searchObj),
-      selectedItem: Object.assign({}, getSpecializationAPIInstance().formData),
+      mainItemAPIInstance: getRankGroupAPIInstance(),
+      itemForm: Object.assign({}, getRankGroupAPIInstance().formData),
+      searchForm: Object.assign({}, getRankGroupAPIInstance().searchObj),
+      selectedItem: Object.assign({}, getRankGroupAPIInstance().formData),
       deleteItemId: "",
     }
   },
@@ -432,10 +365,7 @@ export default {
     showDeleteApproveMultipleModal,
     debouncedSearch: debounce(async function () {
       try {
-        await this.$store.dispatch(
-          "specializations/actionGetList",
-          this.searchForm,
-        )
+        await this.$store.dispatch("rankGroups/actionGetList", this.searchForm)
       } catch (e) {
         this.isError = true
       } finally {
@@ -444,7 +374,7 @@ export default {
     }, 500),
     async addNewItem() {
       try {
-        await this.$store.dispatch("specializations/actionAddNewItem", {
+        await this.$store.dispatch("rankGroups/actionAddNewItem", {
           ...this.itemForm,
         })
       } catch (error) {
@@ -471,7 +401,7 @@ export default {
     },
     async updateMainItemInList() {
       try {
-        await this.$store.dispatch("specializations/actionUpdateItem", {
+        await this.$store.dispatch("rankGroups/actionUpdateItem", {
           ...this.selectedItem,
         })
       } catch (error) {
@@ -482,7 +412,7 @@ export default {
     async deleteItemHandler() {
       try {
         await this.$store.dispatch(
-          "specializations/actionDeleteItem",
+          "rankGroups/actionDeleteItem",
           this.deleteItemId,
         )
       } catch (error) {
@@ -493,10 +423,7 @@ export default {
     async deleteCheckedItemsHandler() {
       this.mainItemList.results.map(async (item) => {
         if (item.isSelected) {
-          await this.$store.dispatch(
-            "specializations/actionDeleteItem",
-            item.id,
-          )
+          await this.$store.dispatch("rankGroups/actionDeleteItem", item.id)
         }
       })
       this.$refs.deleteApproveModalMultipleCloseButton.click()
@@ -514,7 +441,7 @@ export default {
       return this.mainItemList.results
     },
     ...mapGetters({
-      mainItemList: "specializations/getList",
+      mainItemList: "rankGroups/getList",
     }),
   },
   watch: {
