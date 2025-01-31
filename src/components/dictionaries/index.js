@@ -20,3 +20,4 @@ export { default as PassportAuthoritiesListView } from "./passportAuthority/Pass
 export { default as ForeignLanguagesListView } from "./foreignLanguages/ForeignLanguagesListView.vue"
 export { default as GraduationReasonsListView } from "./graduationReasons/GraduationReasonsListView.vue"
 export { default as EducationFormsListView } from "./educationForms/EducationFormsListView.vue"
+export { default as ForeignLanguageLevelsListView } from "./foreignLanguageLevels/ForeignLanguageLevelsListView.vue"

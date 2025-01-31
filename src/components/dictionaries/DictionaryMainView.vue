@@ -109,7 +109,7 @@
             class=""
             :to="{ name: 'dictionaries-passport-authorities' }"
           >
-            Органы выдачи пасспорта
+            Органы выдачи паспорта
           </router-link>
           <br />
           <router-link
@@ -117,6 +117,13 @@
             :to="{ name: 'dictionaries-foreign-languages' }"
           >
             Иностранные языки
+          </router-link>
+          <br />
+          <router-link
+            class=""
+            :to="{ name: 'dictionaries-foreign-language-levels' }"
+          >
+            Уровни владения и.я.
           </router-link>
           <br />
           <router-link

@@ -30,34 +30,26 @@
             <form @submit.prevent="addNewItem">
               <div class="modal-body">
                 <div class="mb-3">
-                  <label for="id_encouragement_kind" class="form-label"
-                    >Специализация</label
+                  <label for="id_direction_name" class="form-label"
+                    >Направление ОРД</label
                   >
                   <input
+                    id="id_direction_name"
                     type="text"
                     class="form-control"
-                    v-model="itemForm.specialization_name"
+                    v-model="itemForm.direction_name"
                     required
                   />
                 </div>
                 <div class="mb-3">
-                  <label for="id_encouragement_kind" class="form-label"
-                    >Специализация (сокращ.)</label
+                  <label for="id_direction_short_name" class="form-label"
+                    >Направление ОРД (сокращ.)</label
                   >
                   <input
+                    id="id_direction_short_name"
                     type="text"
                     class="form-control"
-                    v-model="itemForm.specialization_short_name"
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="id_encouragement_kind" class="form-label"
-                    >Специализация (код)</label
-                  >
-                  <input
-                    type="text"
-                    class="form-control"
-                    v-model="itemForm.specialization_code"
+                    v-model="itemForm.direction_short_name"
                   />
                 </div>
               </div>
@@ -102,34 +94,26 @@
             <form @submit.prevent="updateMainItemInList">
               <div class="modal-body">
                 <div class="mb-3">
-                  <label for="id_encouragement_kind" class="form-label"
-                    >Специализация</label
+                  <label for="id_direction_name" class="form-label"
+                    >Направление ОРД</label
                   >
                   <input
+                    id="id_direction_name"
                     type="text"
                     class="form-control"
-                    v-model="selectedItem.specialization_name"
+                    v-model="selectedItem.direction_name"
                     required
                   />
                 </div>
                 <div class="mb-3">
-                  <label for="id_encouragement_kind" class="form-label"
-                    >Специализация (сокращ.)</label
+                  <label for="id_direction_short_name" class="form-label"
+                    >Направление ОРД (сокращ.)</label
                   >
                   <input
+                    id="id_direction_short_name"
                     type="text"
                     class="form-control"
-                    v-model="selectedItem.specialization_short_name"
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="id_encouragement_kind" class="form-label"
-                    >Специализация (код)</label
-                  >
-                  <input
-                    type="text"
-                    class="form-control"
-                    v-model="selectedItem.specialization_code"
+                    v-model="selectedItem.direction_short_name"
                   />
                 </div>
               </div>
@@ -276,9 +260,8 @@
             />
           </div>
         </th>
-        <th>Специализация</th>
-        <th>Специализация (сокращ.)</th>
-        <th>Специализация (код)</th>
+        <th>Направление ОРД</th>
+        <th>Направление ОРД (сокращ.)</th>
         <th>Дата создания записи</th>
         <th>Дата последнего редактирования записи</th>
         <th></th>
@@ -297,16 +280,16 @@
             <input
               type="checkbox"
               class="form-check-input my-0"
-              v-model="specialization.isSelected"
+              v-model="direction.isSelected"
             />
           </div>
         </td>
-        <td>{{ specialization.specialization_name }}</td>
-        <td>{{ specialization.specialization_short_name }}</td>
-        <td>{{ specialization.specialization_code }}</td>
+        <td>{{ direction.direction_name }}</td>
+        <td>{{ direction.direction_short_name }}</td>
+
         <td>
           {{
-            new Date(specialization.date_time_created).toLocaleString("ru-RU", {
+            new Date(direction.date_time_created).toLocaleString("ru-RU", {
               day: "numeric",
               month: "long",
               year: "numeric",
@@ -318,7 +301,7 @@
         </td>
         <td>
           {{
-            new Date(specialization.date_time_updated).toLocaleString("ru-RU", {
+            new Date(direction.date_time_updated).toLocaleString("ru-RU", {
               day: "numeric",
               month: "long",
               year: "numeric",
@@ -333,7 +316,7 @@
             <button
               type="button"
               class="btn btn-outline-danger"
-              @click="trashButtonClick(specialization.id)"
+              @click="trashButtonClick(direction.id)"
               style="padding: 0.25rem 0.5rem"
             >
               <font-awesome-icon :icon="['fas', 'trash']" />
@@ -347,35 +330,24 @@
         <div class="col-12">
           <div class="mb-3">
             <label for="rank_group__icontains" class="form-label"
-              >Специализация</label
+              >Направление ОРД</label
             >
             <input
               type="text"
               class="form-control"
               id="rank_group__icontains"
-              v-model="searchForm.specialization_name__icontains"
+              v-model="searchForm.direction_name__icontains"
             />
           </div>
           <div class="mb-3">
             <label for="rank_group__icontains" class="form-label"
-              >Специализация (сокращ.)</label
+              >Направление ОРД (сокращ.)</label
             >
             <input
               type="text"
               class="form-control"
               id="rank_group__icontains"
-              v-model="searchForm.specialization_short_name__icontains"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="rank_group__icontains" class="form-label"
-              >Специализация (код)</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              id="rank_group__icontains"
-              v-model="searchForm.specialization_code__icontains"
+              v-model="searchForm.direction_short_name__icontains"
             />
           </div>
         </div>
@@ -388,7 +360,7 @@
 </template>
 
 <script>
-import getSpecializationAPIInstance from "@/api/cadet/specializationAPI"
+import getDirectionOrdAPIInstance from "@/api/cadet/directionOrdAPI"
 import { mapGetters } from "vuex"
 import BaseListLayout from "@/components/layouts/BaseListLayout.vue"
 import {
@@ -402,7 +374,7 @@ import {
 import { debounce } from "lodash/function"
 
 export default {
-  name: "SpecializationListView",
+  name: "DirectionsORDListView",
   components: {
     BaseListLayout,
   },
@@ -410,10 +382,10 @@ export default {
     return {
       isLoading: false,
       isError: false,
-      mainItemAPIInstance: getSpecializationAPIInstance(),
-      itemForm: Object.assign({}, getSpecializationAPIInstance().formData),
-      searchForm: Object.assign({}, getSpecializationAPIInstance().searchObj),
-      selectedItem: Object.assign({}, getSpecializationAPIInstance().formData),
+      mainItemAPIInstance: getDirectionOrdAPIInstance(),
+      itemForm: Object.assign({}, getDirectionOrdAPIInstance().formData),
+      searchForm: Object.assign({}, getDirectionOrdAPIInstance().searchObj),
+      selectedItem: Object.assign({}, getDirectionOrdAPIInstance().formData),
       deleteItemId: "",
     }
   },
@@ -433,7 +405,7 @@ export default {
     debouncedSearch: debounce(async function () {
       try {
         await this.$store.dispatch(
-          "specializations/actionGetList",
+          "directionsORD/actionGetList",
           this.searchForm,
         )
       } catch (e) {
@@ -444,7 +416,7 @@ export default {
     }, 500),
     async addNewItem() {
       try {
-        await this.$store.dispatch("specializations/actionAddNewItem", {
+        await this.$store.dispatch("directionsORD/actionAddNewItem", {
           ...this.itemForm,
         })
       } catch (error) {
@@ -471,7 +443,7 @@ export default {
     },
     async updateMainItemInList() {
       try {
-        await this.$store.dispatch("specializations/actionUpdateItem", {
+        await this.$store.dispatch("directionsORD/actionUpdateItem", {
           ...this.selectedItem,
         })
       } catch (error) {
@@ -482,7 +454,7 @@ export default {
     async deleteItemHandler() {
       try {
         await this.$store.dispatch(
-          "specializations/actionDeleteItem",
+          "directionsORD/actionDeleteItem",
           this.deleteItemId,
         )
       } catch (error) {
@@ -493,10 +465,7 @@ export default {
     async deleteCheckedItemsHandler() {
       this.mainItemList.results.map(async (item) => {
         if (item.isSelected) {
-          await this.$store.dispatch(
-            "specializations/actionDeleteItem",
-            item.id,
-          )
+          await this.$store.dispatch("directionsORD/actionDeleteItem", item.id)
         }
       })
       this.$refs.deleteApproveModalMultipleCloseButton.click()

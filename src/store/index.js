@@ -21,6 +21,7 @@ import educationForms from "@/store/modules/educationForms"
 import punishmentKinds from "@/store/modules/punishmentKinds"
 import gorovds from "@/store/modules/gorovds"
 import rewards from "@/store/modules/rewards"
+import foreignLanguageLevels from "@/store/modules/foreignLanguageLevels"
 
 const store = createStore({
   modules: {
@@ -44,6 +45,7 @@ const store = createStore({
     maritalStatuses,
     passportAuthorities,
     foreignLanguages,
+    foreignLanguageLevels,
     graduationReasons,
     educationForms,
   },

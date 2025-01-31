@@ -47,6 +47,7 @@ import {
   ForeignLanguagesListView,
   GraduationReasonsListView,
   EducationFormsListView,
+  ForeignLanguageLevelsListView,
 } from "@/components/dictionaries"
 
 import NavigationPage from "@/components/NavigationPage.vue"
@@ -295,6 +296,11 @@ const routes = [
         path: "education-forms",
         component: EducationFormsListView,
         name: "dictionaries-education-forms",
+      },
+      {
+        path: "passport-foreign-language-levels",
+        component: ForeignLanguageLevelsListView,
+        name: "dictionaries-foreign-language-levels",
       },
     ],
   },

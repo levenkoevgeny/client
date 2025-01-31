@@ -2,7 +2,7 @@
   <base-list-layout
     :is-loading="isLoading"
     :main-list-length="mainItemList.count"
-    title="Формы обучения"
+    title="Уровни владения инстранными языками"
   >
     <template v-slot:modals>
       <!-- add modal-->
@@ -31,17 +31,18 @@
               <div class="modal-body">
                 <div class="mb-3">
                   <label for="id_direction_name" class="form-label"
-                    >Форма обучения</label
+                    >Уровень владения</label
                   >
                   <input
                     id="id_direction_name"
                     type="text"
                     class="form-control"
-                    v-model="itemForm.education_form"
+                    v-model="itemForm.foreign_language_level"
                     required
                   />
                 </div>
               </div>
+
               <div class="modal-footer">
                 <button
                   type="button"
@@ -84,13 +85,13 @@
               <div class="modal-body">
                 <div class="mb-3">
                   <label for="id_direction_name" class="form-label"
-                    >Форма обучения</label
+                    >Уровень владения</label
                   >
                   <input
                     id="id_direction_name"
                     type="text"
                     class="form-control"
-                    v-model="selectedItem.education_form"
+                    v-model="selectedItem.foreign_language_level"
                     required
                   />
                 </div>
@@ -238,7 +239,7 @@
             />
           </div>
         </th>
-        <th>Форма обучения</th>
+        <th>Уровень владения</th>
         <th>Дата создания записи</th>
         <th>Дата последнего редактирования записи</th>
         <th></th>
@@ -246,9 +247,11 @@
     </template>
     <template v-slot:tbody>
       <tr
-        v-for="education_form in orderedMainList"
-        :key="education_form.id"
-        @dblclick.stop="showUpdateMainItemModalInList(education_form.id)"
+        v-for="foreign_language_level in orderedMainList"
+        :key="foreign_language_level.id"
+        @dblclick.stop="
+          showUpdateMainItemModalInList(foreign_language_level.id)
+        "
       >
         <td>
           <div
@@ -257,34 +260,40 @@
             <input
               type="checkbox"
               class="form-check-input my-0"
-              v-model="education_form.isSelected"
+              v-model="foreign_language_level.isSelected"
             />
           </div>
         </td>
-        <td>{{ education_form.education_form }}</td>
+        <td>{{ foreign_language_level.foreign_language_level }}</td>
 
         <td>
           {{
-            new Date(education_form.date_time_created).toLocaleString("ru-RU", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-              hour: "numeric",
-              minute: "numeric",
-              second: "numeric",
-            })
+            new Date(foreign_language_level.date_time_created).toLocaleString(
+              "ru-RU",
+              {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                second: "numeric",
+              },
+            )
           }}
         </td>
         <td>
           {{
-            new Date(education_form.date_time_updated).toLocaleString("ru-RU", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-              hour: "numeric",
-              minute: "numeric",
-              second: "numeric",
-            })
+            new Date(foreign_language_level.date_time_updated).toLocaleString(
+              "ru-RU",
+              {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                second: "numeric",
+              },
+            )
           }}
         </td>
         <td>
@@ -292,7 +301,7 @@
             <button
               type="button"
               class="btn btn-outline-danger"
-              @click="trashButtonClick(education_form.id)"
+              @click="trashButtonClick(foreign_language_level.id)"
               style="padding: 0.25rem 0.5rem"
             >
               <font-awesome-icon :icon="['fas', 'trash']" />
@@ -305,14 +314,14 @@
       <div class="row">
         <div class="col-12">
           <div class="mb-3">
-            <label for="education_form__icontains" class="form-label"
-              >Форма обучения</label
+            <label for="foreign_language_level__icontains" class="form-label"
+              >Уровень владения</label
             >
             <input
               type="text"
               class="form-control"
-              id="education_form__icontains"
-              v-model="searchForm.education_form__icontains"
+              id="foreign_language_level__icontains"
+              v-model="searchForm.foreign_language_level__icontains"
             />
           </div>
         </div>
@@ -325,7 +334,7 @@
 </template>
 
 <script>
-import getEducationFormAPIInstance from "@/api/student/educationFormAPI"
+import getForeignLanguageLevelAPIInstance from "@/api/cadet/foreignLanguageLevel"
 import { mapGetters } from "vuex"
 import BaseListLayout from "@/components/layouts/BaseListLayout.vue"
 import {
@@ -339,7 +348,7 @@ import {
 import { debounce } from "lodash/function"
 
 export default {
-  name: "EducationFormsListView",
+  name: "ForeignLanguagesListView",
   components: {
     BaseListLayout,
   },
@@ -347,10 +356,19 @@ export default {
     return {
       isLoading: false,
       isError: false,
-      mainItemAPIInstance: getEducationFormAPIInstance(),
-      itemForm: Object.assign({}, getEducationFormAPIInstance().formData),
-      searchForm: Object.assign({}, getEducationFormAPIInstance().searchObj),
-      selectedItem: Object.assign({}, getEducationFormAPIInstance().formData),
+      mainItemAPIInstance: getForeignLanguageLevelAPIInstance(),
+      itemForm: Object.assign(
+        {},
+        getForeignLanguageLevelAPIInstance().formData,
+      ),
+      searchForm: Object.assign(
+        {},
+        getForeignLanguageLevelAPIInstance().searchObj,
+      ),
+      selectedItem: Object.assign(
+        {},
+        getForeignLanguageLevelAPIInstance().formData,
+      ),
       deleteItemId: "",
     }
   },
@@ -370,7 +388,7 @@ export default {
     debouncedSearch: debounce(async function () {
       try {
         await this.$store.dispatch(
-          "educationForms/actionGetList",
+          "foreignLanguageLevels/actionGetList",
           this.searchForm,
         )
       } catch (e) {
@@ -381,7 +399,7 @@ export default {
     }, 500),
     async addNewItem() {
       try {
-        await this.$store.dispatch("educationForms/actionAddNewItem", {
+        await this.$store.dispatch("foreignLanguageLevels/actionAddNewItem", {
           ...this.itemForm,
         })
       } catch (error) {
@@ -408,7 +426,7 @@ export default {
     },
     async updateMainItemInList() {
       try {
-        await this.$store.dispatch("educationForms/actionUpdateItem", {
+        await this.$store.dispatch("foreignLanguageLevels/actionUpdateItem", {
           ...this.selectedItem,
         })
       } catch (error) {
@@ -419,7 +437,7 @@ export default {
     async deleteItemHandler() {
       try {
         await this.$store.dispatch(
-          "educationForms/actionDeleteItem",
+          "foreignLanguageLevels/actionDeleteItem",
           this.deleteItemId,
         )
       } catch (error) {
@@ -430,7 +448,10 @@ export default {
     async deleteCheckedItemsHandler() {
       this.mainItemList.results.map(async (item) => {
         if (item.isSelected) {
-          await this.$store.dispatch("educationForms/actionDeleteItem", item.id)
+          await this.$store.dispatch(
+            "foreignLanguageLevels/actionDeleteItem",
+            item.id,
+          )
         }
       })
       this.$refs.deleteApproveModalMultipleCloseButton.click()
@@ -448,7 +469,7 @@ export default {
       return this.mainItemList.results
     },
     ...mapGetters({
-      mainItemList: "educationForms/getList",
+      mainItemList: "foreignLanguageLevels/getList",
     }),
   },
   watch: {
