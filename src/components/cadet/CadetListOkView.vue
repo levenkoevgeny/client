@@ -337,7 +337,35 @@
               </div>
             </th>
             <th scope="col">
-              <nobr>Отчество</nobr>
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Отчество</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('patronymic_rus')"
+                      >
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('-patronymic_rus')"
+                      >
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </th>
             <th scope="col">
               <div class="d-flex flex-row align-items-center">

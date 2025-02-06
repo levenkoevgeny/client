@@ -41,6 +41,14 @@
                     :filterable="false"
                     @search="onSearch"
                   >
+                    <template #search="{ attributes, events }">
+                      <input
+                        class="vs__search"
+                        :required="!selectedCadet.length"
+                        v-bind="attributes"
+                        v-on="events"
+                      />
+                    </template>
                     <template slot="no-options"> Поиск по фамилии...</template>
                     <template slot="option" slot-scope="option">
                       <div class="d-center">

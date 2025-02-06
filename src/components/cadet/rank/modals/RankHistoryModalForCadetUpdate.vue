@@ -59,15 +59,15 @@
         </option>
       </select>
     </div>
-    <div class="mb-3">
-      <label for="id_rank_extra_data" class="form-label">Фабула</label>
-      <textarea
-        class="form-control"
-        id="id_rank_extra_data"
-        rows="3"
-        v-model="mainData.rank_extra_data"
-      />
-    </div>
+    <!--    <div class="mb-3">-->
+    <!--      <label for="id_rank_extra_data" class="form-label">Фабула</label>-->
+    <!--      <textarea-->
+    <!--        class="form-control"-->
+    <!--        id="id_rank_extra_data"-->
+    <!--        rows="3"-->
+    <!--        v-model="mainData.rank_extra_data"-->
+    <!--      />-->
+    <!--    </div>-->
   </div>
 </template>
 

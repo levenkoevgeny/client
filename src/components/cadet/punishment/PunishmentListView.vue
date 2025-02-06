@@ -1,4 +1,4 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
   <base-list-layout
     :is-loading="isLoading"
     :main-list-length="mainItemList.count"
@@ -41,6 +41,14 @@
                     :filterable="false"
                     @search="onSearch"
                   >
+                    <template #search="{ attributes, events }">
+                      <input
+                        class="vs__search"
+                        :required="!selectedCadet.length"
+                        v-bind="attributes"
+                        v-on="events"
+                      />
+                    </template>
                     <template slot="no-options"> Поиск по фамилии...</template>
                     <template slot="option" slot-scope="option">
                       <div class="d-center">
@@ -115,6 +123,14 @@
                     :filterable="false"
                     @search="onSearch"
                   >
+                    <template #search="{ attributes, events }">
+                      <input
+                        class="vs__search"
+                        :required="!selectedCadet.length"
+                        v-bind="attributes"
+                        v-on="events"
+                      />
+                    </template>
                     <template slot="no-options"> Поиск по фамилии...</template>
                     <template slot="option" slot-scope="option">
                       <div class="d-center">
@@ -309,7 +325,9 @@
             />
           </div>
         </td>
-        <td>{{ punishment.get_cadet_str }}</td>
+        <td>
+          <nobr>{{ punishment.get_cadet_str }}</nobr>
+        </td>
         <td>
           {{ punishment.get_punishment_kind_str || "Нет данных" }}
         </td>
