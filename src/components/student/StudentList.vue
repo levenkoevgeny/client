@@ -6,6 +6,28 @@
     :load-more-data="loadMoreData"
   >
     <template v-slot:add-button>
+      <div class="dropdown">
+        <button
+          class="btn btn-secondary dropdown-toggle me-2"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          Сформировать документ
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <button class="dropdown-item" @click="get_examination_reports">
+              Ведомость
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item" @click="get_group_list">
+              Список
+            </button>
+          </li>
+        </ul>
+      </div>
       <button class="btn btn-warning" @click="showStudentAddModal">
         Добавить запись
       </button>
@@ -211,6 +233,35 @@
         <div class="col-6">
           <div class="mb-3">
             <label for="date_of_birth__gte" class="form-label"
+              >Возраст (с)</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              id="date_of_birth__gte"
+              v-model="searchForm.age_gte"
+            />
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="date_of_birth__lte" class="form-label"
+              >Возраст (по)</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              id="date_of_birth__lte"
+              v-model="searchForm.age_lte"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="date_of_birth__gte" class="form-label"
               >Дата рождения (с)</label
             >
             <input
@@ -379,6 +430,30 @@ export default {
           }
         }
       }
+    },
+    get_examination_reports(destination) {
+      let queryString = "?"
+      for (let key in this.searchForm) {
+        if (key.includes("__in")) {
+          if (typeof this.searchForm[key] === "object") {
+            const valArray = this.searchForm[key]
+            let keyVal = ""
+            valArray.forEach((val) => {
+              keyVal = keyVal + `${key}=${val}&`
+            })
+            queryString = queryString + keyVal
+          }
+        } else {
+          queryString = queryString + `${key}=${this.searchForm[key]}&`
+        }
+      }
+      queryString =
+        queryString + `fields_for_export=${this.selectedFieldsForDataExport}`
+      queryString = queryString + `&destination=${destination}`
+      window.open(
+        `${this.BACKEND_PROTOCOL}://${this.BACKEND_HOST}:${this.BACKEND_PORT}/api/student-list-export/${queryString}`,
+        "_blank",
+      )
     },
   },
 

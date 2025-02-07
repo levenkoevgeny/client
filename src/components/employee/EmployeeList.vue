@@ -130,7 +130,6 @@
           v-model="searchForm.last_name_rus__icontains"
         />
       </div>
-
       <div class="mb-3">
         <label for="subdivision" class="form-label">Подразделение</label>
         <v-select
@@ -140,6 +139,34 @@
           :reduce="(subdivision) => subdivision.id"
           multiple
         />
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="date_of_birth__gte" class="form-label"
+              >Возраст (с)</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              id="date_of_birth__gte"
+              v-model="searchForm.age_gte"
+            />
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="date_of_birth__lte" class="form-label"
+              >Возраст (по)</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              id="date_of_birth__lte"
+              v-model="searchForm.age_lte"
+            />
+          </div>
+        </div>
       </div>
 
       <button type="button" class="btn btn-primary" @click="clearFilter">
