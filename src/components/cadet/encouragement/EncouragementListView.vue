@@ -558,7 +558,7 @@ export default {
     }
   },
   async created() {
-    await this.loadData()
+    // await this.loadData()
   },
   methods: {
     async loadData() {

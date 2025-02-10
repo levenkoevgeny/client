@@ -100,7 +100,11 @@ export default {
   data() {
     return {}
   },
-  async created() {},
+  async created() {
+    await this.$store.dispatch("common/actionGetCommonLists", {
+      token: this.$store.getters["auth/getToken"],
+    })
+  },
   methods: {},
   computed: {},
 }

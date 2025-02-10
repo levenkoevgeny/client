@@ -457,6 +457,7 @@ export default {
       )
     },
   },
+  async created() {},
   computed: {
     checkedForDeleteCount,
     orderedMainList() {

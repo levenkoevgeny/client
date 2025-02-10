@@ -1,3 +1,5 @@
+import store from "../store"
+console.log(store)
 export const queryLimit = 1000
 
 export const baseState = () => ({
@@ -37,9 +39,9 @@ export const baseMutations = {
 
 export function getActionGetListFunction(mainAPIInstance) {
   return async ({ commit }, payload) => {
-    mainAPIInstance.searchObj = { ...payload, limit: queryLimit }
+    mainAPIInstance.searchObj = { ...payload.searchForm, limit: queryLimit }
     try {
-      const response = await mainAPIInstance.getItemsList("token is here!!!")
+      const response = await mainAPIInstance.getItemsList(payload.token)
       commit("setList", await response.data)
     } catch (error) {}
   }

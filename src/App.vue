@@ -4,9 +4,7 @@
 
 <script>
 export default {
-  async created() {
-    await this.$store.dispatch("common/actionGetCommonLists", {})
-  },
+  async created() {},
 }
 </script>
 

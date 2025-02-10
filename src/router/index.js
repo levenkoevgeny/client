@@ -9,6 +9,7 @@ import { SpecialityHistoryView } from "@/components/cadet/speciality"
 import { CadetUpdateView } from "@/components/cadet"
 import { CadetListOkView } from "@/components/cadet"
 import { FiredCadetComponent } from "@/components/cadet/fired"
+import store from "@/store"
 
 import {
   EmployeeMainView,
@@ -50,6 +51,8 @@ import {
   ForeignLanguageLevelsListView,
 } from "@/components/dictionaries"
 
+import LoginView from "@/components/auth/LoginView.vue"
+
 import NavigationPage from "@/components/NavigationPage.vue"
 
 import {
@@ -60,11 +63,23 @@ import {
 
 const routes = [
   { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFoundView },
-  { path: "", name: "navigation", component: NavigationPage },
+  {
+    path: "/login",
+    name: "login",
+    component: LoginView,
+    meta: { requiresAuth: false },
+  },
+  {
+    path: "",
+    name: "navigation",
+    component: NavigationPage,
+    meta: { requiresAuth: true },
+  },
   {
     path: "/cadet",
     name: "cadet-main",
     component: CadetMainView,
+    meta: { requiresAuth: false },
     children: [
       {
         path: "",
@@ -324,6 +339,18 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+})
+
+router.beforeEach(async (to, from) => {
+  await store.dispatch("auth/actionCheckLoggedIn")
+  const isLoggedIn = store.getters["auth/getIsLoggedIn"]
+
+  if (to.meta.requiresAuth && !isLoggedIn) {
+    return {
+      path: "/login",
+      query: { redirect: to.fullPath },
+    }
+  }
 })
 
 export default router
