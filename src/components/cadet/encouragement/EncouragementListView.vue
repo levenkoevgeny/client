@@ -652,6 +652,7 @@ export default {
       return this.orderOwners.results
     },
     ...mapGetters({
+      token: "auth/getToken",
       orderOwners: "orderOwners/getList",
     }),
   },
