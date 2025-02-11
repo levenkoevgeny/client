@@ -294,7 +294,6 @@
 
 <script>
 import getRankHistoryAPIInstance from "@/api/cadet/rankHistoryAPI"
-import getRankAPIInstance from "@/api/cadet/rankAPI"
 import {
   getLoadListFunction,
   showAddNewMainItemModal,
@@ -313,6 +312,7 @@ import {
 import RankHistoryModalForCadetUpdate from "@/components/cadet/rank/modals/RankHistoryModalForCadetUpdate.vue"
 import BaseListLayoutForCadetUpdate from "@/components/layouts/BaseListLayoutForCadetUpdate.vue"
 import { PaginatorView } from "@/components/common"
+import { mapGetters } from "vuex"
 
 export default {
   name: "RankHistoryCadetComponent",
@@ -337,9 +337,7 @@ export default {
       isLoading: true,
       isError: false,
       mainItemList: { count: "", results: [], previous: null, next: null },
-      rankList: { count: "", results: [], previous: null, next: null },
       mainItemAPIInstance: getRankHistoryAPIInstance(),
-      rankAPIInstance: getRankAPIInstance(),
       itemForm: Object.assign({}, getRankHistoryAPIInstance().formData),
       selectedItems: [],
       deleteItemId: "",
@@ -355,8 +353,7 @@ export default {
       this.isError = false
       try {
         const [rankHistories, ranks] = await Promise.all([
-          listFunction("mainItem")(this.cadetId),
-          listFunction("rank")(),
+          listFunction("mainItem")(this.cadetId, null, this.token),
         ]).catch((e) => (this.isError = true))
         this.mainItemList = rankHistories
         this.rankList = ranks
@@ -391,12 +388,17 @@ export default {
       return this.mainItemList.results
     },
     orderedRanks() {
-      return this.rankList.results
+      return this.ranks.results
     },
     orderedOrderOwners() {
       return this.orderOwnersList.results
     },
+    ...mapGetters({
+      ranks: "ranks/getList",
+      token: "auth/getToken",
+    }),
   },
+
   watch: {},
 }
 </script>

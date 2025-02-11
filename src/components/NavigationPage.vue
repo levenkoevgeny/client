@@ -94,19 +94,10 @@
 
 <script>
 import NavigationLayout from "@/components/layouts/NavigationLayout.vue"
+import { mapGetters } from "vuex"
 export default {
   name: "NavigationPage",
   components: { NavigationLayout },
-  data() {
-    return {}
-  },
-  async created() {
-    await this.$store.dispatch("common/actionGetCommonLists", {
-      token: this.$store.getters["auth/getToken"],
-    })
-  },
-  methods: {},
-  computed: {},
 }
 </script>
 

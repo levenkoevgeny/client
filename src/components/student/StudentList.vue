@@ -374,9 +374,9 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [students] = await Promise.all([listFunction("student")()]).catch(
-          () => (this.isError = true),
-        )
+        const [students] = await Promise.all([
+          listFunction("student")(null, null, this.token),
+        ]).catch(() => (this.isError = true))
         this.studentList = students
       } catch (e) {
         this.isError = true
@@ -388,8 +388,9 @@ export default {
       this.isLoading = true
       this.studentAPIInstance.searchObj = this.searchForm
       try {
-        const studentResponse =
-          await this.studentAPIInstance.getItemsList("token is here!!!")
+        const studentResponse = await this.studentAPIInstance.getItemsList(
+          this.token,
+        )
         this.studentList = await studentResponse.data
       } catch (e) {
         this.isError = true
@@ -413,7 +414,7 @@ export default {
           try {
             const response = await this.studentAPIInstance.updateList(
               this.studentList.next,
-              "this.userToken",
+              this.token,
             )
 
             const newData = await response.data
@@ -471,6 +472,7 @@ export default {
       groups: "groups/getList",
       ranks: "ranks/getList",
       positions: "positions/getList",
+      token: "auth/getToken",
     }),
   },
   watch: {

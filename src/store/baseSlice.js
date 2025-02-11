@@ -1,5 +1,3 @@
-import store from "../store"
-console.log(store)
 export const queryLimit = 1000
 
 export const baseState = () => ({

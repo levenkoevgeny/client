@@ -308,6 +308,7 @@ import {
 import BaseListLayoutForCadetUpdate from "@/components/layouts/BaseListLayoutForCadetUpdate.vue"
 import { PaginatorView } from "@/components/common"
 import EncouragementModalForCadetUpdate from "@/components/cadet/encouragement/modals/EncouragementModalForCadetUpdate.vue"
+import { mapGetters } from "vuex"
 
 export default {
   name: "EncouragementCadetComponent",
@@ -355,8 +356,8 @@ export default {
       this.isError = false
       try {
         const [encouragements, encouragementKinds] = await Promise.all([
-          listFunction("mainItem")(this.cadetId),
-          listFunction("encouragementKind")(),
+          listFunction("mainItem")(this.cadetId, null, this.token),
+          listFunction("encouragementKind")(null, null, this.token),
         ])
         this.mainItemList = encouragements
         this.encouragementKindList = encouragementKinds
@@ -396,6 +397,9 @@ export default {
     orderedOrderOwnerList() {
       return this.orderOwnersList.results
     },
+    ...mapGetters({
+      token: "auth/getToken",
+    }),
   },
   watch: {},
 }

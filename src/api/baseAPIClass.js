@@ -18,7 +18,6 @@ export default class BaseAPI {
   }
 
   async getItemsList(token) {
-    console.log("token baseAPI", token)
     let query = this.getQueryStringFromSearchObj()
     return axios.get(
       `${process.env.VUE_APP_BACKEND_PROTOCOL}://${process.env.VUE_APP_BACKEND_HOST}:${process.env.VUE_APP_BACKEND_PORT}/api/${this.baseURL}/${query}`,

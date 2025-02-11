@@ -1,13 +1,12 @@
 export function getLoadListFunction(modelName) {
-  return async (cadetId, limit) => {
+  return async (cadetId, limit, token) => {
     if (cadetId) {
       this[`${modelName}APIInstance`].searchObj.cadet = cadetId
     }
     if (limit) {
       this[`${modelName}APIInstance`].searchObj.limit = limit
     }
-    const res =
-      await this[`${modelName}APIInstance`].getItemsList("token is here!!!")
+    const res = await this[`${modelName}APIInstance`].getItemsList(token)
     return res.data
   }
 }

@@ -2,7 +2,6 @@ const state = () => ({})
 
 const actions = {
   async actionGetCommonLists({ dispatch, commit }, payload) {
-    console.log("actionGetCommonLists", payload)
     try {
       await dispatch(
         "encouragementKinds/actionGetList",

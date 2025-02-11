@@ -331,6 +331,7 @@ import BaseListLayoutForCadetUpdate from "@/components/layouts/BaseListLayoutFor
 import RankHistoryModalForCadetUpdate from "@/components/cadet/rank/modals/RankHistoryModalForCadetUpdate.vue"
 import EducationHistoryModalForCadetUpdate from "@/components/cadet/education/modals/EducationHistoryModalForCadetUpdate.vue"
 import { PaginatorView } from "@/components/common"
+import { mapGetters } from "vuex"
 
 export default {
   name: "EducationHistoryCadetComponent",
@@ -393,10 +394,10 @@ export default {
           educationLevels,
           educationLocalityKinds,
         ] = await Promise.all([
-          listFunction("mainItem")(this.cadetId),
-          listFunction("educationKind")(this.cadetId),
-          listFunction("educationLevel")(this.cadetId),
-          listFunction("educationLocalityKind")(this.cadetId),
+          listFunction("mainItem")(this.cadetId, null, this.token),
+          listFunction("educationKind")(this.cadetId, null, this.token),
+          listFunction("educationLevel")(this.cadetId, null, this.token),
+          listFunction("educationLocalityKind")(this.cadetId, null, this.token),
         ])
         this.mainItemList = educations
         this.educationKindList = educationKinds
@@ -441,6 +442,9 @@ export default {
     orderedEducationLocationKindsList() {
       return this.educationLocationKindList.results
     },
+    ...mapGetters({
+      token: "auth/getToken",
+    }),
   },
   watch: {},
 }

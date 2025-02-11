@@ -1306,12 +1306,12 @@ export default {
         graduationReasons,
       ] = await Promise.all([
         this.getCadetData(cadetId),
-        listFunction("cadetCategory")(null, 1000),
-        listFunction("passportIssueAuthority")(null, 1000),
-        listFunction("specialization")(null, 1000),
-        listFunction("directionOrd")(null, 1000),
-        listFunction("militaryOffice")(null, 1000),
-        listFunction("graduationReason")(null, 1000),
+        listFunction("cadetCategory")(null, 1000, this.token),
+        listFunction("passportIssueAuthority")(null, 1000, this.token),
+        listFunction("specialization")(null, 1000, this.token),
+        listFunction("directionOrd")(null, 1000, this.token),
+        listFunction("militaryOffice")(null, 1000, this.token),
+        listFunction("graduationReason")(null, 1000, this.token),
       ]).catch(() => (this.isError = true))
       this.currentCadetData = cadet
       this.cadetCategoryList = cadetCategories
@@ -1322,10 +1322,7 @@ export default {
       this.graduationReasonList = graduationReasons
     },
     async getCadetData(cadetId) {
-      const res = await this.cadetAPIInstance.getItemData(
-        "token is here!!!",
-        cadetId,
-      )
+      const res = await this.cadetAPIInstance.getItemData(this.token, cadetId)
       return res.data
     },
     debouncedUpdate: debounce(async function () {
@@ -1382,6 +1379,7 @@ export default {
       specialities: "specialities/getList",
       positions: "positions/getList",
       orderOwners: "orderOwners/getList",
+      token: "auth/getToken",
     }),
   },
   watch: {

@@ -387,9 +387,9 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [cadets] = await Promise.all([listFunction("cadet")()]).catch(
-          () => (this.isError = true),
-        )
+        const [cadets] = await Promise.all([
+          listFunction("cadet")(null, null, this.token),
+        ]).catch(() => (this.isError = true))
         this.cadetList = cadets
       } catch (e) {
         this.isError = true
@@ -400,10 +400,7 @@ export default {
     async updatePaginator(url) {
       this.isLoading = true
       try {
-        const response = await this.cadetAPIInstance.updateList(
-          url,
-          "this.userToken",
-        )
+        const response = await this.cadetAPIInstance.updateList(url, this.token)
         this.cadetList = await response.data
       } catch (error) {
         this.isError = true
@@ -415,8 +412,9 @@ export default {
       this.isLoading = true
       this.cadetAPIInstance.searchObj = this.searchForm
       try {
-        const cadetAResponse =
-          await this.cadetAPIInstance.getItemsList("token is here!!!")
+        const cadetAResponse = await this.cadetAPIInstance.getItemsList(
+          this.token,
+        )
         this.cadetList = await cadetAResponse.data
       } catch (e) {
         this.isError = true
@@ -440,7 +438,7 @@ export default {
     async addNewCadet() {
       try {
         const response = await this.cadetAPIInstance.addItem(
-          "this.token",
+          this.token,
           this.cadetNewForm,
         )
         const newItem = await response.data
@@ -468,7 +466,7 @@ export default {
           try {
             const response = await this.cadetAPIInstance.updateList(
               this.cadetList.next,
-              "this.userToken",
+              this.token,
             )
 
             const newData = await response.data
@@ -521,6 +519,7 @@ export default {
       specialities: "specialities/getList",
       positions: "positions/getList",
       categories: "personCategories/getList",
+      token: "auth/getToken",
     }),
   },
   watch: {

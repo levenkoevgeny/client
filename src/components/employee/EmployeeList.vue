@@ -233,7 +233,7 @@ export default {
       this.isError = false
       try {
         const [employees] = await Promise.all([
-          listFunction("employee")(),
+          listFunction("employee")(null, null, this.token),
         ]).catch(() => (this.isError = true))
         this.employeeList = employees
       } catch (e) {
@@ -246,8 +246,9 @@ export default {
       this.isLoading = true
       this.employeeAPIInstance.searchObj = this.searchForm
       try {
-        const employeeResponse =
-          await this.employeeAPIInstance.getItemsList("token is here!!!")
+        const employeeResponse = await this.employeeAPIInstance.getItemsList(
+          this.token,
+        )
         this.employeeList = await employeeResponse.data
       } catch (e) {
         this.isError = true
@@ -285,6 +286,7 @@ export default {
     },
     ...mapGetters({
       subdivisions: "subdivisions/getList",
+      token: "auth/getToken",
     }),
   },
   watch: {

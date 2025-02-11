@@ -30,13 +30,13 @@ axios.interceptors.response.use(
       window.location.href = "/network-error"
       return Promise.reject(error)
     }
-    // if (error.response.status === 401 || error.response.status === 403) {
-    //   removeLocalToken()
-    //   await index.replace({ name: "login" })
-    // }
-    // if (error.response.status === 500) {
-    //   await index.replace({ name: "server-error" })
-    // }
+    if (error.response.status === 401 || error.response.status === 403) {
+      removeLocalToken()
+      await index.replace({ name: "login" })
+    }
+    if (error.response.status === 500) {
+      await index.replace({ name: "server-error" })
+    }
     return Promise.reject(error)
   },
 )

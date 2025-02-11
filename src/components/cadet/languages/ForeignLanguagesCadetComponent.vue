@@ -285,8 +285,6 @@
 
 <script>
 import getCadetForeignLanguageLevelAPIInstance from "@/api/cadet/cadetForeignLanguageLevelAPI"
-import getForeignLanguageAPIInstance from "@/api/cadet/foreignLanguageAPI"
-import getForeignLanguageLevelAPIInstance from "@/api/cadet/foreignLanguageLevel"
 
 import {
   getLoadListFunction,
@@ -307,6 +305,7 @@ import BaseListLayoutForCadetUpdate from "@/components/layouts/BaseListLayoutFor
 import EducationHistoryModalForCadetUpdate from "@/components/cadet/education/modals/EducationHistoryModalForCadetUpdate.vue"
 import ForeignLanguageModalForCadetUpdate from "@/components/cadet/languages/modals/ForeignLanguageModalForCadetUpdate.vue"
 import { PaginatorView } from "@/components/common"
+import { mapGetters } from "vuex"
 
 export default {
   name: "ForeignLanguagesCadetComponent",
@@ -345,8 +344,6 @@ export default {
         next: null,
       },
       mainItemAPIInstance: getCadetForeignLanguageLevelAPIInstance(),
-      foreignLanguageAPIInstance: getForeignLanguageAPIInstance(),
-      foreignLanguageLevelAPIInstance: getForeignLanguageLevelAPIInstance(),
       itemForm: Object.assign(
         {},
         getCadetForeignLanguageLevelAPIInstance().formData,
@@ -364,18 +361,10 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [
-          cadetForeignLanguageLevels,
-          foreignLanguages,
-          foreignLanguageLevels,
-        ] = await Promise.all([
-          listFunction("mainItem")(this.cadetId),
-          listFunction("foreignLanguage")(),
-          listFunction("foreignLanguageLevel")(),
+        const [cadetForeignLanguageLevels] = await Promise.all([
+          listFunction("mainItem")(this.cadetId, null, this.token),
         ])
         this.mainItemList = cadetForeignLanguageLevels
-        this.foreignLanguageList = foreignLanguages
-        this.foreignLanguageLevelList = foreignLanguageLevels
       } catch (e) {
         this.isError = true
       } finally {
@@ -407,11 +396,16 @@ export default {
       return this.mainItemList.results
     },
     orderedForeignLanguagesList() {
-      return this.foreignLanguageList.results
+      return this.foreignLanguages.results
     },
     orderedForeignLanguageLevelsList() {
-      return this.foreignLanguageLevelList.results
+      return this.foreignLanguageLevels.results
     },
+    ...mapGetters({
+      foreignLanguages: "foreignLanguages/getList",
+      foreignLanguageLevels: "foreignLanguageLevels/getList",
+      token: "auth/getToken",
+    }),
   },
   watch: {},
 }
