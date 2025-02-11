@@ -98,6 +98,11 @@ import { mapGetters } from "vuex"
 export default {
   name: "NavigationPage",
   components: { NavigationLayout },
+  computed: {
+    ...mapGetters({
+      // orderOwners: "orderOwners/getList",
+    }),
+  },
 }
 </script>
 
