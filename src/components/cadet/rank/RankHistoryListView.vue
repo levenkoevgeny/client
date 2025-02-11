@@ -482,8 +482,6 @@
 
 <script>
 import getCadetAPIInstance from "@/api/cadet/cadetAPI"
-import getOrderOwnerAPIInstance from "@/api/cadet/orderOwnerAPI"
-import getRankAPIInstance from "@/api/cadet/rankAPI"
 import getRankHistoryAPIInstance from "@/api/cadet/rankHistoryAPI"
 import BaseListLayout from "@/components/layouts/BaseListLayout.vue"
 import RankHistoryModalForCadetUpdate from "@/components/cadet/rank/modals/RankHistoryModalForCadetUpdate.vue"
@@ -506,7 +504,7 @@ import {
   updateMainItemInList,
 } from "../../../../utils"
 import PunishmentModalForCadetUpdate from "@/components/cadet/punishment/modals/PunishmentModalForCadetUpdate.vue"
-import axios from "axios"
+import { mapGetters } from "vuex"
 
 export default {
   name: "RankHistoryListView",
@@ -527,17 +525,10 @@ export default {
         previous: null,
         next: null,
       },
-      rankList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      orderOwnerList: { count: "", results: [], previous: null, next: null },
+
       cadetList: { count: "", results: [], previous: null, next: null },
       mainItemAPIInstance: getRankHistoryAPIInstance(),
-      rankAPIInstance: getRankAPIInstance(),
-      orderOwnerAPIInstance: getOrderOwnerAPIInstance(),
+
       cadetAPIInstance: getCadetAPIInstance(),
       itemForm: Object.assign({}, getRankHistoryAPIInstance().formData),
       searchForm: Object.assign({}, getRankHistoryAPIInstance().searchObj),
@@ -559,14 +550,10 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [rankHistories, ranks, orderOwners] = await Promise.all([
+        const [rankHistories] = await Promise.all([
           listFunction("mainItem")(this.cadetId),
-          listFunction("rank")(null, 1000),
-          listFunction("orderOwner")(null, 1000),
         ])
         this.mainItemList = rankHistories
-        this.rankList = ranks
-        this.orderOwnerList = orderOwners
       } catch (e) {
         this.isError = true
       } finally {
@@ -581,8 +568,7 @@ export default {
           { last_name_rus__icontains: search },
         )
         try {
-          const cadetResponse =
-            await this.cadetAPIInstance.getItemsList("token is here!!!")
+          const cadetResponse = await this.cadetAPIInstance.getItemsList()
           this.cadetList = await cadetResponse.data
         } catch (e) {
           this.isError = true
@@ -613,7 +599,7 @@ export default {
       this.mainItemAPIInstance.searchObj = Object.assign({}, this.searchForm)
       try {
         const encouragementResponse =
-          await this.mainItemAPIInstance.getItemsList("token is here!!!")
+          await this.mainItemAPIInstance.getItemsList()
         this.mainItemList = await encouragementResponse.data
       } catch (e) {
         this.isError = true
@@ -635,14 +621,18 @@ export default {
       return this.mainItemList.results
     },
     orderedRanks() {
-      return this.rankList.results
+      return this.ranks.results
     },
     orderedCadets() {
       return this.cadetList.results
     },
     orderedOrderOwners() {
-      return this.orderOwnerList.results
+      return this.orderOwners.results
     },
+    ...mapGetters({
+      orderOwners: "orderOwners/getList",
+      ranks: "ranks/getList",
+    }),
   },
   watch: {
     searchForm: {

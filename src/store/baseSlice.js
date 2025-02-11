@@ -37,9 +37,9 @@ export const baseMutations = {
 
 export function getActionGetListFunction(mainAPIInstance) {
   return async ({ commit }, payload) => {
-    mainAPIInstance.searchObj = { ...payload.searchForm, limit: queryLimit }
+    mainAPIInstance.searchObj = { ...payload, limit: queryLimit }
     try {
-      const response = await mainAPIInstance.getItemsList(payload.token)
+      const response = await mainAPIInstance.getItemsList()
       commit("setList", await response.data)
     } catch (error) {}
   }
@@ -48,10 +48,7 @@ export function getActionGetListFunction(mainAPIInstance) {
 export function getActionAddNewItem(mainAPIInstance) {
   return async ({ commit }, payload) => {
     try {
-      const response = await mainAPIInstance.addItem(
-        "token is here!!!",
-        payload,
-      )
+      const response = await mainAPIInstance.addItem(payload)
       commit("addItemToList", await response.data)
     } catch (error) {}
   }
@@ -60,10 +57,7 @@ export function getActionAddNewItem(mainAPIInstance) {
 export function getActionUpdateItem(mainAPIInstance) {
   return async ({ commit }, payload) => {
     try {
-      const response = await mainAPIInstance.updateItem(
-        "token is here!!!",
-        payload,
-      )
+      const response = await mainAPIInstance.updateItem(payload)
       commit("updateItemInList", await response.data)
     } catch (error) {}
   }
@@ -72,10 +66,7 @@ export function getActionUpdateItem(mainAPIInstance) {
 export function getActionDeleteItem(mainAPIInstance) {
   return async ({ commit }, payload) => {
     try {
-      const response = await mainAPIInstance.deleteItem(
-        "token is here!!!",
-        payload,
-      )
+      const response = await mainAPIInstance.deleteItem(payload)
       commit("deleteItemInList", await response.data)
     } catch (error) {}
   }

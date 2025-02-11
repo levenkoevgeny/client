@@ -23,6 +23,10 @@ import gorovds from "@/store/modules/gorovds"
 import rewards from "@/store/modules/rewards"
 import foreignLanguageLevels from "@/store/modules/foreignLanguageLevels"
 import auth from "@/store/modules/auth"
+import educationKind from "@/store/modules/educationKind"
+import educationLevel from "@/store/modules/educationLevel"
+import educationLocalityKind from "@/store/modules/educationLocalityKind"
+import degreeOfKinship from "@/store/modules/degreeOfKinship"
 
 const store = createStore({
   modules: {
@@ -50,6 +54,10 @@ const store = createStore({
     foreignLanguageLevels,
     graduationReasons,
     educationForms,
+    educationKind,
+    educationLevel,
+    educationLocalityKind,
+    degreeOfKinship,
   },
 })
 

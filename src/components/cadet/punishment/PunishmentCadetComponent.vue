@@ -305,7 +305,6 @@
 </template>
 
 <script>
-import getPunishmentKindAPIInstance from "@/api/cadet/punishmentKindAPI"
 import getPunishmentAPIInstance from "@/api/cadet/punishmentAPI"
 
 import BaseListLayoutForCadetUpdate from "@/components/layouts/BaseListLayoutForCadetUpdate.vue"
@@ -326,7 +325,7 @@ import {
 } from "../../../../utils"
 import PunishmentModalForCadetUpdate from "@/components/cadet/punishment/modals/PunishmentModalForCadetUpdate.vue"
 import { PaginatorView } from "@/components/common"
-import getEncouragementAPIInstance from "@/api/cadet/encouragementAPI"
+import { mapGetters } from "vuex"
 
 export default {
   name: "PunishmentCadetComponent",
@@ -356,15 +355,8 @@ export default {
         previous: null,
         next: null,
       },
-      punishmentKindList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
       mainItemAPIInstance: getPunishmentAPIInstance(),
-      punishmentKindAPIInstance: getPunishmentKindAPIInstance(),
-      itemForm: Object.assign({}, getEncouragementAPIInstance().formData),
+      itemForm: Object.assign({}, getPunishmentAPIInstance().formData),
       selectedItems: [],
       deleteItemId: "",
     }
@@ -378,12 +370,10 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [punishments, punishmentKinds] = await Promise.all([
+        const [punishments] = await Promise.all([
           listFunction("mainItem")(this.cadetId),
-          listFunction("punishmentKind")(),
         ])
         this.mainItemList = punishments
-        this.punishmentKindList = punishmentKinds
       } catch (e) {
         this.isError = true
       } finally {
@@ -415,11 +405,14 @@ export default {
       return this.mainItemList.results
     },
     orderedPunishmentKindList() {
-      return this.punishmentKindList.results
+      return this.punishmentKinds.results
     },
     orderedOrderOwnerList() {
       return this.orderOwnersList.results
     },
+    ...mapGetters({
+      punishmentKinds: "punishmentKinds/getList",
+    }),
   },
   watch: {},
 }

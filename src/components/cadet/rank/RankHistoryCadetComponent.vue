@@ -352,11 +352,10 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [rankHistories, ranks] = await Promise.all([
-          listFunction("mainItem")(this.cadetId, null, this.token),
+        const [rankHistories] = await Promise.all([
+          listFunction("mainItem")(this.cadetId, null),
         ]).catch((e) => (this.isError = true))
         this.mainItemList = rankHistories
-        this.rankList = ranks
       } catch (e) {
         this.isError = true
       } finally {

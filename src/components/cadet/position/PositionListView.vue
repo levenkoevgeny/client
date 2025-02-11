@@ -517,6 +517,7 @@ import {
   updateMainItemInList,
 } from "../../../../utils"
 import PunishmentModalForCadetUpdate from "@/components/cadet/punishment/modals/PunishmentModalForCadetUpdate.vue"
+import { mapGetters } from "vuex"
 
 export default {
   name: "PositionListView",
@@ -537,17 +538,8 @@ export default {
         previous: null,
         next: null,
       },
-      positionList: {
-        count: 0,
-        results: [],
-        previous: null,
-        next: null,
-      },
-      orderOwnerList: { count: "", results: [], previous: null, next: null },
       cadetList: { count: "", results: [], previous: null, next: null },
       mainItemAPIInstance: getPositionHistoryAPIInstance(),
-      positionAPIInstance: getPositionAPIInstance(),
-      orderOwnerAPIInstance: getOrderOwnerAPIInstance(),
       cadetAPIInstance: getCadetAPIInstance(),
       itemForm: Object.assign({}, getPositionHistoryAPIInstance().formData),
       searchForm: Object.assign({}, getPositionHistoryAPIInstance().searchObj),
@@ -566,14 +558,10 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [positionHistories, positions, orderOwners] = await Promise.all([
+        const [positionHistories] = await Promise.all([
           listFunction("mainItem")(this.cadetId),
-          listFunction("position")(null, 1000),
-          listFunction("orderOwner")(null, 1000),
         ])
         this.mainItemList = positionHistories
-        this.positionList = positions
-        this.orderOwnerList = orderOwners
       } catch (e) {
         this.isError = true
       } finally {
@@ -588,8 +576,7 @@ export default {
           { last_name_rus__icontains: search },
         )
         try {
-          const cadetResponse =
-            await this.cadetAPIInstance.getItemsList("token is here!!!")
+          const cadetResponse = await this.cadetAPIInstance.getItemsList()
           this.cadetList = await cadetResponse.data
         } catch (e) {
           this.isError = true
@@ -620,7 +607,7 @@ export default {
       this.mainItemAPIInstance.searchObj = Object.assign({}, this.searchForm)
       try {
         const encouragementResponse =
-          await this.mainItemAPIInstance.getItemsList("token is here!!!")
+          await this.mainItemAPIInstance.getItemsList()
         this.mainItemList = await encouragementResponse.data
       } catch (e) {
         this.isError = true
@@ -642,14 +629,18 @@ export default {
       return this.mainItemList.results
     },
     orderedPositions() {
-      return this.positionList.results
+      return this.positions.results
     },
     orderedCadets() {
       return this.cadetList.results
     },
     orderedOrderOwners() {
-      return this.orderOwnerList.results
+      return this.orderOwners.results
     },
+    ...mapGetters({
+      orderOwners: "orderOwners/getList",
+      positions: "positions/getList",
+    }),
   },
   watch: {
     searchForm: {

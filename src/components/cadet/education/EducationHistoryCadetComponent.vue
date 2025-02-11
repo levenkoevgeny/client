@@ -357,23 +357,7 @@ export default {
         previous: null,
         next: null,
       },
-      educationKindList: { count: "", results: [], previous: null, next: null },
-      educationLevelList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      educationLocationKindList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
       mainItemAPIInstance: getEducationHistoryAPIInstance(),
-      educationKindAPIInstance: getEducationKindAPIInstance(),
-      educationLevelAPIInstance: getEducationLevelAPIInstance(),
-      educationLocalityKindAPIInstance: getEducationLocalityKindAPIInstance(),
       itemForm: Object.assign({}, getEducationHistoryAPIInstance().formData),
       selectedItems: [],
       deleteItemId: "",
@@ -388,21 +372,10 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [
-          educations,
-          educationKinds,
-          educationLevels,
-          educationLocalityKinds,
-        ] = await Promise.all([
-          listFunction("mainItem")(this.cadetId, null, this.token),
-          listFunction("educationKind")(this.cadetId, null, this.token),
-          listFunction("educationLevel")(this.cadetId, null, this.token),
-          listFunction("educationLocalityKind")(this.cadetId, null, this.token),
+        const [educations] = await Promise.all([
+          listFunction("mainItem")(this.cadetId, null),
         ])
         this.mainItemList = educations
-        this.educationKindList = educationKinds
-        this.educationLevelList = educationLevels
-        this.educationLocationKindList = educationLocalityKinds
       } catch (e) {
         this.isError = true
       } finally {
@@ -434,16 +407,19 @@ export default {
       return this.mainItemList.results
     },
     orderedEducationKindsList() {
-      return this.educationKindList.results
+      return this.educationKinds.results
     },
     orderedEducationLevelsList() {
-      return this.educationLevelList.results
+      return this.educationLevels.results
     },
     orderedEducationLocationKindsList() {
-      return this.educationLocationKindList.results
+      return this.educationLocalityKinds.results
     },
     ...mapGetters({
       token: "auth/getToken",
+      educationLevels: "educationLevel/getList",
+      educationLocalityKinds: "educationLocalityKind/getList",
+      educationKinds: "educationKind/getList",
     }),
   },
   watch: {},

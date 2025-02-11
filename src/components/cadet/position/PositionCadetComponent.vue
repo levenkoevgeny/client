@@ -288,7 +288,6 @@
 </template>
 
 <script>
-import getPositionAPIInstance from "@/api/cadet/positionAPI"
 import getPositionHistoryAPIInstance from "@/api/cadet/positionHistoryAPI"
 import BaseListLayoutForCadetUpdate from "@/components/layouts/BaseListLayoutForCadetUpdate.vue"
 import {
@@ -309,6 +308,7 @@ import {
 import PositionModalForCadetUpdate from "@/components/cadet/position/modals/PositionModalForCadetUpdate.vue"
 import { PaginatorView } from "@/components/common"
 import getEncouragementAPIInstance from "@/api/cadet/encouragementAPI"
+import { mapGetters } from "vuex"
 
 export default {
   name: "PositionCadetComponent",
@@ -338,14 +338,7 @@ export default {
         previous: null,
         next: null,
       },
-      positionList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
       mainItemAPIInstance: getPositionHistoryAPIInstance(),
-      positionAPIInstance: getPositionAPIInstance(),
       itemForm: Object.assign({}, getEncouragementAPIInstance().formData),
       selectedItems: [],
       deleteItemId: "",
@@ -360,12 +353,10 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [positionHistories, positions] = await Promise.all([
+        const [positionHistories] = await Promise.all([
           listFunction("mainItem")(this.cadetId),
-          listFunction("position")(),
         ])
         this.mainItemList = positionHistories
-        this.positionList = positions
       } catch (e) {
         this.isError = true
       } finally {
@@ -397,11 +388,16 @@ export default {
       return this.mainItemList.results
     },
     orderedPositionList() {
-      return this.positionList.results.filter(position => position.position_category == "1")
+      return this.positions.results.filter(
+        (position) => position.position_category == "1",
+      )
     },
     orderedOrderOwnerList() {
       return this.orderOwnersList.results
     },
+    ...mapGetters({
+      positions: "positions/getList",
+    }),
   },
   watch: {},
 }

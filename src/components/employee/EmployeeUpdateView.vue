@@ -514,7 +514,6 @@ import BaseListLayout from "@/components/layouts/BaseListLayout.vue"
 import { mapGetters } from "vuex"
 import BaseListLayoutForCadetUpdate from "@/components/layouts/BaseListLayoutForCadetUpdate.vue"
 import { PaginatorView } from "@/components/common"
-import { getLoadListFunction } from "../../../utils"
 import {
   ArmyServiceCadetComponent,
   MVDServiceCadetComponent,
@@ -530,8 +529,6 @@ import { RankHistoryEmployeeComponent } from "@/components/employee/rank"
 import { ScientificWorksCadetComponent } from "@/components/cadet/scientific_works"
 import { PunishmentCadetComponent } from "@/components/cadet/punishment"
 import { EducationHistoryCadetComponent } from "@/components/cadet/education"
-import getCadetCategoryAPIAPIInstance from "@/api/cadet/cadetCategoryAPI"
-import getPassportIssueAuthorityAPIInstance from "@/api/cadet/passportIssueAuthorityAPI"
 
 export default {
   name: "EmployeeUpdateView",
@@ -556,13 +553,6 @@ export default {
   data() {
     return {
       employeeList: { count: "", results: [], previous: null, next: null },
-      categoryList: { count: "", results: [], previous: null, next: null },
-      passportIssueAuthorityList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
       isLoading: true,
       isError: false,
       currentEmployeeData: {
@@ -650,8 +640,6 @@ export default {
       BACKEND_HOST: process.env.VUE_APP_BACKEND_HOST,
       BACKEND_PORT: process.env.VUE_APP_BACKEND_PORT,
       employeeAPIInstance: getEmployeeAPIInstance(),
-      categoryAPIInstance: getCadetCategoryAPIAPIInstance(),
-      passportIssueAuthorityAPIInstance: getPassportIssueAuthorityAPIInstance(),
       employeeNewForm: {
         last_name_rus: "",
         first_name_rus: "",
@@ -664,30 +652,20 @@ export default {
   },
   methods: {
     async loadData(employeeId) {
-      const listFunction = getLoadListFunction.bind(this)
-
-      const [employee, categories, passportIssueAuthorities] =
-        await Promise.all([
-          this.getEmployeeData(employeeId),
-          listFunction("category")(null, 1000),
-          listFunction("passportIssueAuthority")(null, 1000),
-        ]).catch(() => (this.isError = true))
+      const [employee] = await Promise.all([
+        this.getEmployeeData(employeeId),
+      ]).catch(() => (this.isError = true))
       this.currentEmployeeData = employee
-      this.categoryList = categories
-      this.passportIssueAuthorityList = passportIssueAuthorities
     },
     async getEmployeeData(employeeId) {
-      const res = await this.employeeAPIInstance.getItemData(
-        "token is here!!!",
-        employeeId,
-      )
+      const res = await this.employeeAPIInstance.getItemData(employeeId)
       return res.data
     },
   },
 
   computed: {
     orderedCategories() {
-      return this.categoryList.results
+      return this.categories.results
     },
     orderedSubdivisions() {
       return this.subdivisions.results.filter(
@@ -695,7 +673,7 @@ export default {
       )
     },
     orderedPassportIssueAuthorities() {
-      return this.passportIssueAuthorityList.results
+      return this.passportIssueAuthorities.results
     },
     ...mapGetters({
       groups: "groups/getList",
@@ -704,6 +682,8 @@ export default {
       specialities: "specialities/getList",
       positions: "positions/getList",
       orderOwners: "orderOwners/getList",
+      categories: "personCategories/getList",
+      passportIssueAuthorities: "passportAuthorities/getList",
     }),
   },
 }

@@ -558,7 +558,7 @@ export default {
     }
   },
   async created() {
-    // await this.loadData()
+    await this.loadData()
   },
   methods: {
     async loadData() {
@@ -568,13 +568,10 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [encouragements, encouragementKinds, orderOwners] =
-          await Promise.all([
-            listFunction("mainItem")(this.cadetId),
-            listFunction("encouragementKind")(null, 1000),
-          ])
+        const [encouragements] = await Promise.all([
+          listFunction("mainItem")(this.cadetId, null),
+        ])
         this.mainItemList = encouragements
-        this.encouragementKindList = encouragementKinds
       } catch (e) {
         this.isError = true
       } finally {
@@ -589,8 +586,7 @@ export default {
           { last_name_rus__icontains: search },
         )
         try {
-          const cadetResponse =
-            await this.cadetAPIInstance.getItemsList("token is here!!!")
+          const cadetResponse = await this.cadetAPIInstance.getItemsList()
           this.cadetList = await cadetResponse.data
         } catch (e) {
           this.isError = true
@@ -621,7 +617,7 @@ export default {
       this.mainItemAPIInstance.searchObj = Object.assign({}, this.searchForm)
       try {
         const encouragementResponse =
-          await this.mainItemAPIInstance.getItemsList("token is here!!!")
+          await this.mainItemAPIInstance.getItemsList()
         this.mainItemList = await encouragementResponse.data
       } catch (e) {
         this.isError = true
@@ -643,7 +639,7 @@ export default {
       return this.mainItemList.results
     },
     orderedEncouragementKinds() {
-      return this.encouragementKindList.results
+      return this.encouragementKinds.results
     },
     orderedCadets() {
       return this.cadetList.results
@@ -652,8 +648,8 @@ export default {
       return this.orderOwners.results
     },
     ...mapGetters({
-      token: "auth/getToken",
       orderOwners: "orderOwners/getList",
+      encouragementKinds: "encouragementKinds/getList",
     }),
   },
   watch: {

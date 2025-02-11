@@ -1049,24 +1049,7 @@
 
 <script>
 import getCadetAPIInstance from "@/api/cadet/cadetAPI"
-import getEncouragementAPIInstance from "@/api/cadet/encouragementAPI"
-import getPunishmentAPIInstance from "@/api/cadet/punishmentAPI"
-import getRankHistoryAPIInstance from "@/api/cadet/rankHistoryAPI"
-import getRankAPIInstance from "@/api/cadet/rankAPI"
-import getPositionHistoryAPIInstance from "@/api/cadet/positionHistoryAPI"
-import getSpecialityHistoryAPIInstance from "@/api/cadet/specialityHistoryAPI"
-import getJobHistoryAPIInstance from "@/api/cadet/jobHistoryAPI"
-import getRewardHistoryAPIInstance from "@/api/cadet/rewardHistoryAPI"
-import getArmyHistoryAPIInstance from "@/api/cadet/armyHistoryAPI"
-import getMVDHistoryAPIInstance from "@/api/cadet/mvdHistoryAPI"
-import getCadetCategoryAPIAPIInstance from "@/api/cadet/cadetCategoryAPI"
-import getSubdivisionAPIInstance from "@/api/cadet/subdivisionAPI"
-import getGroupAPIInstance from "@/api/cadet/groupAPI"
-import getPassportIssueAuthorityAPIInstance from "@/api/cadet/passportIssueAuthorityAPI"
-import getSpecializationAPIInstance from "@/api/cadet/specializationAPI"
-import getDirectionOrdAPIInstance from "@/api/cadet/directionOrdAPI"
-import getMilitaryOfficeAPIInstance from "@/api/cadet/militaryOfficeAPI"
-import getGraduationReasonAPIAPIInstance from "@/api/cadet/graduationReasonAPI"
+
 import { debounce } from "lodash/function"
 import { RankHistoryCadetComponent } from "@/components/cadet/rank"
 import { EncouragementCadetComponent } from "@/components/cadet/encouragement"
@@ -1084,7 +1067,6 @@ import { PositionCadetComponent } from "@/components/cadet/position"
 import { SpecialityCadetComponent } from "@/components/cadet/speciality"
 import RelativesCadetComponent from "@/components/cadet/relatives/RelativesCadetComponent.vue"
 
-import { getLoadListFunction } from "../../../utils"
 import "vue-select/dist/vue-select.css"
 import { mapGetters } from "vuex"
 import * as dayjs from "dayjs"
@@ -1193,101 +1175,7 @@ export default {
         has_certificate_kind_heart: "",
         is_employee: "",
       },
-      cadetCategoryList: { count: "", results: [], previous: null, next: null },
-      encouragementList: { count: "", results: [], previous: null, next: null },
-      encouragementKindList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      punishmentList: { count: "", results: [], previous: null, next: null },
-      rankHistoryList: { count: "", results: [], previous: null, next: null },
-      positionHistoryList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      specialityHistoryList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      specializationList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      directionOrdList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      jobHistoryList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      rewardHistoryList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      armyHistoryList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      mvdHistoryList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      passportIssueAuthorityList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      militaryOfficeList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
-      graduationReasonList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
       cadetAPIInstance: getCadetAPIInstance(),
-      cadetCategoryAPIInstance: getCadetCategoryAPIAPIInstance(),
-      encouragementAPIInstance: getEncouragementAPIInstance(),
-      punishmentAPIInstance: getPunishmentAPIInstance(),
-      rankHistoryAPIInstance: getRankHistoryAPIInstance(),
-      rankAPIInstance: getRankAPIInstance(),
-      positionHistoryAPIInstance: getPositionHistoryAPIInstance(),
-      specialityHistoryAPIInstance: getSpecialityHistoryAPIInstance(),
-      specializationAPIInstance: getSpecializationAPIInstance(),
-      directionOrdAPIInstance: getDirectionOrdAPIInstance(),
-      jobHistoryAPIInstance: getJobHistoryAPIInstance(),
-      rewardHistoryAPIInstance: getRewardHistoryAPIInstance(),
-      armyHistoryAPIInstance: getArmyHistoryAPIInstance(),
-      mvdHistoryAPIInstance: getMVDHistoryAPIInstance(),
-      subdivisionAPIInstance: getSubdivisionAPIInstance(),
-      groupAPIInstance: getGroupAPIInstance(),
-      passportIssueAuthorityAPIInstance: getPassportIssueAuthorityAPIInstance(),
-      militaryOfficeAPIInstance: getMilitaryOfficeAPIInstance(),
-      graduationReasonAPIInstance: getGraduationReasonAPIAPIInstance(),
     }
   },
   async created() {
@@ -1295,41 +1183,20 @@ export default {
   },
   methods: {
     async loadData(cadetId) {
-      const listFunction = getLoadListFunction.bind(this)
-      const [
-        cadet,
-        cadetCategories,
-        passportIssueAuthorities,
-        specializations,
-        directionsOrd,
-        militaryOffices,
-        graduationReasons,
-      ] = await Promise.all([
-        this.getCadetData(cadetId),
-        listFunction("cadetCategory")(null, 1000, this.token),
-        listFunction("passportIssueAuthority")(null, 1000, this.token),
-        listFunction("specialization")(null, 1000, this.token),
-        listFunction("directionOrd")(null, 1000, this.token),
-        listFunction("militaryOffice")(null, 1000, this.token),
-        listFunction("graduationReason")(null, 1000, this.token),
-      ]).catch(() => (this.isError = true))
+      const [cadet] = await Promise.all([this.getCadetData(cadetId)]).catch(
+        () => (this.isError = true),
+      )
       this.currentCadetData = cadet
-      this.cadetCategoryList = cadetCategories
-      this.passportIssueAuthorityList = passportIssueAuthorities
-      this.specializationList = specializations
-      this.directionOrdList = directionsOrd
-      this.militaryOfficeList = militaryOffices
-      this.graduationReasonList = graduationReasons
     },
     async getCadetData(cadetId) {
-      const res = await this.cadetAPIInstance.getItemData(this.token, cadetId)
+      const res = await this.cadetAPIInstance.getItemData(cadetId)
       return res.data
     },
     debouncedUpdate: debounce(async function () {
       this.isLoading = true
       try {
         const { photo, ...rest } = this.currentCadetData
-        await this.cadetAPIInstance.updateItem("token is here!!!", rest)
+        await this.cadetAPIInstance.updateItem(rest)
       } catch (e) {
         this.isError = true
         console.log(e)
@@ -1340,7 +1207,7 @@ export default {
   },
   computed: {
     orderedCadetCategories() {
-      return this.cadetCategoryList.results
+      return this.categories.results ? this.categories.results : []
     },
     orderedSubdivisions() {
       return this.subdivisions.results.filter(
@@ -1351,19 +1218,19 @@ export default {
       return this.groups.results
     },
     orderedSpecializations() {
-      return this.specializationList.results
+      return this.specializations.results
     },
     orderedDirectionsOrd() {
-      return this.directionOrdList.results
+      return this.directionsORD.results
     },
     orderedPassportIssueAuthorities() {
-      return this.passportIssueAuthorityList.results
+      return this.passportIssueAuthorities.results
     },
     orderedMilitaryOffices() {
-      return this.militaryOfficeList.results
+      return this.militaryOffices.results
     },
     orderedGraduationReasons() {
-      return this.graduationReasonList.results
+      return this.graduationReasons.results
     },
     getCadetStatus() {
       if (dayjs().isBefore(dayjs(this.currentCadetData.academy_end_date))) {
@@ -1377,8 +1244,14 @@ export default {
       ranks: "ranks/getList",
       subdivisions: "subdivisions/getList",
       specialities: "specialities/getList",
+      specializations: "specializations/getList",
+      directionsORD: "directionsORD/getList",
       positions: "positions/getList",
       orderOwners: "orderOwners/getList",
+      categories: "personCategories/getList",
+      militaryOffices: "militaryOffices/getList",
+      graduationReasons: "graduationReasons/getList",
+      passportIssueAuthorities: "passportAuthorities/getList",
       token: "auth/getToken",
     }),
   },

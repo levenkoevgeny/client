@@ -624,9 +624,7 @@
 </template>
 
 <script>
-import getPunishmentKindAPIInstance from "@/api/cadet/punishmentKindAPI"
 import getPunishmentAPIInstance from "@/api/cadet/punishmentAPI"
-import getOrderOwnerAPIInstance from "@/api/cadet/orderOwnerAPI"
 import getCadetAPIInstance from "@/api/cadet/cadetAPI"
 
 import { PaginatorView } from "@/components/common"
@@ -670,15 +668,8 @@ export default {
         previous: null,
         next: null,
       },
-      punishmentKindList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
       cadetList: { count: "", results: [], previous: null, next: null },
       mainItemAPIInstance: getPunishmentAPIInstance(),
-      punishmentKindAPIInstance: getPunishmentKindAPIInstance(),
       cadetAPIInstance: getCadetAPIInstance(),
       itemForm: Object.assign({}, getPunishmentAPIInstance().formData),
       searchForm: Object.assign({}, getPunishmentAPIInstance().searchObj),
@@ -697,12 +688,10 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [punishments, punishmentKinds, orderOwners] = await Promise.all([
+        const [punishments] = await Promise.all([
           listFunction("mainItem")(this.cadetId),
-          listFunction("punishmentKind")(null, 1000),
         ])
         this.mainItemList = punishments
-        this.punishmentKindList = punishmentKinds
       } catch (e) {
         this.isError = true
       } finally {
@@ -717,8 +706,7 @@ export default {
           { last_name_rus__icontains: search },
         )
         try {
-          const cadetResponse =
-            await this.cadetAPIInstance.getItemsList("token is here!!!")
+          const cadetResponse = await this.cadetAPIInstance.getItemsList()
           this.cadetList = await cadetResponse.data
         } catch (e) {
           this.isError = true
@@ -749,7 +737,7 @@ export default {
       this.mainItemAPIInstance.searchObj = Object.assign({}, this.searchForm)
       try {
         const encouragementResponse =
-          await this.mainItemAPIInstance.getItemsList("token is here!!!")
+          await this.mainItemAPIInstance.getItemsList()
         this.mainItemList = await encouragementResponse.data
       } catch (e) {
         this.isError = true
@@ -771,7 +759,7 @@ export default {
       return this.mainItemList.results
     },
     orderedPunishmentKinds() {
-      return this.punishmentKindList.results
+      return this.punishmentKinds.results
     },
     orderedCadets() {
       return this.cadetList.results
@@ -781,6 +769,7 @@ export default {
     },
     ...mapGetters({
       orderOwners: "orderOwners/getList",
+      punishmentKinds: "punishmentKinds/getList",
     }),
   },
   watch: {

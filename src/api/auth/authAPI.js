@@ -1,21 +1,12 @@
 import axios from "axios"
-import { getLocalToken, saveLocalToken, removeLocalToken } from "@/utils"
-import index from "@/router"
-
-export function authHeaders(token) {
-  return {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
-}
+import { removeLocalToken } from "@/utils"
+import router from "@/router"
 
 axios.interceptors.request.use(
   function (config) {
     return config
   },
   function (error) {
-    // Do something with request error
     return Promise.reject(error)
   },
 )
@@ -32,10 +23,10 @@ axios.interceptors.response.use(
     }
     if (error.response.status === 401 || error.response.status === 403) {
       removeLocalToken()
-      await index.replace({ name: "login" })
+      await router.replace({ name: "login" })
     }
     if (error.response.status === 500) {
-      await index.replace({ name: "server-error" })
+      await router.replace({ name: "server-error" })
     }
     return Promise.reject(error)
   },
@@ -55,22 +46,6 @@ export const authApi = {
   async getUserData(token) {
     return axios.get(
       `${process.env.VUE_APP_BACKEND_PROTOCOL}://${process.env.VUE_APP_BACKEND_HOST}:${process.env.VUE_APP_BACKEND_PORT}/api/users/me/`,
-      authHeaders(token),
-    )
-  },
-  async getUserNames(username) {
-    return axios.get(
-      `${process.env.VUE_APP_BACKEND_PROTOCOL}://${process.env.VUE_APP_BACKEND_HOST}:${process.env.VUE_APP_BACKEND_PORT}/api/usernames/?username=${username}`,
-    )
-  },
-  async updateUserData(token, userData) {
-    console.log(userData)
-    let { last_name, first_name, phone_number } = userData
-
-    return axios.patch(
-      `${process.env.VUE_APP_BACKEND_PROTOCOL}://${process.env.VUE_APP_BACKEND_HOST}:${process.env.VUE_APP_BACKEND_PORT}/api/users/${userData.id}/`,
-      { last_name, first_name, phone_number },
-      authHeaders(token),
     )
   },
 }

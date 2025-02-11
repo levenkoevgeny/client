@@ -287,7 +287,6 @@
 </template>
 
 <script>
-import getSpecialityAPIInstance from "@/api/cadet/specialityAPI"
 import getSpecialityHistoryAPIInstance from "@/api/cadet/specialityHistoryAPI"
 import SpecialityModalForCadetUpdate from "@/components/cadet/speciality/modals/SpecialityModalForCadetUpdate.vue"
 
@@ -309,6 +308,7 @@ import {
 } from "../../../../utils"
 import { PaginatorView } from "@/components/common"
 import getEncouragementAPIInstance from "@/api/cadet/encouragementAPI"
+import { mapGetters } from "vuex"
 
 export default {
   name: "SpecialityCadetComponent",
@@ -338,14 +338,7 @@ export default {
         previous: null,
         next: null,
       },
-      specialityList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
       mainItemAPIInstance: getSpecialityHistoryAPIInstance(),
-      specialityAPIInstance: getSpecialityAPIInstance(),
       itemForm: Object.assign({}, getEncouragementAPIInstance().formData),
       selectedItems: [],
       deleteItemId: "",
@@ -360,12 +353,10 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [specialityHistories, specialities] = await Promise.all([
+        const [specialityHistories] = await Promise.all([
           listFunction("mainItem")(this.cadetId),
-          listFunction("speciality")(),
         ])
         this.mainItemList = specialityHistories
-        this.specialityList = specialities
       } catch (e) {
         this.isError = true
       } finally {
@@ -397,11 +388,14 @@ export default {
       return this.mainItemList.results
     },
     orderedSpecialityList() {
-      return this.specialityList.results
+      return this.specialities.results
     },
     orderedOrderOwnerList() {
       return this.orderOwnersList.results
     },
+    ...mapGetters({
+      specialities: "specialities/getList",
+    }),
   },
   watch: {},
 }

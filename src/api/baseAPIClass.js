@@ -1,5 +1,4 @@
 import axios from "axios"
-import { authHeaders } from "@/api/auth/authAPI"
 
 export default class BaseAPI {
   constructor(baseURL, searchObj, formData = {}) {
@@ -17,45 +16,40 @@ export default class BaseAPI {
     return queryString
   }
 
-  async getItemsList(token) {
+  async getItemsList() {
     let query = this.getQueryStringFromSearchObj()
     return axios.get(
       `${process.env.VUE_APP_BACKEND_PROTOCOL}://${process.env.VUE_APP_BACKEND_HOST}:${process.env.VUE_APP_BACKEND_PORT}/api/${this.baseURL}/${query}`,
-      { ...authHeaders(token) },
     )
   }
 
-  async updateList(url, token) {
-    return axios.get(url, authHeaders(token))
+  async updateList(url) {
+    return axios.get(url)
   }
 
-  async getItemData(token, itemId) {
+  async getItemData(itemId) {
     return axios.get(
       `${process.env.VUE_APP_BACKEND_PROTOCOL}://${process.env.VUE_APP_BACKEND_HOST}:${process.env.VUE_APP_BACKEND_PORT}/api/${this.baseURL}/${itemId}/`,
-      authHeaders(token),
     )
   }
 
-  async addItem(token, itemData) {
+  async addItem(itemData) {
     return axios.post(
       `${process.env.VUE_APP_BACKEND_PROTOCOL}://${process.env.VUE_APP_BACKEND_HOST}:${process.env.VUE_APP_BACKEND_PORT}/api/${this.baseURL}/`,
       itemData,
-      authHeaders(token),
     )
   }
 
-  async updateItem(token, itemData) {
+  async updateItem(itemData) {
     return axios.put(
       `${process.env.VUE_APP_BACKEND_PROTOCOL}://${process.env.VUE_APP_BACKEND_HOST}:${process.env.VUE_APP_BACKEND_PORT}/api/${this.baseURL}/${itemData.id}/`,
       itemData,
-      authHeaders(token),
     )
   }
 
-  async deleteItem(token, itemId) {
+  async deleteItem(itemId) {
     return axios.delete(
       `${process.env.VUE_APP_BACKEND_PROTOCOL}://${process.env.VUE_APP_BACKEND_HOST}:${process.env.VUE_APP_BACKEND_PORT}/api/${this.baseURL}/${itemId}/`,
-      authHeaders(token),
     )
   }
 }

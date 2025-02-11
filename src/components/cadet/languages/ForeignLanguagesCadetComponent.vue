@@ -362,7 +362,7 @@ export default {
       this.isError = false
       try {
         const [cadetForeignLanguageLevels] = await Promise.all([
-          listFunction("mainItem")(this.cadetId, null, this.token),
+          listFunction("mainItem")(this.cadetId, null),
         ])
         this.mainItemList = cadetForeignLanguageLevels
       } catch (e) {

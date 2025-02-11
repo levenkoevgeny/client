@@ -1036,11 +1036,7 @@
 
 <script>
 import getStudentAPIInstance from "@/api/student/studentAPI"
-import getRankAPIInstance from "@/api/cadet/rankAPI"
 import getJobHistoryAPIInstance from "@/api/cadet/jobHistoryAPI"
-import getGroupAPIInstance from "@/api/cadet/groupAPI"
-import getPassportIssueAuthorityAPIInstance from "@/api/cadet/passportIssueAuthorityAPI"
-import getMilitaryOfficeAPIInstance from "@/api/cadet/militaryOfficeAPI"
 import { debounce } from "lodash/function"
 
 import { EducationHistoryCadetComponent } from "@/components/cadet/education"
@@ -1057,7 +1053,6 @@ import { PositionCadetComponent } from "@/components/cadet/position"
 import { SpecialityCadetComponent } from "@/components/cadet/speciality"
 import RelativesCadetComponent from "@/components/cadet/relatives/RelativesCadetComponent.vue"
 
-import { getLoadListFunction } from "../../../utils"
 import "vue-select/dist/vue-select.css"
 import { mapGetters } from "vuex"
 import * as dayjs from "dayjs"
@@ -1135,18 +1130,8 @@ export default {
         year: "",
         year_litera: "",
       },
-      passportIssueAuthorityList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
       studentAPIInstance: getStudentAPIInstance(),
-      rankAPIInstance: getRankAPIInstance(),
       jobHistoryAPIInstance: getJobHistoryAPIInstance(),
-      groupAPIInstance: getGroupAPIInstance(),
-      passportIssueAuthorityAPIInstance: getPassportIssueAuthorityAPIInstance(),
-      militaryOfficeAPIInstance: getMilitaryOfficeAPIInstance(),
     }
   },
   async created() {
@@ -1154,26 +1139,20 @@ export default {
   },
   methods: {
     async loadData(studentId) {
-      const listFunction = getLoadListFunction.bind(this)
-      const [student, passportIssueAuthorities] = await Promise.all([
+      const [student] = await Promise.all([
         this.getStudentData(studentId),
-        listFunction("passportIssueAuthority")(null, 1000),
       ]).catch(() => (this.isError = true))
       this.currentStudentData = student
-      this.passportIssueAuthorityList = passportIssueAuthorities
     },
     async getStudentData(studentId) {
-      const res = await this.studentAPIInstance.getItemData(
-        "token is here!!!",
-        studentId,
-      )
+      const res = await this.studentAPIInstance.getItemData(studentId)
       return res.data
     },
     debouncedUpdate: debounce(async function () {
       this.isLoading = true
       try {
         const { photo, ...rest } = this.currentStudentData
-        await this.studentAPIInstance.updateItem("token is here!!!", rest)
+        await this.studentAPIInstance.updateItem(rest)
       } catch (e) {
         this.isError = true
         console.log(e)
@@ -1187,7 +1166,7 @@ export default {
       return this.groups.results
     },
     orderedPassportIssueAuthorities() {
-      return this.passportIssueAuthorityList.results
+      return this.passportAuthorities.results
     },
     orderedGraduationReasons() {
       return []
@@ -1219,6 +1198,7 @@ export default {
       educationForms: "educationForms/getList",
       categories: "personCategories/getList",
       subdivisions: "subdivisions/getList",
+      passportAuthorities: "passportAuthorities/getList",
     }),
   },
   watch: {

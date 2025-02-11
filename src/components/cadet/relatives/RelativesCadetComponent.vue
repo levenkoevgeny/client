@@ -290,7 +290,6 @@
 
 <script>
 import getRelativesAPIInstance from "@/api/cadet/relativesAPI"
-import getDegreeOfKinshipAPIInstance from "@/api/cadet/degreeOfKinshipAPI"
 
 import BaseListLayoutForCadetUpdate from "@/components/layouts/BaseListLayoutForCadetUpdate.vue"
 import RelativesModalForCadetUpdate from "@/components/cadet/relatives/modals/RelativesModalForCadetUpdate.vue"
@@ -310,6 +309,7 @@ import {
   deleteCheckedItemsHandler,
 } from "../../../../utils"
 import { PaginatorView } from "@/components/common"
+import { mapGetters } from "vuex"
 
 export default {
   name: "SpecialityCadetComponent",
@@ -334,14 +334,7 @@ export default {
         previous: null,
         next: null,
       },
-      degreeOfKinshipList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
       mainItemAPIInstance: getRelativesAPIInstance(),
-      degreeOfKinshipAPIInstance: getDegreeOfKinshipAPIInstance(),
       itemForm: Object.assign({}, getRelativesAPIInstance().formData),
       selectedItems: [],
       deleteItemId: "",
@@ -356,12 +349,10 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [relatives, degreesOfKinship] = await Promise.all([
+        const [relatives] = await Promise.all([
           listFunction("mainItem")(this.cadetId),
-          listFunction("degreeOfKinship")(),
         ])
         this.mainItemList = relatives
-        this.degreeOfKinshipList = degreesOfKinship
       } catch (e) {
         this.isError = true
       } finally {
@@ -393,8 +384,11 @@ export default {
       return this.mainItemList.results
     },
     orderedDegreeOfKinshipList() {
-      return this.degreeOfKinshipList.results
+      return this.degreeOfKinship.results
     },
+    ...mapGetters({
+      degreeOfKinship: "degreeOfKinship/getList",
+    }),
   },
   watch: {},
 }

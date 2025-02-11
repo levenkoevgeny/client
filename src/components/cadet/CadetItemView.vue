@@ -1412,18 +1412,14 @@ export default {
       }
     },
     async getCadetData(cadetId) {
-      const res = await this.cadetAPIInstance.getItemData(
-        "token is here!!!",
-        cadetId,
-      )
+      const res = await this.cadetAPIInstance.getItemData(cadetId)
       return res.data
     },
 
     getLoadListFunction(modelName) {
       return async (cadetId) => {
         this[`${modelName}APIInstance`].searchObj.cadet = cadetId
-        const res =
-          await this[`${modelName}APIInstance`].getItemsList("token is here!!!")
+        const res = await this[`${modelName}APIInstance`].getItemsList()
         return res.data
       }
     },
@@ -1431,10 +1427,7 @@ export default {
     getPaginatorUpdateFunction(modelName) {
       return async (url) => {
         try {
-          const response = await this[`${modelName}APIInstance`].updateList(
-            url,
-            "this.userToken",
-          )
+          const response = await this[`${modelName}APIInstance`].updateList(url)
           this[`${modelName}List`] = await response.data
         } catch (error) {
           this.isError = true

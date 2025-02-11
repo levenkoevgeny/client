@@ -289,7 +289,6 @@
 
 <script>
 import getEncouragementAPIInstance from "@/api/cadet/encouragementAPI"
-import getEncouragementKindAPIInstance from "@/api/cadet/encouragementKindAPI"
 import {
   getLoadListFunction,
   showAddNewMainItemModal,
@@ -333,14 +332,7 @@ export default {
       isLoading: true,
       isError: false,
       mainItemList: { count: "", results: [], previous: null, next: null },
-      encouragementKindList: {
-        count: "",
-        results: [],
-        previous: null,
-        next: null,
-      },
       mainItemAPIInstance: getEncouragementAPIInstance(),
-      encouragementKindAPIInstance: getEncouragementKindAPIInstance(),
       itemForm: Object.assign({}, getEncouragementAPIInstance().formData),
       selectedItems: [],
       deleteItemId: "",
@@ -355,12 +347,10 @@ export default {
       this.isLoading = true
       this.isError = false
       try {
-        const [encouragements, encouragementKinds] = await Promise.all([
-          listFunction("mainItem")(this.cadetId, null, this.token),
-          listFunction("encouragementKind")(null, null, this.token),
+        const [encouragements] = await Promise.all([
+          listFunction("mainItem")(this.cadetId, null),
         ])
         this.mainItemList = encouragements
-        this.encouragementKindList = encouragementKinds
       } catch (e) {
         this.isError = true
       } finally {
@@ -392,13 +382,13 @@ export default {
       return this.mainItemList.results
     },
     orderedEncouragementKinds() {
-      return this.encouragementKindList.results
+      return this.encouragementKind.results
     },
     orderedOrderOwnerList() {
       return this.orderOwnersList.results
     },
     ...mapGetters({
-      token: "auth/getToken",
+      encouragementKind: "encouragementKinds/getList",
     }),
   },
   watch: {},
