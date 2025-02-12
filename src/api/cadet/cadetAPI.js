@@ -23,7 +23,7 @@ class CadetAPI extends BaseAPI {
 
 export default function getCadetAPIInstance() {
   return new CadetAPI("cadet", {
-    is_active: "",
+    is_active: "true",
     category: "",
     category__in: "",
     gender: "",

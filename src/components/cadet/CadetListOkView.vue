@@ -177,14 +177,19 @@
     </div>
 
     <div
-      style="max-height: 75vh; overflow: auto"
+      style="max-height: 80vh; overflow: auto"
       @scroll="loadMoreData"
       ref="infinite_list"
       id="infinite_list"
     >
-      <table class="table table-hover table-responsive" style="overflow: auto">
+      <table
+        class="table table-hover table-responsive"
+        style="overflow: auto; min-height: 80vh"
+      >
         <thead>
           <tr>
+            <th scope="col">№п.п.</th>
+            <th scope="col">Фото</th>
             <th scope="col">
               <div class="d-flex flex-row align-items-center">
                 <nobr>id</nobr>
@@ -210,8 +215,7 @@
                 </div>
               </div>
             </th>
-            <th scope="col">№п.п.</th>
-            <th scope="col">Фото</th>
+            <th scope="col">Активный</th>
             <th scope="col">
               <div class="d-flex flex-row align-items-center">
                 <nobr>Категория</nobr>
@@ -431,6 +435,201 @@
             </th>
             <th scope="col">
               <div class="d-flex flex-row align-items-center">
+                <nobr>Звание</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('current_rank__rank')"
+                      >
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('-current_rank__rank')"
+                      >
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </th>
+            <th scope="col">
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Должность</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('current_position__position')"
+                      >
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('-current_position__position')"
+                      >
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </th>
+
+            <th scope="col">
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Специализация</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="
+                          setOrdering('specialization__specialization_name')
+                        "
+                      >
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="
+                          setOrdering('-specialization__specialization_name')
+                        "
+                      >
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </th>
+            <th scope="col">
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Направление ОРД</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('direction_ord__direction_name')"
+                      >
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('-direction_ord__direction_name')"
+                      >
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </th>
+            <th scope="col">
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Специальность</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="
+                          setOrdering('current_speciality__speciality_name')
+                        "
+                      >
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="
+                          setOrdering('-current_speciality__speciality_name')
+                        "
+                      >
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </th>
+            <th scope="col">
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Комплектующий орган</nobr>
+                <div class="dropdown">
+                  <button
+                    class="btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  ></button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('component_organ__component_name')"
+                      >
+                        А -> Я
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        class="dropdown-item"
+                        @click="setOrdering('-component_organ__component_name')"
+                      >
+                        Я -> А
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </th>
+            <th scope="col">
+              <div class="d-flex flex-row align-items-center">
                 <nobr>Дата рождения</nobr>
                 <div class="dropdown">
                   <button
@@ -458,6 +657,11 @@
                     </li>
                   </ul>
                 </div>
+              </div>
+            </th>
+            <th scope="col">
+              <div class="d-flex flex-row align-items-center">
+                <nobr>Возраст</nobr>
               </div>
             </th>
             <th scope="col">
@@ -548,200 +752,6 @@
               <nobr>Статья окончания обучения</nobr>
             </th>
             <th scope="col">
-              <div class="d-flex flex-row align-items-center">
-                <nobr>Специализация</nobr>
-                <div class="dropdown">
-                  <button
-                    class="btn dropdown-toggle"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  ></button>
-                  <ul class="dropdown-menu">
-                    <li>
-                      <button
-                        class="dropdown-item"
-                        @click="
-                          setOrdering('specialization__specialization_name')
-                        "
-                      >
-                        А -> Я
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        class="dropdown-item"
-                        @click="
-                          setOrdering('-specialization__specialization_name')
-                        "
-                      >
-                        Я -> А
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </th>
-            <th scope="col">
-              <div class="d-flex flex-row align-items-center">
-                <nobr>Направление ОРД</nobr>
-                <div class="dropdown">
-                  <button
-                    class="btn dropdown-toggle"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  ></button>
-                  <ul class="dropdown-menu">
-                    <li>
-                      <button
-                        class="dropdown-item"
-                        @click="setOrdering('direction_ord__direction_name')"
-                      >
-                        А -> Я
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        class="dropdown-item"
-                        @click="setOrdering('-direction_ord__direction_name')"
-                      >
-                        Я -> А
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </th>
-            <th scope="col">
-              <div class="d-flex flex-row align-items-center">
-                <nobr>Звание</nobr>
-                <div class="dropdown">
-                  <button
-                    class="btn dropdown-toggle"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  ></button>
-                  <ul class="dropdown-menu">
-                    <li>
-                      <button
-                        class="dropdown-item"
-                        @click="setOrdering('current_rank__rank')"
-                      >
-                        А -> Я
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        class="dropdown-item"
-                        @click="setOrdering('-current_rank__rank')"
-                      >
-                        Я -> А
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </th>
-            <th scope="col">
-              <div class="d-flex flex-row align-items-center">
-                <nobr>Должность</nobr>
-                <div class="dropdown">
-                  <button
-                    class="btn dropdown-toggle"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  ></button>
-                  <ul class="dropdown-menu">
-                    <li>
-                      <button
-                        class="dropdown-item"
-                        @click="setOrdering('current_position__position')"
-                      >
-                        А -> Я
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        class="dropdown-item"
-                        @click="setOrdering('-current_position__position')"
-                      >
-                        Я -> А
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </th>
-            <th scope="col">
-              <div class="d-flex flex-row align-items-center">
-                <nobr>Специальность</nobr>
-                <div class="dropdown">
-                  <button
-                    class="btn dropdown-toggle"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  ></button>
-                  <ul class="dropdown-menu">
-                    <li>
-                      <button
-                        class="dropdown-item"
-                        @click="
-                          setOrdering('current_speciality__speciality_name')
-                        "
-                      >
-                        А -> Я
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        class="dropdown-item"
-                        @click="
-                          setOrdering('-current_speciality__speciality_name')
-                        "
-                      >
-                        Я -> А
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </th>
-            <th scope="col">
-              <div class="d-flex flex-row align-items-center">
-                <nobr>Комплектующий орган</nobr>
-                <div class="dropdown">
-                  <button
-                    class="btn dropdown-toggle"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  ></button>
-                  <ul class="dropdown-menu">
-                    <li>
-                      <button
-                        class="dropdown-item"
-                        @click="setOrdering('component_organ__component_name')"
-                      >
-                        А -> Я
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        class="dropdown-item"
-                        @click="setOrdering('-component_organ__component_name')"
-                      >
-                        Я -> А
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </th>
-            <th scope="col">
               <nobr>Снятие с воинского учета</nobr>
             </th>
             <th scope="col">
@@ -777,12 +787,18 @@
                 </div>
               </div>
             </th>
-            <th></th>
           </tr>
           <tr>
             <th></th>
             <th></th>
             <th scope="col"></th>
+            <th>
+              <select class="form-select" v-model="searchForm.is_active">
+                <option selected value="">-------</option>
+                <option value="true" key="1">Да</option>
+                <option value="false" key="0">Нет</option>
+              </select>
+            </th>
             <th style="min-width: 200px; z-index: 10000">
               <v-select
                 v-model="searchForm.category__in"
@@ -839,6 +855,62 @@
               />
             </th>
             <th>
+              <v-select
+                v-model="searchForm.current_rank__in"
+                :options="orderedRanks"
+                label="rank"
+                :reduce="(rank) => rank.id"
+                multiple
+              />
+            </th>
+            <th>
+              <v-select
+                v-model="searchForm.current_position__in"
+                :options="orderedPositions"
+                label="position"
+                :reduce="(current_position) => current_position.id"
+                multiple
+              />
+            </th>
+
+            <th>
+              <v-select
+                v-model="searchForm.specialization__in"
+                :options="orderedSpecializations"
+                label="specialization_name"
+                :reduce="(specialization) => specialization.id"
+                multiple
+              />
+            </th>
+            <th>
+              <v-select
+                v-model="searchForm.direction_ord__in"
+                :options="orderedDirectionOrds"
+                label="direction_name"
+                :reduce="(direction_ord) => direction_ord.id"
+                multiple
+              />
+            </th>
+            <th>
+              <v-select
+                v-model="searchForm.current_speciality__in"
+                :options="orderedSpecialities"
+                label="speciality_name"
+                :reduce="(current_speciality) => current_speciality.id"
+                multiple
+              />
+            </th>
+            <th>
+              <v-select
+                v-model="searchForm.component_organ__in"
+                :options="orderedComponentOrgans"
+                label="component_name"
+                :reduce="(component_organ) => component_organ.id"
+                multiple
+              />
+            </th>
+
+            <th>
               <div class="d-flex justify-content-center align-items-center">
                 <input
                   type="date"
@@ -849,6 +921,20 @@
                   type="date"
                   class="form-control"
                   v-model="searchForm.date_of_birth__lte"
+                />
+              </div>
+            </th>
+            <th>
+              <div class="d-flex justify-content-center align-items-center">
+                <input
+                  type="text"
+                  class="form-control me-2"
+                  v-model="searchForm.age_gte"
+                />
+                <input
+                  type="text"
+                  class="form-control"
+                  v-model="searchForm.age_lte"
                 />
               </div>
             </th>
@@ -1039,60 +1125,6 @@
                 v-model="searchForm.graduation_reason_article__icontains"
               />
             </th>
-            <th>
-              <v-select
-                v-model="searchForm.specialization__in"
-                :options="orderedSpecializations"
-                label="specialization_name"
-                :reduce="(specialization) => specialization.id"
-                multiple
-              />
-            </th>
-            <th>
-              <v-select
-                v-model="searchForm.direction_ord__in"
-                :options="orderedDirectionOrds"
-                label="direction_name"
-                :reduce="(direction_ord) => direction_ord.id"
-                multiple
-              />
-            </th>
-            <th>
-              <v-select
-                v-model="searchForm.current_rank__in"
-                :options="orderedRanks"
-                label="rank"
-                :reduce="(rank) => rank.id"
-                multiple
-              />
-            </th>
-            <th>
-              <v-select
-                v-model="searchForm.current_position__in"
-                :options="orderedPositions"
-                label="position"
-                :reduce="(current_position) => current_position.id"
-                multiple
-              />
-            </th>
-            <th>
-              <v-select
-                v-model="searchForm.current_speciality__in"
-                :options="orderedSpecialities"
-                label="speciality_name"
-                :reduce="(current_speciality) => current_speciality.id"
-                multiple
-              />
-            </th>
-            <th>
-              <v-select
-                v-model="searchForm.component_organ__in"
-                :options="orderedComponentOrgans"
-                label="component_name"
-                :reduce="(component_organ) => component_organ.id"
-                multiple
-              />
-            </th>
 
             <th>
               <div class="d-flex justify-content-center align-items-center">
@@ -1117,12 +1149,10 @@
                 multiple
               />
             </th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="cadet in orderedMainList" :key="cadet.id">
-            <td>{{ cadet.id }}</td>
             <td>{{ cadet.serial_number }}</td>
             <td>
               <img
@@ -1140,14 +1170,27 @@
                 style="width: 50px"
               />
             </td>
+            <td>{{ cadet.id }}</td>
+            <td v-if="cadet.is_active"></td>
+            <td v-else>
+              <font-awesome-icon :icon="['fas', 'lock']" />
+            </td>
             <td>{{ cadet.get_category }}</td>
-            <td>{{ cadet.gender }}</td>
+            <td>{{ cadet.get_gender }}</td>
             <td>{{ cadet.last_name_rus }}</td>
             <td>{{ cadet.first_name_rus }}</td>
             <td>{{ cadet.patronymic_rus }}</td>
             <td>{{ cadet.get_subdivision }}</td>
             <td>{{ cadet.get_group }}</td>
-            <td>{{ cadet.date_of_birth }}</td>
+            <td>{{ cadet?.get_rank || "" }}</td>
+            <td>{{ cadet.get_position || "" }}</td>
+            <td>{{ cadet.get_specialization }}</td>
+            <td>{{ cadet.get_direction_ord }}</td>
+            <td>{{ cadet.get_speciality || "" }}</td>
+            <td>{{ cadet.get_component_organ }}</td>
+
+            <td class="text-center">{{ cadet.date_of_birth }}</td>
+            <td class="text-center">{{ cadet.get_age }}</td>
             <td>{{ cadet.place_of_birth }}</td>
             <td>{{ cadet.address_registration }}</td>
             <td>{{ cadet.address_residence }}</td>
@@ -1177,12 +1220,7 @@
             <td>{{ cadet.academy_end_date }}</td>
             <td>{{ cadet.get_graduation_reason }}</td>
             <td>{{ cadet.graduation_reason_article }}</td>
-            <td>{{ cadet.get_specialization }}</td>
-            <td>{{ cadet.get_direction_ord }}</td>
-            <td>{{ cadet?.get_rank || "" }}</td>
-            <td>{{ cadet.get_position || "" }}</td>
-            <td>{{ cadet.get_speciality || "" }}</td>
-            <td>{{ cadet.get_component_organ }}</td>
+
             <td>{{ cadet.removed_from_military_registration }}</td>
             <td>
               <nobr>{{ cadet.get_military_office }}</nobr>
@@ -1225,7 +1263,59 @@ export default {
       fieldsForDataExport: [
         { fieldName: "Фамилия", fieldValue: "last_name_rus" },
         { fieldName: "Имя", fieldValue: "first_name_rus" },
+        { fieldName: "Отчество", fieldValue: "patronymic_rus" },
         { fieldName: "Дата рождения", fieldValue: "date_of_birth" },
+        { fieldName: "Возраст", fieldValue: "get_age" },
+        { fieldName: "Пол", fieldValue: "get_gender" },
+        {
+          fieldName: "Факультет",
+          fieldValue: "get_subdivision",
+        },
+        {
+          fieldName: "Группа",
+          fieldValue: "get_group",
+        },
+        {
+          fieldName: "Звание",
+          fieldValue: "get_rank",
+        },
+        {
+          fieldName: "Должность",
+          fieldValue: "get_position",
+        },
+        {
+          fieldName: "Специализация",
+          fieldValue: "get_specialization",
+        },
+        {
+          fieldName: "Направление ОРД",
+          fieldValue: "get_direction_ord",
+        },
+        {
+          fieldName: "Специальность",
+          fieldValue: "get_speciality",
+        },
+        {
+          fieldName: "Комплектующий орган",
+          fieldValue: "get_component_organ",
+        },
+        {
+          fieldName: "Личный номер (жетон)",
+          fieldValue: "personal_number_mvd",
+        },
+        {
+          fieldName: "Дата поступления",
+          fieldValue: "academy_start_date",
+        },
+        {
+          fieldName: "Дата окончания",
+          fieldValue: "academy_end_date",
+        },
+        {
+          fieldName: "Военкомат",
+          fieldValue: "get_military_office",
+        },
+
         { fieldName: "Место рождения", fieldValue: "place_of_birth" },
         {
           fieldName: "Место жительства (проживания)",
@@ -1238,10 +1328,6 @@ export default {
         {
           fieldName: "Номер телефона",
           fieldValue: "phone_number",
-        },
-        {
-          fieldName: "Личный номер (жетон)",
-          fieldValue: "personal_number_mvd",
         },
         {
           fieldName: "Семейное положение",
@@ -1272,22 +1358,6 @@ export default {
           fieldValue: "removed_from_military_registration",
         },
         {
-          fieldName: "Факультет",
-          fieldValue: "get_subdivision",
-        },
-        {
-          fieldName: "Группа",
-          fieldValue: "get_group",
-        },
-        {
-          fieldName: "Дата поступления",
-          fieldValue: "academy_start_date",
-        },
-        {
-          fieldName: "Дата окончания",
-          fieldValue: "academy_end_date",
-        },
-        {
           fieldName: "Причина окончания",
           fieldValue: "get_graduation_reason",
         },
@@ -1300,36 +1370,8 @@ export default {
           fieldValue: "graduation_extra_data",
         },
         {
-          fieldName: "Специализация",
-          fieldValue: "get_specialization",
-        },
-        {
-          fieldName: "Направление ОРД",
-          fieldValue: "get_direction_ord",
-        },
-        {
-          fieldName: "Звание",
-          fieldValue: "get_rank",
-        },
-        {
-          fieldName: "Должность",
-          fieldValue: "get_position",
-        },
-        {
-          fieldName: "Специальность",
-          fieldValue: "get_speciality",
-        },
-        {
-          fieldName: "Комплектующий орган",
-          fieldValue: "get_component_organ",
-        },
-        {
           fieldName: "Прибыл из ГО-РОВД",
           fieldValue: "get_arrived_from_go_rovd",
-        },
-        {
-          fieldName: "Военкомат",
-          fieldValue: "get_military_office",
         },
       ],
       selectedFieldsForDataExport: ["last_name_rus", "first_name_rus"],
@@ -1415,8 +1457,7 @@ export default {
       this.isLoading = true
       this.cadetAPIInstance.searchObj = Object.assign({}, this.searchForm)
       try {
-        const cadetAResponse =
-          await this.cadetAPIInstance.getItemsList("token is here!!!")
+        const cadetAResponse = await this.cadetAPIInstance.getItemsList()
         this.cadetList = await cadetAResponse.data
         this.setSerialNumbers()
       } catch (e) {
@@ -1428,10 +1469,7 @@ export default {
     async updatePaginator(url) {
       this.isLoading = true
       try {
-        const response = await this.cadetAPIInstance.updateList(
-          url,
-          "this.userToken",
-        )
+        const response = await this.cadetAPIInstance.updateList(url)
         this.cadetList = await response.data
       } catch (error) {
         this.isError = true
@@ -1469,7 +1507,6 @@ export default {
           try {
             const response = await this.cadetAPIInstance.updateList(
               this.cadetList.next,
-              "this.userToken",
             )
 
             const newData = await response.data

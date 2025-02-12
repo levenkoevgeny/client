@@ -36,7 +36,6 @@ const actions = {
       const response = await authApi.logInGetToken(username, password)
       const data = await response.data
       const token = data.access
-      const refresh = data.refresh
       if (token) {
         saveLocalToken(token)
         commit("setToken", token)
@@ -92,7 +91,7 @@ const actions = {
 
   async actionRemoveLogIn({ state, commit }) {
     removeLocalToken()
-    commit("setToken", "")
+    commit("setToken", null)
     commit("setLoggedIn", false)
   },
   async updateUserData({ state }) {

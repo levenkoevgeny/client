@@ -33,6 +33,8 @@ import { faCaretUp } from "@fortawesome/free-solid-svg-icons"
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
 import { faCakeCandles } from "@fortawesome/free-solid-svg-icons"
 import { faLock } from "@fortawesome/free-solid-svg-icons"
+import { faLockOpen } from "@fortawesome/free-solid-svg-icons"
+import { faCheck } from "@fortawesome/free-solid-svg-icons"
 
 library.add(faUserGraduate)
 library.add(faPersonBreastfeeding)
@@ -61,6 +63,8 @@ library.add(faCaretUp)
 library.add(faCaretDown)
 library.add(faCakeCandles)
 library.add(faLock)
+library.add(faCheck)
+library.add(faLockOpen)
 
 createApp(App)
   .component("font-awesome-icon", FontAwesomeIcon)
