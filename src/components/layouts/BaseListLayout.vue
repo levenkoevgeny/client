@@ -1,8 +1,18 @@
 <template>
   <slot name="modals"></slot>
   <div class="container-fluid">
-    <div class="row">
-      <div class="col-8">
+    <div class="row flex-nowrap">
+      <div class="col">
+        <div class="d-flex justify-content-end">
+          <a
+            href="#"
+            data-bs-target="#sidebar"
+            data-bs-toggle="collapse"
+            class="rounded-3 p-1 text-decoration-none fs-3 link-light"
+            ><font-awesome-icon :icon="['fas', 'filter']"
+          /></a>
+        </div>
+
         <h2>
           {{ title }}
         </h2>
@@ -48,10 +58,24 @@
           <slot name="paginator"></slot>
         </div>
       </div>
-      <div class="col-4">
-        <h3 class="my-3">Поиск по критериям</h3>
-        <div style="">
-          <slot name="search-form"></slot>
+
+      <div class="col-auto">
+        <div class="navbar navbar-expand-lg">
+          <div
+            id="sidebar"
+            class="collapse collapse-horizontal border-start px-3"
+          >
+            <div
+              id="sidebar-nav"
+              class="list-group border-0 rounded-0 text-sm-start"
+              style="width: 500px"
+            >
+              <h3 class="my-3">Поиск по критериям</h3>
+              <div style="">
+                <slot name="search-form"></slot>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

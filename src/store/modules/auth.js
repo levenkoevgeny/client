@@ -3,9 +3,8 @@ import { getLocalToken, saveLocalToken, removeLocalToken } from "@/utils"
 
 const state = () => ({
   token: null,
-  isLoggedIn: null,
+  isLoggedIn: false,
   isLogInError: null,
-  isRegistrationError: null,
   user: { is_staff: false },
 })
 
@@ -19,9 +18,6 @@ const getters = {
   },
   getIsLogInError(state) {
     return state.isLogInError
-  },
-  getIsRegistrationError(state) {
-    return state.isRegistrationError
   },
   getUser(state) {
     return state.user
@@ -49,18 +45,6 @@ const actions = {
       if (error.code !== "ERR_NETWORK") {
         commit("setIsLogInError", true)
       }
-    }
-  },
-
-  async actionRegistration({ commit }, payload) {
-    let { username, password } = payload
-    try {
-      const response = await authApi.registration(username, password)
-      if (response.status !== 201) {
-        throw new Error("Registration error")
-      }
-    } catch (error) {
-      commit("setIsRegistrationError", true)
     }
   },
 
@@ -93,18 +77,7 @@ const actions = {
     removeLocalToken()
     commit("setToken", null)
     commit("setLoggedIn", false)
-  },
-  async updateUserData({ state }) {
-    try {
-      const response = await authApi.updateUserData(state.token, {
-        ...state.user,
-      })
-      if (response.status !== 200) {
-        throw new Error("User update error")
-      }
-    } catch (error) {
-      throw new Error(error)
-    }
+    commit("setUserData", {})
   },
 }
 
@@ -121,9 +94,6 @@ const mutations = {
   },
   setIsLogInError(state, payload) {
     state.isLogInError = payload
-  },
-  setIsRegistrationError(state, payload) {
-    state.isRegistrationError = payload
   },
 }
 

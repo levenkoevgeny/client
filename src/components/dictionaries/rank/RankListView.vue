@@ -470,10 +470,7 @@ export default {
     },
     async showUpdateMainItemModalInList(id) {
       try {
-        const response = await this.mainItemAPIInstance.getItemData(
-          "token is here!!!",
-          id,
-        )
+        const response = await this.mainItemAPIInstance.getItemData(id)
         this.selectedItem = await response.data
         let updateModal = this.$refs.mainItemUpdateModal
         let myModal = new bootstrap.Modal(updateModal, {

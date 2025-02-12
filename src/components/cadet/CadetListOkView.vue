@@ -177,15 +177,12 @@
     </div>
 
     <div
-      style="max-height: 80vh; overflow: auto"
+      style="min-height: 80vh; max-height: 80vh; overflow: auto"
       @scroll="loadMoreData"
       ref="infinite_list"
       id="infinite_list"
     >
-      <table
-        class="table table-hover table-responsive"
-        style="overflow: auto; min-height: 80vh"
-      >
+      <table class="table table-hover table-responsive" style="overflow: auto">
         <thead>
           <tr>
             <th scope="col">№п.п.</th>
@@ -799,7 +796,7 @@
                 <option value="false" key="0">Нет</option>
               </select>
             </th>
-            <th style="min-width: 200px; z-index: 10000">
+            <th style="min-width: 200px">
               <v-select
                 v-model="searchForm.category__in"
                 :options="orderedCadetCategories"
@@ -1152,7 +1149,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="cadet in orderedMainList" :key="cadet.id">
+          <tr
+            v-for="cadet in orderedMainList"
+            :key="cadet.id"
+            @dblclick="
+              $router.push({ name: 'cadet-update', params: { id: cadet.id } })
+            "
+          >
             <td>{{ cadet.serial_number }}</td>
             <td>
               <img
@@ -1229,24 +1232,14 @@
         </tbody>
       </table>
     </div>
-
-    <!--    <div class="my-3">-->
-    <!--      <label class="form-label">Количество записей на странице</label>-->
-    <!--      <input-->
-    <!--        type="number"-->
-    <!--        class="form-control"-->
-    <!--        v-model="searchForm.limit"-->
-    <!--        min="1"-->
-    <!--        max="500"-->
-    <!--      />-->
-    <!--    </div>-->
-
     <div class="my-3"></div>
   </div>
 </template>
 
 <script>
 import getCadetAPIInstance from "@/api/cadet/cadetAPI"
+import { globalCadetAPIInstance } from "@/api/cadet/cadetAPI"
+
 import { getLoadListFunction } from "../../../utils"
 import { debounce } from "lodash/function"
 import { PaginatorView } from "@/components/common"
@@ -1382,7 +1375,7 @@ export default {
         next: null,
       },
       searchForm: Object.assign({}, getCadetAPIInstance().searchObj),
-      cadetAPIInstance: getCadetAPIInstance(),
+      cadetAPIInstance: globalCadetAPIInstance,
       BACKEND_PROTOCOL: process.env.VUE_APP_BACKEND_PROTOCOL,
       BACKEND_HOST: process.env.VUE_APP_BACKEND_HOST,
       BACKEND_PORT: process.env.VUE_APP_BACKEND_PORT,
@@ -1653,5 +1646,8 @@ thead {
 input,
 select {
   min-width: 200px;
+}
+z-index-select {
+  z-index: 1000;
 }
 </style>

@@ -8,6 +8,29 @@
         <img src="../../assets/logo.png" alt="KIS" width="30" height="30" />
       </a>
       <slot name="menu"></slot>
+      <ul
+        class="navbar-nav ms-auto me-4 mb-2 mb-lg-0"
+        v-if="userData.get_display_name"
+      >
+        <li class="nav-item dropdown dropstart">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            {{ userData.get_display_name }}
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <button class="dropdown-item" @click="logOut">
+                Выход из системы
+              </button>
+            </li>
+          </ul>
+        </li>
+      </ul>
 
       <div class="theme-control-toggle fa-icon-wait px-2">
         <input
@@ -79,6 +102,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex"
+
 export default {
   name: "base-list-layout",
   components: {},
@@ -104,8 +129,16 @@ export default {
         localStorage.setItem("bsTheme", "light")
       }
     },
+    logOut() {
+      this.$store.dispatch("auth/actionRemoveLogIn")
+      this.$router.push({ name: "login", replace: true })
+    },
   },
-  computed: {},
+  computed: {
+    ...mapGetters({
+      userData: "auth/getUser",
+    }),
+  },
 }
 </script>
 

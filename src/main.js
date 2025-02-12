@@ -35,6 +35,7 @@ import { faCakeCandles } from "@fortawesome/free-solid-svg-icons"
 import { faLock } from "@fortawesome/free-solid-svg-icons"
 import { faLockOpen } from "@fortawesome/free-solid-svg-icons"
 import { faCheck } from "@fortawesome/free-solid-svg-icons"
+import { faFilter } from "@fortawesome/free-solid-svg-icons"
 
 library.add(faUserGraduate)
 library.add(faPersonBreastfeeding)
@@ -65,6 +66,7 @@ library.add(faCakeCandles)
 library.add(faLock)
 library.add(faCheck)
 library.add(faLockOpen)
+library.add(faFilter)
 
 createApp(App)
   .component("font-awesome-icon", FontAwesomeIcon)

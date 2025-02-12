@@ -12,10 +12,30 @@ import { FiredCadetComponent } from "@/components/cadet/fired"
 import store from "@/store"
 import axios from "axios"
 
-axios.interceptors.request.use((config) => {
-  config.headers["Authorization"] = `Bearer ${store.getters["auth/getToken"]}`
-  return config
-})
+axios.interceptors.request.use(
+  (config) => {
+    config.headers["Authorization"] = `Bearer ${store.getters["auth/getToken"]}`
+    return config
+  },
+  function (response) {
+    return response
+  },
+  async function (error) {
+    console.log("error", error)
+    if (error.code === "ERR_NETWORK") {
+      window.location.href = "/network-error"
+      return Promise.reject(error)
+    }
+    if (error.response.status === 401 || error.response.status === 403) {
+      await store.dispatch("auth/actionRemoveLogIn")
+      await router.replace({ name: "login" })
+    }
+    if (error.response.status === 500) {
+      await router.replace({ name: "server-error" })
+    }
+    return Promise.reject(error)
+  },
+)
 
 import {
   EmployeeMainView,
@@ -66,6 +86,7 @@ import {
   NetworkErrorView,
   ServerErrorView,
 } from "@/components/errors"
+import { removeLocalToken } from "@/utils"
 
 const routes = [
   { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFoundView },
