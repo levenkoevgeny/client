@@ -61,8 +61,8 @@ export default {
   data() {
     return {
       auth_data: {
-        username: "",
-        password: "",
+        username: "levenko",
+        password: "1986",
       },
     }
   },

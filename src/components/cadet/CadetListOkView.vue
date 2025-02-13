@@ -25,7 +25,7 @@
                 class="btn btn-link text-primary"
                 style="font-size: inherit"
                 title="Экспорт в Word"
-                @click="exportData('word')"
+                @click="exportData('docx')"
               >
                 <font-awesome-icon :icon="['far', 'file-word']" />
               </button>
@@ -33,7 +33,7 @@
                 class="btn btn-link text-success"
                 style="font-size: inherit; color: inherit"
                 title="Экспорт в Excel"
-                @click="exportData('excel')"
+                @click="exportData('xlsx')"
               >
                 <font-awesome-icon :icon="['far', 'file-excel']" />
               </button>
@@ -1244,7 +1244,6 @@ import { getLoadListFunction } from "../../../utils"
 import { debounce } from "lodash/function"
 import { PaginatorView } from "@/components/common"
 import { mapGetters } from "vuex"
-import axios from "axios"
 
 export default {
   name: "CadetListOkView",
@@ -1416,7 +1415,7 @@ export default {
     clearAllFieldsForExport() {
       this.selectedFieldsForDataExport = []
     },
-    exportData(destination) {
+    async exportData(destination) {
       let queryString = "?"
       for (let key in this.searchForm) {
         if (key.includes("__in")) {
@@ -1435,10 +1434,19 @@ export default {
       queryString =
         queryString + `fields_for_export=${this.selectedFieldsForDataExport}`
       queryString = queryString + `&destination=${destination}`
-      window.open(
-        `${this.BACKEND_PROTOCOL}://${this.BACKEND_HOST}:${this.BACKEND_PORT}/api/list-export/${queryString}`,
-        "_blank",
-      )
+      this.$axios
+        .get(
+          `${this.BACKEND_PROTOCOL}://${this.BACKEND_HOST}:${this.BACKEND_PORT}/api/list-export/${queryString}`,
+          { responseType: "blob" },
+        )
+        .then((response) => {
+          const url = window.URL.createObjectURL(new Blob([response.data]))
+          const link = document.createElement("a")
+          link.href = url
+          link.setAttribute("download", `file.${destination}`)
+          document.body.appendChild(link)
+          link.click()
+        })
     },
     clearFilter() {
       this.searchForm = Object.assign(
@@ -1541,7 +1549,7 @@ export default {
           queryString = queryString + `${key}=${this.searchForm[key]}&`
         }
       }
-      const response = await axios.get(
+      const response = await this.$axios.get(
         `${this.BACKEND_PROTOCOL}://${this.BACKEND_HOST}:${this.BACKEND_PORT}/api/ranks-terms/${queryString}`,
       )
       this.rankTermsList = await response.data

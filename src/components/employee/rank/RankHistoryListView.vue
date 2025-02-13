@@ -506,7 +506,6 @@ import {
   updateMainItemInList,
 } from "../../../../utils"
 import PunishmentModalForCadetUpdate from "@/components/cadet/punishment/modals/PunishmentModalForCadetUpdate.vue"
-import axios from "axios"
 
 export default {
   name: "RankHistoryListView",

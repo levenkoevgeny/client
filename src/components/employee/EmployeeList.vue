@@ -196,7 +196,6 @@ import BaseListLayoutForCadetUpdate from "@/components/layouts/BaseListLayoutFor
 import { PaginatorView } from "@/components/common"
 import { getLoadListFunction } from "../../../utils"
 import { debounce } from "lodash/function"
-import axios from "axios"
 
 export default {
   name: "EmployeeList",
@@ -264,7 +263,7 @@ export default {
       )
     },
     async showBirthdaysModal() {
-      const response = await axios.get(
+      const response = await this.$axios.get(
         `${this.BACKEND_PROTOCOL}://${this.BACKEND_HOST}:${this.BACKEND_PORT}/api/birthdays/`,
       )
       this.birthDays = await response.data

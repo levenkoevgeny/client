@@ -1,4 +1,4 @@
-import axios from "axios"
+import { axiosInstance as axios } from "@/main"
 
 export const authApi = {
   async logInGetToken(username, password) {

@@ -36,6 +36,9 @@ import { faLock } from "@fortawesome/free-solid-svg-icons"
 import { faLockOpen } from "@fortawesome/free-solid-svg-icons"
 import { faCheck } from "@fortawesome/free-solid-svg-icons"
 import { faFilter } from "@fortawesome/free-solid-svg-icons"
+import axios from "axios"
+
+export const axiosInstance = axios.create()
 
 library.add(faUserGraduate)
 library.add(faPersonBreastfeeding)
@@ -68,9 +71,48 @@ library.add(faCheck)
 library.add(faLockOpen)
 library.add(faFilter)
 
-createApp(App)
+axiosInstance.interceptors.request.use(
+  (config) => {
+    config.headers["Authorization"] = `Bearer ${store.getters["auth/getToken"]}`
+    return config
+  },
+  function (response) {
+    return response
+  },
+  async function (error) {
+    return Promise.reject(error)
+  },
+)
+
+axiosInstance.interceptors.response.use(
+  function (response) {
+    return response
+  },
+  async function (error) {
+    console.log("interceptors error", error)
+    if (error.code === "ERR_NETWORK") {
+      window.location.href = "/network-error"
+      return Promise.reject(error)
+    }
+    if (error.response.status === 401 || error.response.status === 403) {
+      await store.dispatch("auth/actionRemoveLogIn")
+      await router.replace({ name: "login" })
+    }
+    if (error.response.status === 500) {
+      await router.replace({ name: "server-error" })
+    }
+    return Promise.reject(error)
+  },
+)
+
+const app = createApp(App)
   .component("font-awesome-icon", FontAwesomeIcon)
   .component("v-select", vSelect)
   .use(router)
   .use(store)
-  .mount("#app")
+
+app.config.globalProperties.$axios = axiosInstance
+
+app.mount("#app")
+
+export default app
