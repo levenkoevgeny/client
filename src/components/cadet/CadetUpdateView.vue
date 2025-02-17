@@ -47,6 +47,9 @@
                         />
                         <input
                           type="file"
+                          v-on:change="uploadPhoto"
+                          ref="uploadedPhoto"
+                          name="photo_file"
                           accept="image/png, image/jpeg"
                           style="position: absolute; bottom: 10px; left: 10px"
                         />
@@ -1176,6 +1179,9 @@ export default {
         is_employee: "",
       },
       cadetAPIInstance: getCadetAPIInstance(),
+      BACKEND_PROTOCOL: process.env.VUE_APP_BACKEND_PROTOCOL,
+      BACKEND_HOST: process.env.VUE_APP_BACKEND_HOST,
+      BACKEND_PORT: process.env.VUE_APP_BACKEND_PORT,
     }
   },
   async created() {
@@ -1204,6 +1210,20 @@ export default {
         this.isLoading = false
       }
     }, 500),
+    async uploadPhoto() {
+      let formData = new FormData()
+      formData.append("photo", this.$refs.uploadedPhoto.files[0])
+
+      const response = await this.cadetAPIInstance.updatePhoto(
+        this.currentCadetData.id,
+        formData,
+      )
+
+      this.currentCadetData = {
+        ...this.currentCadetData,
+        photo: response.data.photo,
+      }
+    },
   },
   computed: {
     orderedCadetCategories() {

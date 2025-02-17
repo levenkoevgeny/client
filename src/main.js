@@ -89,19 +89,26 @@ axiosInstance.interceptors.response.use(
     return response
   },
   async function (error) {
-    console.log("interceptors error", error)
-    if (error.code === "ERR_NETWORK") {
-      window.location.href = "/network-error"
-      return Promise.reject(error)
+    // console.log("interceptors error", error)
+
+    switch (error.code) {
+      case "ERR_NETWORK":
+        window.location.href = "/network-error"
+        return Promise.reject(error)
+      case 401:
+        await store.dispatch("auth/actionRemoveLogIn")
+        await router.replace({ name: "login" })
+        break
+      case 403:
+        await store.dispatch("auth/actionRemoveLogIn")
+        await router.replace({ name: "login" })
+        break
+      case 500:
+        await router.replace({ name: "server-error" })
+        break
+      default:
+        return Promise.reject(error)
     }
-    if (error.response.status === 401 || error.response.status === 403) {
-      await store.dispatch("auth/actionRemoveLogIn")
-      await router.replace({ name: "login" })
-    }
-    if (error.response.status === 500) {
-      await router.replace({ name: "server-error" })
-    }
-    return Promise.reject(error)
   },
 )
 
