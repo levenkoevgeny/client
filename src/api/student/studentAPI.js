@@ -82,6 +82,8 @@ export default function getStudentAPIInstance() {
     current_speciality__in: "",
     component_organ: "",
     component_organ__in: "",
+    year: "",
+    year_litera: "",
     extra_data__icontains: "",
     ordering: null,
   })

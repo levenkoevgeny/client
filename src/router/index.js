@@ -23,6 +23,7 @@ import {
   StudentList,
   StudentItemView,
   StudentUpdateView,
+  StudentDocsMakeView,
 } from "@/components/student"
 
 import {
@@ -60,7 +61,6 @@ import {
   NetworkErrorView,
   ServerErrorView,
 } from "@/components/errors"
-import { removeLocalToken } from "@/utils"
 
 const routes = [
   { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFoundView },
@@ -197,6 +197,11 @@ const routes = [
             path: "",
             component: StudentList,
             name: "student",
+          },
+          {
+            path: "reports",
+            component: StudentDocsMakeView,
+            name: "student-reports",
           },
           {
             path: ":id",

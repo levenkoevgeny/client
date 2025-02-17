@@ -16,6 +16,7 @@
         <h2>
           {{ title }}
         </h2>
+        <slot name="search-form-horizontal">search-form-horizontal</slot>
         <div class="d-flex align-items-center justify-content-end m-4">
           <slot name="add-button">
             <button class="btn btn-warning" :disabled="isLoading" type="button">
