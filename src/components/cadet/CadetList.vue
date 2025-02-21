@@ -153,6 +153,18 @@
     <template v-slot:paginator> </template>
     <template v-slot:search-form>
       <div class="mb-3">
+        <label for="last_name_rus" class="form-label">Активная запись</label>
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          v-model="searchForm.is_active"
+        >
+          <option selected value="">Все</option>
+          <option value="true">Да</option>
+          <option value="false">Нет</option>
+        </select>
+      </div>
+      <div class="mb-3">
         <label for="last_name_rus" class="form-label">Фамилия</label>
         <input
           type="text"
