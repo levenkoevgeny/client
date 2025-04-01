@@ -4,7 +4,11 @@ import { PunishmentListView } from "@/components/cadet/punishment"
 import { EncouragementListView } from "@/components/cadet/encouragement"
 import { PositionListView } from "@/components/cadet/position"
 import { RankHistoryListView } from "@/components/cadet/rank"
-import { EntranceMainView } from "@/components/entrance_campaign"
+import {
+  EntranceMainView,
+  EntranceListView,
+  EntranceInputForm,
+} from "@/components/entrance_campaign"
 import { SpecialityHistoryView } from "@/components/cadet/speciality"
 import { CadetUpdateView } from "@/components/cadet"
 import { CadetListOkView } from "@/components/cadet"
@@ -338,7 +342,19 @@ const routes = [
     path: "/entrance",
     component: EntranceMainView,
     meta: { requiresAuth: true },
-    name: "entrance",
+    name: "entrance-main",
+    children: [
+      {
+        path: "",
+        component: EntranceListView,
+        name: "entrance-list",
+      },
+      {
+        path: "input",
+        component: EntranceInputForm,
+        name: "entrance-input-form",
+      },
+    ],
   },
   {
     path: "/network-error",

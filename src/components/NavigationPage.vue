@@ -61,7 +61,7 @@
           <p class="card-text">
             Комплексная информационная система "Вступительная кампания"
           </p>
-          <router-link class="btn btn-primary" :to="{ name: 'entrance' }">
+          <router-link class="btn btn-primary" :to="{ name: 'entrance-main' }">
             Перейти
           </router-link>
         </div>
@@ -83,7 +83,7 @@
         <div class="card-body">
           <h5 class="card-title">Пользователи</h5>
           <p class="card-text">Администрирование пользователей</p>
-          <router-link class="btn btn-primary" :to="{ name: 'entrance' }">
+          <router-link class="btn btn-primary" :to="{ name: 'navigation' }">
             Перейти
           </router-link>
         </div>
