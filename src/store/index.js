@@ -33,6 +33,8 @@ import countryRegion from "@/store/modules/countryRegion"
 import educationalInstitutions from "@/store/modules/educationalInstitutions"
 import documentType from "@/store/modules/documentType"
 import privileges from "@/store/modules/privileges"
+import ppflCategories from "@/store/modules/ppflCategories"
+import vpkCategories from "@/store/modules/vpkCategories"
 
 const store = createStore({
   modules: {
@@ -70,6 +72,8 @@ const store = createStore({
     educationalInstitutions,
     documentType,
     privileges,
+    ppflCategories,
+    vpkCategories,
   },
 })
 

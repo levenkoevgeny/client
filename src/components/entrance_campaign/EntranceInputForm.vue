@@ -167,6 +167,43 @@
               <label for="floatingSelect">Льгота</label>
             </div>
           </div>
+
+          <div class="row mt-3">
+            <div class="col-xl-3">
+              <div class="form-floating mb-3">
+                <select
+                  class="form-select"
+                  v-model="currentCadetData.foreign_language_was"
+                >
+                  <option value="">---------</option>
+                  <option
+                    :value="foreign_language.id"
+                    v-for="foreign_language in orderedForeignLanguages"
+                  >
+                    {{ foreign_language }}
+                  </option>
+                </select>
+                <label for="floatingSelect">Иностранный язык (был)</label>
+              </div>
+            </div>
+            <div class="col-xl-3">
+              <div class="form-floating mb-3">
+                <select
+                  class="form-select"
+                  v-model="currentCadetData.foreign_language_will_be"
+                >
+                  <option value="">---------</option>
+                  <option
+                    :value="foreign_language.id"
+                    v-for="foreign_language in orderedForeignLanguages"
+                  >
+                    {{ foreign_language }}
+                  </option>
+                </select>
+                <label>Иностранный язык (будет)</label>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -224,7 +261,7 @@
           </button>
           <button
             class="nav-link"
-            id="nav-contact-tab"
+            id="nav-questionary-tab"
             data-bs-toggle="tab"
             data-bs-target="#nav-questionary"
             type="button"
@@ -233,6 +270,18 @@
             aria-selected="false"
           >
             Анкета
+          </button>
+          <button
+            class="nav-link"
+            id="nav-med-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#nav-med"
+            type="button"
+            role="tab"
+            aria-controls="nav-med"
+            aria-selected="false"
+          >
+            Данные мед. осв-я
           </button>
         </div>
       </nav>
@@ -426,7 +475,6 @@
                   </div>
                 </div>
               </div>
-
               <div class="row">
                 <div class="col-6">
                   <div class="form-floating mb-3">
@@ -516,15 +564,26 @@
                     <label for="floatingSelect">Орган выдачи</label>
                   </div>
                 </div>
-                <div class="col-6">
+                <div class="col-xl-3">
                   <div class="form-floating mb-3">
                     <input
-                      type="text"
+                      type="date"
                       class="form-control form-control-sm"
                       placeholder="Номер паспорта"
-                      v-model="currentCadetData.passport_number"
+                      v-model="currentCadetData.passport_issue_date"
                     />
-                    <label>Номер паспорта</label>
+                    <label>Дата выдачи</label>
+                  </div>
+                </div>
+                <div class="col-xl-3">
+                  <div class="form-floating mb-3">
+                    <input
+                      type="date"
+                      class="form-control form-control-sm"
+                      placeholder="Номер паспорта"
+                      v-model="currentCadetData.passport_validity_period"
+                    />
+                    <label>Срок действия</label>
                   </div>
                 </div>
               </div>
@@ -538,7 +597,174 @@
           aria-labelledby="nav-representatives-tab"
           tabindex="0"
         >
-          <div>Представители</div>
+          <div>
+            <div class="my-3">
+              <p class="fs-6 fw-bold my-2">Мать</p>
+              <div class="row">
+                <div class="col-xl-3">
+                  <div class="form-floating mb-3">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      placeholder="Мать (фамилия)"
+                      v-model="currentCadetData.mother_last_name"
+                    />
+                    <label>Фамилия</label>
+                  </div>
+                </div>
+                <div class="col-xl-3">
+                  <div class="form-floating mb-3">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      placeholder="Мать (имя)"
+                      v-model="currentCadetData.mother_first_name"
+                    />
+                    <label>Имя</label>
+                  </div>
+                </div>
+                <div class="col-xl-3">
+                  <div class="form-floating mb-3">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      placeholder="Мать (имя)"
+                      v-model="currentCadetData.mother_patronymic"
+                    />
+                    <label>Отчество</label>
+                  </div>
+                </div>
+                <div class="col-xl-3">
+                  <div class="form-floating mb-3">
+                    <input
+                      type="date"
+                      class="form-control form-control-sm"
+                      placeholder="Мать (имя)"
+                      v-model="currentCadetData.mother_date_of_birth"
+                    />
+                    <label>Дата рождения</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                  <div class="form-floating mb-3">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      placeholder="Проживает"
+                      v-model="currentCadetData.mother_address_residence"
+                    />
+                    <label>Проживает</label>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-floating mb-3">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      placeholder="Место работы и должность"
+                      v-model="currentCadetData.mother_place_of_work"
+                    />
+                    <label>Место работы и должность</label>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-floating mb-3">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      placeholder="Номер телефона"
+                      v-model="currentCadetData.mother_phone_number"
+                    />
+                    <label>Номер телефона</label>
+                  </div>
+                </div>
+              </div>
+              <p class="fs-6 fw-bold my-2">Отец</p>
+              <div class="row">
+                <div class="col-xl-3">
+                  <div class="form-floating mb-3">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      placeholder="Мать (фамилия)"
+                      v-model="currentCadetData.father_last_name"
+                    />
+                    <label>Фамилия</label>
+                  </div>
+                </div>
+                <div class="col-xl-3">
+                  <div class="form-floating mb-3">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      placeholder="Мать (имя)"
+                      v-model="currentCadetData.father_first_name"
+                    />
+                    <label>Имя</label>
+                  </div>
+                </div>
+                <div class="col-xl-3">
+                  <div class="form-floating mb-3">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      placeholder="Мать (имя)"
+                      v-model="currentCadetData.father_patronymic"
+                    />
+                    <label>Отчество</label>
+                  </div>
+                </div>
+                <div class="col-xl-3">
+                  <div class="form-floating mb-3">
+                    <input
+                      type="date"
+                      class="form-control form-control-sm"
+                      placeholder="Мать (имя)"
+                      v-model="currentCadetData.father_date_of_birth"
+                    />
+                    <label>Дата рождения</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                  <div class="form-floating mb-3">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      placeholder="Проживает"
+                      v-model="currentCadetData.father_address_residence"
+                    />
+                    <label>Проживает</label>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-floating mb-3">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      placeholder="Место работы и должность"
+                      v-model="currentCadetData.father_place_of_work"
+                    />
+                    <label>Место работы и должность</label>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-floating mb-3">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      placeholder="Номер телефона"
+                      v-model="currentCadetData.father_phone_number"
+                    />
+                    <label>Номер телефона</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div
           class="tab-pane fade"
@@ -547,114 +773,221 @@
           aria-labelledby="nav-questionary-tab"
           tabindex="0"
         >
-          <div>Анкета</div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-4">
-        <h3>Выбор специальностей</h3>
-        <div class="form-floating mb-3">
-          <select
-            class="form-select"
-            id="floatingSelect"
-            aria-label="Floating label select example"
-          >
-            <option selected>Open this select menu</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </select>
-          <label for="floatingSelect">Works with selects</label>
-        </div>
-        <div class="form-floating mb-3">
-          <select
-            class="form-select"
-            id="floatingSelect"
-            aria-label="Floating label select example"
-          >
-            <option selected>Open this select menu</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </select>
-          <label for="floatingSelect">Works with selects</label>
-        </div>
-        <div class="form-floating mb-3">
-          <select
-            class="form-select"
-            id="floatingSelect"
-            aria-label="Floating label select example"
-          >
-            <option selected>Open this select menu</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </select>
-          <label for="floatingSelect">Works with selects</label>
-        </div>
-        <div class="form-floating mb-3">
-          <select
-            class="form-select"
-            id="floatingSelect"
-            aria-label="Floating label select example"
-          >
-            <option selected>Open this select menu</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </select>
-          <label for="floatingSelect">Works with selects</label>
-        </div>
-        <div class="form-floating">
-          <select
-            class="form-select"
-            id="floatingSelect"
-            aria-label="Floating label select example"
-          >
-            <option selected>Open this select menu</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </select>
-          <label for="floatingSelect">Works with selects</label>
-        </div>
-      </div>
-      <div class="col-lg-8">
-        <h3>Набранные баллы</h3>
-        <div class="row">
-          <div class="col-lg-4">
-            <div class="form-floating mb-3">
-              <input
-                type="number"
-                class="form-control"
-                id="floatingInput"
-                placeholder="Русский язык ЦТ"
-              />
-              <label for="floatingInput">Русский язык ЦТ</label>
+          <div>
+            <div class="my-3">
+              <div class="row">
+                <div class="col-xl-6">
+                  <div class="form-floating mb-3">
+                    <select class="form-select" v-model="currentCadetData.vpk">
+                      <option value="">---------</option>
+                      <option
+                        :value="vpk.id"
+                        v-for="vpk in orderedVpkCategories"
+                      >
+                        {{ vpk.category }}
+                      </option>
+                    </select>
+                    <label for="floatingSelect"
+                      >Военно-патриотический клуб</label
+                    >
+                  </div>
+                </div>
+                <div class="col-xl-6">
+                  <div class="form-floating mb-3">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      placeholder="Данные по ВПК"
+                      v-model="currentCadetData.vpk_data"
+                    />
+                    <label>Данные по ВПК</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xl-3">
+                  <div class="form-check mb-3">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      v-model="currentCadetData.aims_to_graduate_with_honors"
+                    />
+                    <label class="form-check-label" for="checkDefault">
+                      Претендует на аттестат с отличием
+                    </label>
+                  </div>
+                </div>
+                <div class="col-xl-3">
+                  <div class="form-check mb-3">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      v-model="currentCadetData.is_olympiad_winner"
+                    />
+                    <label class="form-check-label" for="checkDefault">
+                      Победитель ресбуликанских или региональных олимпиад
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xl-3">
+                  <div class="form-check mb-3">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      v-model="currentCadetData.is_class_vpn"
+                    />
+                    <label class="form-check-label" for="checkDefault">
+                      Класс военно-патриотической направленности
+                    </label>
+                  </div>
+                </div>
+                <div class="col-xl-3">
+                  <div class="form-check mb-3">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      v-model="currentCadetData.is_class_pn"
+                    />
+                    <label class="form-check-label" for="checkDefault">
+                      Класс правовой направленности
+                    </label>
+                  </div>
+                </div>
+                <div class="col-xl-3">
+                  <div class="form-check mb-3">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      v-model="currentCadetData.is_class_other"
+                    />
+                    <label class="form-check-label" for="checkDefault">
+                      Профильный класс иной направленности
+                    </label>
+                  </div>
+                </div>
+                <div class="col-xl-3">
+                  <div class="form-check mb-3">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      v-model="currentCadetData.has_achievements_in_sports"
+                    />
+                    <label class="form-check-label" for="checkDefault">
+                      Достижения в спорте
+                    </label>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="col-lg-4">
-            <div class="form-floating mb-3">
-              <input
-                type="number"
-                class="form-control"
-                id="floatingInput"
-                placeholder="Русский язык ЦТ"
-              />
-              <label for="floatingInput">Русский язык ЦТ</label>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="nav-med"
+          role="tabpanel"
+          aria-labelledby="nav-med-tab"
+          tabindex="0"
+        >
+          <div>
+            <div class="my-3">
+              <div class="row">
+                <div class="col-xl-4">
+                  <div class="form-floating mb-3">
+                    <select
+                      class="form-select"
+                      aria-label="Floating label select example"
+                      v-model="currentCadetData.health_group"
+                    >
+                      <option value="">---------</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                    <label for="floatingSelect">Группа здоровья</label>
+                  </div>
+                </div>
+                <div class="col-xl-4">
+                  <div class="form-floating mb-3">
+                    <select
+                      class="form-select"
+                      v-model="currentCadetData.ppfl_test"
+                    >
+                      <option value="">---------</option>
+                      <option
+                        :value="ppfl.id"
+                        v-for="ppfl in orderedPpflCategories"
+                      >
+                        {{ ppfl.category }}
+                      </option>
+                    </select>
+                    <label for="floatingSelect">Тест ПФЛ</label>
+                  </div>
+                </div>
+                <div class="col-xl-4">
+                  <div class="form-floating mb-3">
+                    <select
+                      class="form-select"
+                      aria-label="Floating label select example"
+                      v-model="currentCadetData.medical_age_group"
+                    >
+                      <option value="">---------</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                    <label for="floatingSelect">Медико-возрастная группа</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      v-model="currentCadetData.passed_medical_examination"
+                    />
+                    <label class="form-check-label" for="checkDefault">
+                      Мед. комиссию прошел
+                    </label>
+                  </div>
+                </div>
+                <div class="col-xl-8">
+                  <div class="form-floating mb-3">
+                    <textarea
+                      class="form-control"
+                      placeholder="Примечание по медицинской комиссии"
+                      rows="2"
+                      v-model="
+                        currentCadetData.passed_medical_examination_extra_data
+                      "
+                    ></textarea>
+                    <label>Примечание по медицинской комиссии</label>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="col-lg-4">
-            <div class="form-floating mb-3">
-              <input
-                type="number"
-                class="form-control"
-                id="floatingInput"
-                placeholder="Русский язык ЦТ"
-              />
-              <label for="floatingInput">Русский язык ЦТ</label>
-            </div>
+        </div>
+      </div>
+
+      <div class="card shadow mb-2 rounded">
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">Замечания по личному делу</label>
+            <textarea
+              class="form-control"
+              rows="3"
+              v-model="currentCadetData.comments_on_personal_file"
+            ></textarea>
           </div>
         </div>
       </div>
@@ -667,6 +1000,7 @@ import NavigationLayout from "@/components/layouts/NavigationLayout.vue"
 import { globalCadetAPIForEntranceInstance } from "@/api/cadet/cadetAPI"
 import { debounce } from "lodash/function"
 import { mapGetters } from "vuex"
+import { c2iUrl } from "core-js/internals/base64-map"
 
 export default {
   name: "EntranceInputForm",
@@ -701,6 +1035,7 @@ export default {
         passport_validity_period: "",
         passport_issue_authority: "",
         identification_number: "",
+        comments_on_personal_file: "",
         removed_from_military_registration: "",
         military_commissariat_attitude: "",
         father_last_name: "",
@@ -709,12 +1044,14 @@ export default {
         father_date_of_birth: "",
         father_place_of_work: "",
         father_phone_number: "",
+        father_address_residence: "",
         mother_last_name: "",
         mother_first_name: "",
         mother_patronymic: "",
         mother_date_of_birth: "",
         mother_place_of_work: "",
         mother_phone_number: "",
+        mother_address_residence: "",
         foreign_language_was: "",
         foreign_language_will_be: "",
         subdivision: "",
@@ -748,6 +1085,9 @@ export default {
         health_group: "",
         ppfl_test: "",
         medical_age_group: "",
+        passed_medical_examination: "",
+        passed_medical_examination_extra_data: "",
+        is_medical_examination_passed: false,
         needs_increased_attention: "",
         needs_psychological_support: "",
         is_risk_group: "",
@@ -756,8 +1096,6 @@ export default {
         has_gusb_check: "",
         has_employee_in_family: "",
         is_orphan: "",
-        passed_medical_examination: "",
-        passed_medical_examination_extra_data: "",
         has_certificate_ideas_for_Belarus: "",
         has_certificate_kind_heart: "",
         is_employee: "",
@@ -778,6 +1116,9 @@ export default {
     },
   },
   computed: {
+    c2iUrl() {
+      return c2iUrl
+    },
     orderedCadetCategories() {
       return this.categories.results
     },
@@ -833,6 +1174,16 @@ export default {
     orderedPassportAuthorities() {
       return this.passportAuthorities.results
     },
+    orderedForeignLanguages() {
+      return this.foreignLanguages.results
+    },
+    orderedPpflCategories() {
+      return this.ppflCategories.results
+    },
+
+    orderedVpkCategories() {
+      return this.vpkCategories.results
+    },
 
     ...mapGetters({
       groups: "groups/getList",
@@ -851,6 +1202,9 @@ export default {
       documentTypes: "documentType/getList",
       privileges: "privileges/getList",
       passportAuthorities: "passportAuthorities/getList",
+      foreignLanguages: "foreignLanguages/getList",
+      ppflCategories: "ppflCategories/getList",
+      vpkCategories: "vpkCategories/getList",
       token: "auth/getToken",
     }),
   },

@@ -1253,11 +1253,13 @@ export default {
       return this.graduationReasons.results
     },
     getCadetStatus() {
-      if (dayjs().isBefore(dayjs(this.currentCadetData.academy_end_date))) {
-        return "Обучается"
-      } else
-        return `Дата окончания обучения - ${this.currentCadetData.academy_end_date || "Нет данных"}, причина - ${this.currentCadetData.get_graduation_reason || "Нет данных"},
+      if (this.currentCadetData.academy_end_date) {
+        if (dayjs().isBefore(dayjs(this.currentCadetData.academy_end_date))) {
+          return "Обучается"
+        } else
+          return `Дата окончания обучения - ${this.currentCadetData.academy_end_date || "Нет данных"}, причина - ${this.currentCadetData.get_graduation_reason || "Нет данных"},
         статья - ${this.currentCadetData.graduation_reason_article || "Нет данных"}`
+      } else return "Нет данных о дате отчисления"
     },
     ...mapGetters({
       groups: "groups/getList",

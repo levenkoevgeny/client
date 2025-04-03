@@ -40,6 +40,8 @@ const actions = {
       await dispatch("countryRegion/actionGetList", null, { root: true })
       await dispatch("documentType/actionGetList", null, { root: true })
       await dispatch("privileges/actionGetList", null, { root: true })
+      await dispatch("ppflCategories/actionGetList", null, { root: true })
+      await dispatch("vpkCategories/actionGetList", null, { root: true })
       await dispatch("educationalInstitutions/actionGetList", null, {
         root: true,
       })
