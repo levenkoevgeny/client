@@ -61,7 +61,7 @@
           <p class="card-text">
             Комплексная информационная система "Вступительная кампания"
           </p>
-          <router-link class="btn btn-primary" :to="{ name: 'entrance-main' }">
+          <router-link class="btn btn-primary" :to="{ name: 'entrance-list' }">
             Перейти
           </router-link>
         </div>

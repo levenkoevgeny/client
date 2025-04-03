@@ -336,23 +336,23 @@ const routes = [
           },
         ],
       },
-    ],
-  },
-  {
-    path: "/entrance",
-    component: EntranceMainView,
-    meta: { requiresAuth: true },
-    name: "entrance-main",
-    children: [
       {
-        path: "",
-        component: EntranceListView,
-        name: "entrance-list",
-      },
-      {
-        path: "input",
-        component: EntranceInputForm,
-        name: "entrance-input-form",
+        path: "/entrance",
+        component: EntranceMainView,
+        meta: { requiresAuth: true },
+        name: "entrance-main",
+        children: [
+          {
+            path: "",
+            component: EntranceListView,
+            name: "entrance-list",
+          },
+          {
+            path: ":id/update",
+            component: EntranceInputForm,
+            name: "entrance-input-form",
+          },
+        ],
       },
     ],
   },

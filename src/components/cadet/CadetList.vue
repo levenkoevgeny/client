@@ -348,11 +348,6 @@
 <script>
 import { globalCadetAPIInstance } from "@/api/cadet/cadetAPI"
 
-import getSubdivisionAPIInstance from "@/api/cadet/subdivisionAPI"
-import getGroupAPIInstance from "@/api/cadet/groupAPI"
-import getRankAPIInstance from "@/api/cadet/rankAPI"
-import getSpecialityAPIInstance from "@/api/cadet/specialityAPI"
-import getPositionAPIInstance from "@/api/cadet/positionAPI"
 import BaseListLayout from "@/components/layouts/BaseListLayout.vue"
 import { PaginatorView } from "@/components/common"
 import { debounce } from "lodash/function"
@@ -377,11 +372,6 @@ export default {
       BACKEND_HOST: process.env.VUE_APP_BACKEND_HOST,
       BACKEND_PORT: process.env.VUE_APP_BACKEND_PORT,
       cadetAPIInstance: globalCadetAPIInstance,
-      subdivisionAPIInstance: getSubdivisionAPIInstance(),
-      groupAPIInstance: getGroupAPIInstance(),
-      rankAPIInstance: getRankAPIInstance(),
-      specialityAPIInstance: getSpecialityAPIInstance(),
-      positionAPIInstance: getPositionAPIInstance(),
       searchForm: Object.assign({}, globalCadetAPIInstance.searchObj),
       cadetNewForm: {
         last_name_rus: "",
@@ -449,10 +439,7 @@ export default {
     },
     async addNewCadet() {
       try {
-        const response = await this.cadetAPIInstance.addItem(
-          this.token,
-          this.cadetNewForm,
-        )
+        const response = await this.cadetAPIInstance.addItem(this.cadetNewForm)
         const newItem = await response.data
         this.cadetList.results.unshift(newItem)
         this.$refs.cadetAddModalCloseButton.click()

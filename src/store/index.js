@@ -27,6 +27,12 @@ import educationKind from "@/store/modules/educationKind"
 import educationLevel from "@/store/modules/educationLevel"
 import educationLocalityKind from "@/store/modules/educationLocalityKind"
 import degreeOfKinship from "@/store/modules/degreeOfKinship"
+import socialStatus from "@/store/modules/socialStatus"
+import entranceCategory from "@/store/modules/entranceCategory"
+import countryRegion from "@/store/modules/countryRegion"
+import educationalInstitutions from "@/store/modules/educationalInstitutions"
+import documentType from "@/store/modules/documentType"
+import privileges from "@/store/modules/privileges"
 
 const store = createStore({
   modules: {
@@ -58,6 +64,12 @@ const store = createStore({
     educationLevel,
     educationLocalityKind,
     degreeOfKinship,
+    socialStatus,
+    entranceCategory,
+    countryRegion,
+    educationalInstitutions,
+    documentType,
+    privileges,
   },
 })
 

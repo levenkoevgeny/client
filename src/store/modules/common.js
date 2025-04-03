@@ -35,6 +35,14 @@ const actions = {
         root: true,
       })
       await dispatch("degreeOfKinship/actionGetList", null, { root: true })
+      await dispatch("socialStatus/actionGetList", null, { root: true })
+      await dispatch("entranceCategory/actionGetList", null, { root: true })
+      await dispatch("countryRegion/actionGetList", null, { root: true })
+      await dispatch("documentType/actionGetList", null, { root: true })
+      await dispatch("privileges/actionGetList", null, { root: true })
+      await dispatch("educationalInstitutions/actionGetList", null, {
+        root: true,
+      })
     } catch (error) {
       console.log(error)
     }

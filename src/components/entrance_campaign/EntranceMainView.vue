@@ -20,13 +20,8 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" :to="{ name: 'entrance-main' }">
+            <router-link class="nav-link" :to="{ name: 'entrance-list' }">
               Список личных дел
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" :to="{ name: 'entrance-input-form' }">
-              Ввод личных дел
             </router-link>
           </li>
         </ul>
