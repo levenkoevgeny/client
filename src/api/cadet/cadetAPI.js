@@ -20,13 +20,6 @@ class CadetAPI extends BaseAPI {
     }
     return queryString
   }
-
-  async updatePhoto(cadetId, formData) {
-    return axios.patch(
-      `${process.env.VUE_APP_BACKEND_PROTOCOL}://${process.env.VUE_APP_BACKEND_HOST}:${process.env.VUE_APP_BACKEND_PORT}/api/${this.baseURL}/${cadetId}/`,
-      formData,
-    )
-  }
 }
 
 const searchObj = {

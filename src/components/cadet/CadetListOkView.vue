@@ -177,41 +177,45 @@
     </div>
 
     <div
-      style="min-height: 80vh; max-height: 80vh; overflow: auto"
+      style="
+        min-height: calc(100vh - 260px);
+        max-height: calc(100vh - 260px);
+        overflow: auto;
+      "
       @scroll="loadMoreData"
       ref="infinite_list"
       id="infinite_list"
     >
       <table class="table table-hover table-responsive" style="overflow: auto">
-        <thead>
+        <thead ref="thead">
           <tr>
-            <th scope="col">№п.п.</th>
+            <th scope="col" class="text-center">№п.п.</th>
             <th scope="col">Фото</th>
-            <th scope="col">
-              <div class="d-flex flex-row align-items-center">
-                <nobr>id</nobr>
-                <div class="dropdown">
-                  <button
-                    class="btn dropdown-toggle"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  ></button>
-                  <ul class="dropdown-menu">
-                    <li>
-                      <button class="dropdown-item" @click="setOrdering('id')">
-                        А -> Я
-                      </button>
-                    </li>
-                    <li>
-                      <button class="dropdown-item" @click="setOrdering('-id')">
-                        Я -> А
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </th>
+            <!--            <th scope="col">-->
+            <!--              <div class="d-flex flex-row align-items-center">-->
+            <!--                <nobr>id</nobr>-->
+            <!--                <div class="dropdown">-->
+            <!--                  <button-->
+            <!--                    class="btn dropdown-toggle"-->
+            <!--                    type="button"-->
+            <!--                    data-bs-toggle="dropdown"-->
+            <!--                    aria-expanded="false"-->
+            <!--                  ></button>-->
+            <!--                  <ul class="dropdown-menu">-->
+            <!--                    <li>-->
+            <!--                      <button class="dropdown-item" @click="setOrdering('id')">-->
+            <!--                        А -> Я-->
+            <!--                      </button>-->
+            <!--                    </li>-->
+            <!--                    <li>-->
+            <!--                      <button class="dropdown-item" @click="setOrdering('-id')">-->
+            <!--                        Я -> А-->
+            <!--                      </button>-->
+            <!--                    </li>-->
+            <!--                  </ul>-->
+            <!--                </div>-->
+            <!--              </div>-->
+            <!--            </th>-->
             <th scope="col">Активный</th>
             <th scope="col">
               <div class="d-flex flex-row align-items-center">
@@ -788,7 +792,7 @@
           <tr>
             <th></th>
             <th></th>
-            <th scope="col"></th>
+            <!--            <th scope="col"></th>-->
             <th>
               <select class="form-select" v-model="searchForm.is_active">
                 <option selected value="">-------</option>
@@ -1156,26 +1160,26 @@
               $router.push({ name: 'cadet-update', params: { id: cadet.id } })
             "
           >
-            <td>{{ cadet.serial_number }}</td>
+            <td class="text-center">{{ cadet.serial_number }}</td>
             <td>
               <img
                 v-if="cadet.photo"
                 :src="cadet.photo"
-                class="img-thumbnail"
+                class="img-thumbnail bg-body border-0"
                 alt="..."
                 style="width: 50px"
               />
               <img
                 v-else
                 src="../../assets/without_photo.jpg"
-                class="img-thumbnail"
+                class="img-thumbnail bg-body border-0"
                 alt="..."
                 style="width: 50px"
               />
             </td>
-            <td>{{ cadet.id }}</td>
+            <!--            <td>{{ cadet.id }}</td>-->
             <td v-if="cadet.is_active"></td>
-            <td v-else>
+            <td v-else class="text-center">
               <font-awesome-icon :icon="['fas', 'lock']" />
             </td>
             <td>{{ cadet.get_category }}</td>
@@ -1400,6 +1404,8 @@ export default {
       }
     },
     showExportDataModal() {
+      let thead = this.$refs.thead
+      console.log(thead.getBoundingClientRect())
       let addModal = this.$refs.exportDataModal
       let myModal = new bootstrap.Modal(addModal, {
         keyboard: false,

@@ -94,6 +94,10 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(error)
     }
 
+    store.commit("errors/setErrorList", error.response.data)
+
+    console.log("axios interceptor", error)
+
     switch (error.response.status) {
       case 401:
         await store.dispatch("auth/actionRemoveLogIn")
@@ -107,6 +111,7 @@ axiosInstance.interceptors.response.use(
         await router.replace({ name: "server-error" })
         break
       default:
+        console.log("axios interceptor", error)
         return Promise.reject(error)
     }
   },

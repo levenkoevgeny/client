@@ -47,6 +47,21 @@ export default class BaseAPI {
     )
   }
 
+  async updateItemPartly(itemData) {
+    return axios.patch(
+      `${process.env.VUE_APP_BACKEND_PROTOCOL}://${process.env.VUE_APP_BACKEND_HOST}:${process.env.VUE_APP_BACKEND_PORT}/api/${this.baseURL}/${itemData.id}/`,
+      itemData,
+    )
+  }
+
+  // FormData only !!!
+  async updatePhotoOrAnyFile(cadetId, formData) {
+    return axios.patch(
+      `${process.env.VUE_APP_BACKEND_PROTOCOL}://${process.env.VUE_APP_BACKEND_HOST}:${process.env.VUE_APP_BACKEND_PORT}/api/${this.baseURL}/${cadetId}/`,
+      formData,
+    )
+  }
+
   async deleteItem(itemId) {
     return axios.delete(
       `${process.env.VUE_APP_BACKEND_PROTOCOL}://${process.env.VUE_APP_BACKEND_HOST}:${process.env.VUE_APP_BACKEND_PORT}/api/${this.baseURL}/${itemId}/`,

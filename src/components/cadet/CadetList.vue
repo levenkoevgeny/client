@@ -95,7 +95,7 @@
     </template>
 
     <template v-slot:thead>
-      <tr>
+      <tr ref="thead">
         <th scope="col"></th>
         <th scope="col">Фамилия, имя, отчество</th>
         <th scope="col">Факультет</th>
@@ -117,28 +117,31 @@
           <img
             v-if="cadet.photo"
             :src="cadet.photo"
-            class="img-thumbnail"
+            class="img-thumbnail bg-body border-0"
             alt="..."
             style="width: 50px"
           />
           <img
             v-else
             src="../../assets/without_photo.jpg"
-            class="img-thumbnail"
+            class="img-thumbnail bg-body border-0"
             alt="..."
             style="width: 50px"
           />
         </td>
         <td>
-          <router-link
-            :to="{
-              name: 'cadet-view',
-              params: { id: cadet.id },
-            }"
-          >
-            {{ cadet.last_name_rus }}<br />
-            {{ cadet.first_name_rus }}<br />{{ cadet.patronymic_rus }}
-          </router-link>
+          {{ cadet.last_name_rus }}<br />
+          {{ cadet.first_name_rus }}<br />{{ cadet.patronymic_rus }}
+
+          <!--          <router-link-->
+          <!--            :to="{-->
+          <!--              name: 'cadet-view',-->
+          <!--              params: { id: cadet.id },-->
+          <!--            }"-->
+          <!--          >-->
+          <!--            {{ cadet.last_name_rus }}<br />-->
+          <!--            {{ cadet.first_name_rus }}<br />{{ cadet.patronymic_rus }}-->
+          <!--          </router-link>-->
         </td>
         <td>{{ cadet.get_subdivision }}</td>
         <td>{{ cadet.get_group }}</td>
@@ -149,7 +152,6 @@
         </td>
       </tr>
     </template>
-
     <template v-slot:paginator> </template>
     <template v-slot:search-form>
       <div class="mb-3">
@@ -338,6 +340,9 @@
           </div>
         </div>
       </div>
+    </template>
+
+    <template v-slot:search-form-clear-button>
       <button type="button" class="btn btn-primary" @click="clearFilter">
         Сбросить фильтр
       </button>

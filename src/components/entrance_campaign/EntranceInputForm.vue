@@ -8,7 +8,7 @@
       >
     </h1>
 
-    <div class="card shadow mb-2 rounded">
+    <div class="card shadow mb-2 rounded bg-body border-0">
       <div class="card-body">
         <h5 class="card-title">Персональные данные</h5>
         <div class="row mt-3">
@@ -16,7 +16,7 @@
             <div class="form-floating mb-3">
               <input
                 type="text"
-                class="form-control form-control-sm"
+                class="form-control form-control-sm bg-body"
                 placeholder="Фамилия"
                 v-model="currentCadetData.last_name_rus"
               />
@@ -98,7 +98,7 @@
       </div>
     </div>
 
-    <div class="card shadow mb-2 rounded">
+    <div class="card shadow mb-2 rounded bg-body border-0">
       <div class="card-body">
         <h5 class="card-title">Блок по Академии</h5>
         <div class="row mt-3">
@@ -282,6 +282,18 @@
             aria-selected="false"
           >
             Данные мед. осв-я
+          </button>
+          <button
+            class="nav-link"
+            id="nav-attached_documents-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#nav-attached_documents"
+            type="button"
+            role="tab"
+            aria-controls="nav-attached_documents"
+            aria-selected="false"
+          >
+            Отсканированные документы
           </button>
         </div>
       </nav>
@@ -977,9 +989,70 @@
             </div>
           </div>
         </div>
+        <div
+          class="tab-pane fade"
+          id="nav-attached_documents"
+          role="tabpanel"
+          aria-labelledby="nav-attached_documents-tab"
+          tabindex="0"
+        >
+          <div class="m-3">
+            <div v-if="currentCadetData.attached_documents">
+              <div class="d-flex flex-row my-2">
+                <div class="mx-3">
+                  <input
+                    class="form-control"
+                    ref="uploadedDocument"
+                    type="file"
+                    accept=".pdf"
+                    v-on:change="uploadDocument"
+                    style="width: 600px"
+                  />
+                </div>
+                <div class="d-flex align-items-end">
+                  <button
+                    type="button"
+                    class="btn btn-link"
+                    @click="deleteDocument"
+                  >
+                    Удалить скан документа
+                  </button>
+                </div>
+              </div>
+
+              <object
+                :data="currentCadetData.attached_documents"
+                type="application/pdf"
+                ref="objectWithDocument"
+                width="100%"
+                height="700"
+              >
+                <p>
+                  <b>Ошибка загрузки pdf документа.</b> Попробуйте скачать его
+                  <a :href="currentCadetData.attached_documents">отсюда</a>.
+                </p>
+              </object>
+            </div>
+
+            <div v-else>
+              <div class="mb-3">
+                <label for="formFile" class="form-label"
+                  >Выберите pdf файл для загрузки</label
+                >
+                <input
+                  class="form-control"
+                  ref="uploadedDocument"
+                  type="file"
+                  accept=".pdf"
+                  v-on:change="uploadDocument"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="card shadow mb-2 rounded">
+      <div class="card shadow mb-2 rounded bg-body border-0">
         <div class="card-body">
           <div class="mb-3">
             <label class="form-label">Замечания по личному делу</label>
@@ -988,6 +1061,169 @@
               rows="3"
               v-model="currentCadetData.comments_on_personal_file"
             ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow mb-2 rounded bg-body border-0">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-xl-4">
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="currentCadetData.needs_increased_attention"
+                />
+                <label class="form-check-label">
+                  Требует повышенного внимания
+                </label>
+              </div>
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="currentCadetData.needs_psychological_support"
+                />
+                <label class="form-check-label">
+                  Требует психологического сопровождения
+                </label>
+              </div>
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="currentCadetData.is_risk_group"
+                />
+                <label class="form-check-label">Группа риска</label>
+              </div>
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="currentCadetData.has_conviction"
+                />
+                <label class="form-check-label">Судимость</label>
+              </div>
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="currentCadetData.has_dactocard"
+                />
+                <label class="form-check-label">Дактокарта</label>
+              </div>
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="currentCadetData.has_gusb_check"
+                />
+                <label class="form-check-label">Проверка ГУСБ</label>
+              </div>
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="currentCadetData.has_employee_in_family"
+                />
+                <label class="form-check-label">Сотрудники в семье</label>
+              </div>
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="currentCadetData.is_orphan"
+                />
+                <label class="form-check-label">Сирота</label>
+              </div>
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="currentCadetData.is_employee"
+                />
+                <label class="form-check-label">Сотрудник</label>
+              </div>
+            </div>
+            <div class="col-xl-4">
+              <p1>Сертификаты</p1>
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="currentCadetData.has_certificate_ideas_for_Belarus"
+                />
+                <label class="form-check-label">100 идей для Беларуси</label>
+              </div>
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="currentCadetData.has_certificate_kind_heart"
+                />
+                <label class="form-check-label">Доброе сердце</label>
+              </div>
+            </div>
+            <div class="col-xl-4">
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="currentCadetData.is_law_class"
+                />
+                <label class="form-check-label">Правовой класс</label>
+              </div>
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="currentCadetData.is_law_enforcement"
+                />
+                <label class="form-check-label">Охрана правопорядка</label>
+              </div>
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="currentCadetData.is_reserve"
+                />
+                <label class="form-check-label">Резерв</label>
+              </div>
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="currentCadetData.is_fired"
+                />
+                <label class="form-check-label">Уволен</label>
+              </div>
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="currentCadetData.took_documents"
+                />
+                <label class="form-check-label">Забрал документы</label>
+              </div>
+
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="currentCadetData.is_vv"
+                />
+                <label class="form-check-label">ВВ</label>
+              </div>
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="currentCadetData.is_fp"
+                />
+                <label class="form-check-label">ФП</label>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1000,7 +1236,6 @@ import NavigationLayout from "@/components/layouts/NavigationLayout.vue"
 import { globalCadetAPIForEntranceInstance } from "@/api/cadet/cadetAPI"
 import { debounce } from "lodash/function"
 import { mapGetters } from "vuex"
-import { c2iUrl } from "core-js/internals/base64-map"
 
 export default {
   name: "EntranceInputForm",
@@ -1099,6 +1334,14 @@ export default {
         has_certificate_ideas_for_Belarus: "",
         has_certificate_kind_heart: "",
         is_employee: "",
+        attached_documents: "",
+        is_law_class: "",
+        is_law_enforcement: "",
+        is_reserve: "",
+        is_fired: "",
+        took_documents: "",
+        is_vv: "",
+        is_fp: "",
       },
       cadetAPIInstance: globalCadetAPIForEntranceInstance,
       BACKEND_PROTOCOL: process.env.VUE_APP_BACKEND_PROTOCOL,
@@ -1114,11 +1357,36 @@ export default {
       const response = await this.cadetAPIInstance.getItemData(applicantId)
       this.currentCadetData = await response.data
     },
+    async uploadDocument() {
+      let formData = new FormData()
+      formData.append(
+        "attached_documents",
+        this.$refs.uploadedDocument.files[0],
+      )
+
+      const response = await this.cadetAPIInstance.updatePhotoOrAnyFile(
+        this.currentCadetData.id,
+        formData,
+      )
+
+      this.currentCadetData = {
+        ...this.currentCadetData,
+        attached_documents: response.data.attached_documents,
+      }
+    },
+    async deleteDocument() {
+      const response = await this.cadetAPIInstance.updatePhotoOrAnyFile(
+        this.currentCadetData.id,
+        { attached_documents: null },
+      )
+
+      this.currentCadetData = {
+        ...this.currentCadetData,
+        attached_documents: response.data.attached_documents,
+      }
+    },
   },
   computed: {
-    c2iUrl() {
-      return c2iUrl
-    },
     orderedCadetCategories() {
       return this.categories.results
     },
@@ -1210,3 +1478,15 @@ export default {
   },
 }
 </script>
+
+<style>
+input,
+select,
+textarea {
+  --bs-bg-opacity: 1;
+  background-color: rgba(
+    var(--bs-body-bg-rgb),
+    var(--bs-bg-opacity)
+  ) !important;
+}
+</style>

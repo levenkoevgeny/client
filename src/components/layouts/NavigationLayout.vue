@@ -1,7 +1,7 @@
 <template>
   <nav
-    class="navbar navbar-expand-lg bg-body-tertiary"
-    style="position: sticky; top: 0; z-index: 100000"
+    class="navbar navbar-expand-lg bg-body"
+    style="position: sticky; top: 0; z-index: 100000; height: 58px"
   >
     <div class="container-fluid">
       <a class="navbar-brand" href="/">

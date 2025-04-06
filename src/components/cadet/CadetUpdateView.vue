@@ -18,11 +18,8 @@
             tabindex="0"
             style="height: 85vh; max-height: 85vh; overflow-y: scroll"
           >
-            <div
-              class="shadow p-3 mb-3 bg-body-tertiary rounded"
-              id="simple-list-personal-data"
-            >
-              <div class="card">
+            <div class="shadow p-3 mb-3" id="simple-list-personal-data">
+              <div class="card bg-body border-0">
                 <div class="card-body">
                   <h5 class="card-title">Личные данные</h5>
                   <div class="row">
@@ -390,7 +387,7 @@
               class="shadow p-3 mb-3 bg-body-tertiary rounded"
               id="simple-list-passport-data"
             >
-              <div class="card">
+              <div class="card bg-body border-0">
                 <div class="card-body">
                   <h5 class="card-title">Паспортные данные</h5>
                   <div class="row">
@@ -474,7 +471,7 @@
               class="shadow p-3 mb-3 bg-body-tertiary rounded"
               id="simple-list-academy-data"
             >
-              <div class="card">
+              <div class="card bg-body border-0">
                 <div class="card-body">
                   <h5 class="card-title">Обучение в Академии МВД</h5>
                   <div class="row">
@@ -650,7 +647,7 @@
               class="shadow p-3 mb-3 bg-body-tertiary rounded"
               id="simple-list-military-office-data"
             >
-              <div class="card">
+              <div class="card bg-body border-0">
                 <div class="card-body">
                   <h5 class="card-title">Воинский учет</h5>
                   <div class="row">
@@ -699,7 +696,7 @@
               class="shadow p-3 mb-3 bg-body-tertiary rounded"
               id="simple-list-parents-data"
             >
-              <div class="card">
+              <div class="card bg-body border-0">
                 <div class="card-body">
                   <h5 class="card-title mb-3">Данные о родителях</h5>
                   <div class="row">
@@ -938,7 +935,7 @@
             />
             <EducationHistoryCadetComponent :cadet-id="$route.params.id" />
             <ForeignLanguagesCadetComponent :cadet-id="$route.params.id" />
-            <ScientificWorksCadetComponent :cadet-id="$route.params.id" />
+            <!--            <ScientificWorksCadetComponent :cadet-id="$route.params.id" />-->
             <JobCadetComponent :cadet-id="$route.params.id" />
             <ArmyServiceCadetComponent
               :cadet-id="$route.params.id"
@@ -973,7 +970,7 @@
         </div>
         <div class="col-2">
           <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
-            <div class="card">
+            <div class="card bg-body border-0">
               <div class="card-body">
                 <div
                   id="simple-list-example"
@@ -1008,11 +1005,11 @@
                     href="#simple-list-foreign-language-data"
                     >Иностранные языки</a
                   >
-                  <a
-                    class="p-1 rounded"
-                    href="#simple-list-scientific-works-data"
-                    >Научные труды и изобретения</a
-                  >
+                  <!--                  <a-->
+                  <!--                    class="p-1 rounded"-->
+                  <!--                    href="#simple-list-scientific-works-data"-->
+                  <!--                    >Научные труды и изобретения</a-->
+                  <!--                  >-->
                   <a class="p-1 rounded" href="#simple-list-job-data"
                     >Трудовая деятельность</a
                   >
@@ -1098,7 +1095,8 @@ export default {
       isLoading: true,
       isError: false,
       currentCadetData: {
-        category: null,
+        is_preloaded_data: true,
+        category: "",
         last_name_rus: "",
         first_name_rus: "",
         patronymic_rus: "",
@@ -1201,7 +1199,7 @@ export default {
     debouncedUpdate: debounce(async function () {
       this.isLoading = true
       try {
-        const { photo, ...rest } = this.currentCadetData
+        const { photo, attached_documents, ...rest } = this.currentCadetData
         await this.cadetAPIInstance.updateItem(rest)
       } catch (e) {
         this.isError = true
@@ -1214,7 +1212,7 @@ export default {
       let formData = new FormData()
       formData.append("photo", this.$refs.uploadedPhoto.files[0])
 
-      const response = await this.cadetAPIInstance.updatePhoto(
+      const response = await this.cadetAPIInstance.updatePhotoOrAnyFile(
         this.currentCadetData.id,
         formData,
       )
@@ -1280,7 +1278,9 @@ export default {
   watch: {
     currentCadetData: {
       handler(newValue, oldValue) {
-        this.debouncedUpdate()
+        if (!oldValue.hasOwnProperty("is_preloaded_data")) {
+          this.debouncedUpdate()
+        }
       },
       deep: true,
     },

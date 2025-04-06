@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card bg-body border-0">
     <div class="card-body">
       <h5 class="card-title">
         {{ title }}

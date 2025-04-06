@@ -8,7 +8,7 @@
             href="#"
             data-bs-target="#sidebar"
             data-bs-toggle="collapse"
-            class="rounded-3 p-1 text-decoration-none fs-3 link-light"
+            class="rounded-3 p-1 text-decoration-none fs-3 filter-icon-color"
             ><font-awesome-icon :icon="['fas', 'filter']"
           /></a>
         </div>
@@ -38,11 +38,13 @@
               <slot name="delete-selected-button"></slot>
             </div>
             <slot name="table-mode-button"></slot>
+            {{ value }}
             <div
               class="table-responsive"
-              style="max-height: 68vh; overflow-y: auto"
+              style="max-height: calc(100vh - 400px); overflow-y: auto"
               @scroll="loadMoreData"
               id="infinite_list"
+              ref="infinite_list_div"
             >
               <table class="table table-hover">
                 <thead style="position: sticky; top: 0">
@@ -62,19 +64,20 @@
 
       <div class="col-auto">
         <div class="navbar navbar-expand-lg">
-          <div
-            id="sidebar"
-            class="collapse collapse-horizontal border-start px-3"
-          >
+          <div id="sidebar" class="collapse collapse-horizontal border-start">
             <div
               id="sidebar-nav"
               class="list-group border-0 rounded-0 text-sm-start"
               style="width: 500px"
             >
-              <h3 class="my-3">Поиск по критериям</h3>
-              <div style="">
+              <h3 class="my-3 p-3">Поиск по критериям</h3>
+              <div
+                style="max-height: calc(100vh - 290px); overflow-y: auto"
+                class="p-3"
+              >
                 <slot name="search-form"></slot>
               </div>
+              <slot name="search-form-clear-button"></slot>
             </div>
           </div>
         </div>
@@ -109,7 +112,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 thead {
   position: sticky;
   top: 0;
@@ -119,8 +122,16 @@ td {
   min-width: 100px;
   text-align: start;
   vertical-align: middle;
+  --bs-bg-opacity: 1;
+  background-color: rgba(
+    var(--bs-body-bg-rgb),
+    var(--bs-bg-opacity)
+  ) !important;
 }
 td {
   cursor: pointer;
+}
+.filter-icon-color {
+  color: var(--bs-body-color);
 }
 </style>

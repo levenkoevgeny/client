@@ -1,4 +1,10 @@
-const state = () => ({})
+const state = () => ({ isCommonLoading: true })
+
+const getters = {
+  getIsCommonLoading(state) {
+    return state.isCommonLoading
+  },
+}
 
 const actions = {
   async actionGetCommonLists({ dispatch, commit }, payload) {
@@ -47,7 +53,15 @@ const actions = {
       })
     } catch (error) {
       console.log(error)
+    } finally {
+      commit("setIsCommonLoading", false)
     }
+  },
+}
+
+const mutations = {
+  setIsCommonLoading(state, payload) {
+    state.isCommonLoading = payload
   },
 }
 
@@ -55,4 +69,6 @@ export default {
   namespaced: true,
   state,
   actions,
+  getters,
+  mutations,
 }

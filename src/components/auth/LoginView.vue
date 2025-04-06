@@ -25,7 +25,7 @@
         <div class="form-floating">
           <input
             type="text"
-            class="form-control"
+            class="form-control bg-body rounded-bottom-0"
             id="id_login"
             placeholder="login"
             v-model="auth_data.username"
@@ -35,7 +35,7 @@
         <div class="form-floating">
           <input
             type="password"
-            class="form-control"
+            class="form-control bg-body"
             id="id_password"
             v-model="auth_data.password"
             placeholder="Password"
@@ -44,9 +44,7 @@
         </div>
 
         <button class="btn btn-primary w-100 py-2" type="submit">Войти</button>
-        <p class="mt-5 mb-3 text-body-secondary">
-          &copy; Designed by Levenko Evgeny
-        </p>
+        <p class="mt-5 mb-3 text-body-secondary">&copy; Designed by OOIT</p>
       </form>
     </main>
   </div>
