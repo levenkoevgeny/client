@@ -255,7 +255,7 @@ export default {
   methods: {
     async loadData() {
       this.isLoading = true
-      const response = await this.cadetAPIInstance.getItemsList(this.token)
+      const response = await this.cadetAPIInstance.getItemsList()
       this.cadetList = await response.data
       this.isLoading = false
     },

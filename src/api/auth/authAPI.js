@@ -11,7 +11,7 @@ export const authApi = {
       params,
     )
   },
-  async getUserData(token) {
+  async getUserData() {
     return axios.get(
       `${process.env.VUE_APP_BACKEND_PROTOCOL}://${process.env.VUE_APP_BACKEND_HOST}:${process.env.VUE_APP_BACKEND_PORT}/api/users/me/`,
     )

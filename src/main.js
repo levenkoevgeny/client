@@ -36,6 +36,7 @@ import { faLock } from "@fortawesome/free-solid-svg-icons"
 import { faLockOpen } from "@fortawesome/free-solid-svg-icons"
 import { faCheck } from "@fortawesome/free-solid-svg-icons"
 import { faFilter } from "@fortawesome/free-solid-svg-icons"
+import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons"
 import axios from "axios"
 
 export const axiosInstance = axios.create()
@@ -70,6 +71,7 @@ library.add(faLock)
 library.add(faCheck)
 library.add(faLockOpen)
 library.add(faFilter)
+library.add(faArrowRightFromBracket)
 
 axiosInstance.interceptors.request.use(
   (config) => {
@@ -93,11 +95,6 @@ axiosInstance.interceptors.response.use(
       window.location.href = "/network-error"
       return Promise.reject(error)
     }
-
-    store.commit("errors/setErrorList", error.response.data)
-
-    console.log("axios interceptor", error)
-
     switch (error.response.status) {
       case 401:
         await store.dispatch("auth/actionRemoveLogIn")
@@ -107,10 +104,20 @@ axiosInstance.interceptors.response.use(
         await store.dispatch("auth/actionRemoveLogIn")
         await router.replace({ name: "login" })
         break
+      case 404:
+        store.commit("errors/setErrorList", {
+          errorStatus: error.status,
+          errorMessage: "URL Not found",
+        })
+        return Promise.reject(error)
       case 500:
         await router.replace({ name: "server-error" })
         break
       default:
+        store.commit("errors/setErrorList", {
+          errorStatus: error.status,
+          errorMessage: error.response.data,
+        })
         console.log("axios interceptor", error)
         return Promise.reject(error)
     }

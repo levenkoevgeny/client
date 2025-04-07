@@ -20,6 +20,7 @@
                 Раздел навигации
               </router-link>
             </li>
+
             <li class="nav-item">
               <router-link class="nav-link" :to="{ name: 'dictionaries-main' }">
                 Главная
@@ -35,164 +36,162 @@
       <div class="row">
         <div class="col-2">
           <div style="max-height: calc(100vh - 180px); overflow-y: auto">
-            <ul class="list-group list-group-flush bg-body">
-              <li class="list-group-item bg-body">
-                <router-link
-                  class=""
-                  :to="{ name: 'dictionaries-person-categories' }"
-                >
-                  Категории сотрудников, курсантов, студентов
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link class="" :to="{ name: 'dictionaries-ranks' }">
-                  Звания
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link
-                  class=""
-                  :to="{ name: 'dictionaries-rank-groups' }"
-                >
-                  Категории званий
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link class="" :to="{ name: 'dictionaries-groups' }">
-                  Группы
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link
-                  class=""
-                  :to="{ name: 'dictionaries-encouragements' }"
-                >
-                  Поощрения
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link
-                  class=""
-                  :to="{ name: 'dictionaries-punishments' }"
-                >
-                  Взыскания
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link
-                  class=""
-                  :to="{ name: 'dictionaries-subdivisions' }"
-                >
-                  Подразделения
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link class="" :to="{ name: 'dictionaries-positions' }">
-                  Должности
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link class="" :to="{ name: 'order-owners' }">
-                  Чей приказ
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link
-                  class=""
-                  :to="{ name: 'dictionaries-militaryoffices' }"
-                >
-                  Военкоматы
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link class="" :to="{ name: 'dictionaries-go-rovd' }">
-                  ГО-РОВД
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link
-                  class=""
-                  :to="{ name: 'dictionaries-component-organ' }"
-                >
-                  Комплектующие органы
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link class="" :to="{ name: 'dictionaries-rewards' }">
-                  Награды
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link class="" :to="{ name: 'dictionaries-speciality' }">
-                  Специальности
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link
-                  class=""
-                  :to="{ name: 'dictionaries-specializations' }"
-                >
-                  Специализации
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link
-                  class=""
-                  :to="{ name: 'dictionaries-ord-directions' }"
-                >
-                  Направления ОРД
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link
-                  class=""
-                  :to="{ name: 'dictionaries-marital-statuses' }"
-                >
-                  Семейные положения
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link
-                  class=""
-                  :to="{ name: 'dictionaries-passport-authorities' }"
-                >
-                  Органы выдачи паспорта
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link
-                  class=""
-                  :to="{ name: 'dictionaries-foreign-languages' }"
-                >
-                  Иностранные языки
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link
-                  class=""
-                  :to="{ name: 'dictionaries-foreign-language-levels' }"
-                >
-                  Уровни владения и.я.
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link
-                  class=""
-                  :to="{ name: 'dictionaries-graduation-reasons' }"
-                >
-                  Причины отчисления
-                </router-link>
-              </li>
-              <li class="list-group-item bg-body">
-                <router-link
-                  class=""
-                  :to="{ name: 'dictionaries-education-forms' }"
-                >
-                  Формы обучения
-                </router-link>
-                <br />
-              </li>
-            </ul>
+            <div class="list-group">
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-person-categories' }"
+              >
+                Категории сотрудников, курсантов, студентов
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-ranks' }"
+              >
+                Звания
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-rank-groups' }"
+              >
+                Категории званий
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-groups' }"
+              >
+                Группы
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-encouragements' }"
+              >
+                Поощрения
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-punishments' }"
+              >
+                Взыскания
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-subdivisions' }"
+              >
+                Подразделения
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-positions' }"
+              >
+                Должности
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'order-owners' }"
+              >
+                Чей приказ
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-militaryoffices' }"
+              >
+                Военкоматы
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-go-rovd' }"
+              >
+                ГО-РОВД
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-component-organ' }"
+              >
+                Комплектующие органы
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-rewards' }"
+              >
+                Награды
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-speciality' }"
+              >
+                Специальности
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-specializations' }"
+              >
+                Специализации
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-ord-directions' }"
+              >
+                Направления ОРД
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-marital-statuses' }"
+              >
+                Семейные положения
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-passport-authorities' }"
+              >
+                Органы выдачи паспорта
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-foreign-languages' }"
+              >
+                Иностранные языки
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-foreign-language-levels' }"
+              >
+                Уровни владения и.я.
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-graduation-reasons' }"
+              >
+                Причины отчисления
+              </router-link>
+
+              <router-link
+                class="list-group-item list-group-item-action rounded-1"
+                :to="{ name: 'dictionaries-education-forms' }"
+              >
+                Формы обучения
+              </router-link>
+              <br />
+            </div>
           </div>
         </div>
         <div class="col-10">

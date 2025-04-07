@@ -14,7 +14,7 @@
     <div class="container">
       <h1 class="my-4">Навигация по разделам</h1>
       <div class="d-flex flex-row flex-wrap">
-        <div class="card me-4 mb-4 bg-body border-0" style="width: 24rem">
+        <div class="card me-4 mb-4 border-0" style="width: 24rem">
           <div class="card-body">
             <h5 class="card-title">КИС Курсант</h5>
             <p class="card-text">
@@ -25,7 +25,7 @@
             </router-link>
           </div>
         </div>
-        <div class="card me-4 mb-4 bg-body border-0" style="width: 24rem">
+        <div class="card me-4 mb-4 border-0" style="width: 24rem">
           <div class="card-body">
             <h5 class="card-title">КИС Сотрудники</h5>
             <p class="card-text">
@@ -37,7 +37,7 @@
             </router-link>
           </div>
         </div>
-        <div class="card me-4 mb-4 bg-body border-0" style="width: 24rem">
+        <div class="card me-4 mb-4 border-0" style="width: 24rem">
           <div class="card-body">
             <h5 class="card-title">КИС Студент</h5>
             <p class="card-text">
@@ -48,7 +48,7 @@
             </router-link>
           </div>
         </div>
-        <div class="card me-4 mb-4 bg-body border-0" style="width: 24rem">
+        <div class="card me-4 mb-4 border-0" style="width: 24rem">
           <div class="card-body">
             <h5 class="card-title">КИС Идеология</h5>
             <p class="card-text">
@@ -59,7 +59,7 @@
             </router-link>
           </div>
         </div>
-        <div class="card me-4 mb-4 bg-body border-0" style="width: 24rem">
+        <div class="card me-4 mb-4 border-0" style="width: 24rem">
           <div class="card-body">
             <h5 class="card-title">КИС Научная деятельность</h5>
             <p class="card-text">
@@ -70,7 +70,7 @@
             </router-link>
           </div>
         </div>
-        <div class="card me-4 mb-4 bg-body border-0" style="width: 24rem">
+        <div class="card me-4 mb-4 border-0" style="width: 24rem">
           <div class="card-body">
             <h5 class="card-title">КИС Вступительная кампания</h5>
             <p class="card-text">
@@ -85,7 +85,7 @@
           </div>
         </div>
 
-        <div class="card me-4 mb-4 bg-body border-0" style="width: 24rem">
+        <div class="card me-4 mb-4 border-0" style="width: 24rem">
           <div class="card-body">
             <h5 class="card-title">Словари</h5>
             <p class="card-text">Наполнение выпадающих меню</p>
@@ -97,7 +97,7 @@
             </router-link>
           </div>
         </div>
-        <div class="card me-4 mb-4 bg-body border-0" style="width: 24rem">
+        <div class="card me-4 mb-4 border-0" style="width: 24rem">
           <div class="card-body">
             <h5 class="card-title">Пользователи</h5>
             <p class="card-text">Администрирование пользователей</p>

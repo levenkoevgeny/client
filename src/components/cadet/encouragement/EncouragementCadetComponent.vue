@@ -188,10 +188,7 @@
     </div>
   </div>
 
-  <div
-    class="shadow p-3 mb-3 bg-body-tertiary rounded"
-    id="simple-list-encouragements-data"
-  >
+  <div class="shadow p-3 mb-3 rounded" id="simple-list-encouragements-data">
     <base-list-layout-for-cadet-update
       :is-loading="isLoading"
       :main-list-length="orderedMainList.length"

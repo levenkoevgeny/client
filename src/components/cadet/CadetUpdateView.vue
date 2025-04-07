@@ -1,7 +1,8 @@
 <template>
   <div class="container-fluid">
     <br />
-    <div>
+    <div v-if="isLoading">Загрузка данных ...</div>
+    <div v-else>
       <h1 class="my-2 text-decoration-underline">
         Личное дело ({{ currentCadetData.last_name_rus }}
         {{ currentCadetData.first_name_rus }})
@@ -16,10 +17,14 @@
             data-bs-smooth-scroll="true"
             class="scrollspy-example"
             tabindex="0"
-            style="height: 85vh; max-height: 85vh; overflow-y: scroll"
+            style="
+              height: calc(100vh - 250px);
+              max-height: calc(100vh - 250px);
+              overflow-y: scroll;
+            "
           >
             <div class="shadow p-3 mb-3" id="simple-list-personal-data">
-              <div class="card bg-body border-0">
+              <div class="card border-0">
                 <div class="card-body">
                   <h5 class="card-title">Личные данные</h5>
                   <div class="row">
@@ -383,11 +388,8 @@
               </div>
             </div>
 
-            <div
-              class="shadow p-3 mb-3 bg-body-tertiary rounded"
-              id="simple-list-passport-data"
-            >
-              <div class="card bg-body border-0">
+            <div class="shadow p-3 mb-3 rounded" id="simple-list-passport-data">
+              <div class="card border-0">
                 <div class="card-body">
                   <h5 class="card-title">Паспортные данные</h5>
                   <div class="row">
@@ -467,11 +469,8 @@
               </div>
             </div>
 
-            <div
-              class="shadow p-3 mb-3 bg-body-tertiary rounded"
-              id="simple-list-academy-data"
-            >
-              <div class="card bg-body border-0">
+            <div class="shadow p-3 mb-3 rounded" id="simple-list-academy-data">
+              <div class="card border-0">
                 <div class="card-body">
                   <h5 class="card-title">Обучение в Академии МВД</h5>
                   <div class="row">
@@ -644,10 +643,10 @@
               </div>
             </div>
             <div
-              class="shadow p-3 mb-3 bg-body-tertiary rounded"
+              class="shadow p-3 mb-3 rounded"
               id="simple-list-military-office-data"
             >
-              <div class="card bg-body border-0">
+              <div class="card border-0">
                 <div class="card-body">
                   <h5 class="card-title">Воинский учет</h5>
                   <div class="row">
@@ -692,11 +691,8 @@
                 </div>
               </div>
             </div>
-            <div
-              class="shadow p-3 mb-3 bg-body-tertiary rounded"
-              id="simple-list-parents-data"
-            >
-              <div class="card bg-body border-0">
+            <div class="shadow p-3 mb-3 rounded" id="simple-list-parents-data">
+              <div class="card border-0">
                 <div class="card-body">
                   <h5 class="card-title mb-3">Данные о родителях</h5>
                   <div class="row">
@@ -969,74 +965,109 @@
           </div>
         </div>
         <div class="col-2">
-          <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
-            <div class="card bg-body border-0">
-              <div class="card-body">
-                <div
-                  id="simple-list-example"
-                  class="d-flex flex-column gap-2 simple-list-example-scrollspy text-start"
-                >
-                  <a class="p-1 rounded" href="#simple-list-personal-data"
-                    >Личные данные</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-passport-data"
-                    >Пасспортные данные</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-academy-data"
-                    >Обучение в Академии МВД</a
-                  >
-                  <a
-                    class="p-1 rounded"
-                    href="#simple-list-military-office-data"
-                    >Воинский учет</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-parents-data"
-                    >Данные о родителях</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-rank-data"
-                    >Присвоение званий</a
-                  >
+          <div
+            style="
+              height: calc(100vh - 250px);
+              max-height: calc(100vh - 250px);
+              overflow-y: scroll;
+            "
+          >
+            <div class="shadow p-2 mb-5 rounded">
+              <div class="card border-0">
+                <div class="card-body">
+                  <div class="list-group">
+                    <a
+                      class="list-group-item list-group-item-action rounded-1"
+                      href="#simple-list-personal-data"
+                      >Личные данные</a
+                    >
+                    <a
+                      class="list-group-item list-group-item-action rounded-1"
+                      href="#simple-list-passport-data"
+                      >Пасспортные данные</a
+                    >
+                    <a
+                      class="list-group-item list-group-item-action rounded-1"
+                      href="#simple-list-academy-data"
+                      >Обучение в Академии МВД</a
+                    >
+                    <a
+                      class="list-group-item list-group-item-action rounded-1"
+                      href="#simple-list-military-office-data"
+                      >Воинский учет</a
+                    >
+                    <a
+                      class="list-group-item list-group-item-action rounded-1"
+                      href="#simple-list-parents-data"
+                      >Данные о родителях</a
+                    >
+                    <a
+                      class="list-group-item list-group-item-action rounded-1"
+                      href="#simple-list-rank-data"
+                      >Присвоение званий</a
+                    >
 
-                  <a class="p-1 rounded" href="#simple-list-education-data"
-                    >Образование</a
-                  >
-                  <a
-                    class="p-1 rounded"
-                    href="#simple-list-foreign-language-data"
-                    >Иностранные языки</a
-                  >
-                  <!--                  <a-->
-                  <!--                    class="p-1 rounded"-->
-                  <!--                    href="#simple-list-scientific-works-data"-->
-                  <!--                    >Научные труды и изобретения</a-->
-                  <!--                  >-->
-                  <a class="p-1 rounded" href="#simple-list-job-data"
-                    >Трудовая деятельность</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-army-service-data"
-                    >Прохождение службы в ВС РБ</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-mvd-service-data"
-                    >Прохождение службы в МВД РБ</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-rewards-data"
-                    >Награды</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-encouragements-data"
-                    >Поощрения</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-punishments-data"
-                    >Дисциплинарные взыскания</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-positions-data"
-                    >Должности</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-specialities-data"
-                    >Специальности</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-marital-status-data"
-                    >Семейное положение</a
-                  >
+                    <a
+                      class="list-group-item list-group-item-action rounded-1"
+                      href="#simple-list-education-data"
+                      >Образование</a
+                    >
+                    <a
+                      class="list-group-item list-group-item-action rounded-1"
+                      href="#simple-list-foreign-language-data"
+                      >Иностранные языки</a
+                    >
+                    <!--                  <a-->
+                    <!--                    class="p-1 rounded"-->
+                    <!--                    href="#simple-list-scientific-works-data"-->
+                    <!--                    >Научные труды и изобретения</a-->
+                    <!--                  >-->
+                    <a
+                      class="list-group-item list-group-item-action rounded-1"
+                      href="#simple-list-job-data"
+                      >Трудовая деятельность</a
+                    >
+                    <a
+                      class="list-group-item list-group-item-action rounded-1"
+                      href="#simple-list-army-service-data"
+                      >Прохождение службы в ВС РБ</a
+                    >
+                    <a
+                      class="list-group-item list-group-item-action rounded-1"
+                      href="#simple-list-mvd-service-data"
+                      >Прохождение службы в МВД РБ</a
+                    >
+                    <a
+                      class="list-group-item list-group-item-action rounded-1"
+                      href="#simple-list-rewards-data"
+                      >Награды</a
+                    >
+                    <a
+                      class="list-group-item list-group-item-action rounded-1"
+                      href="#simple-list-encouragements-data"
+                      >Поощрения</a
+                    >
+                    <a
+                      class="list-group-item list-group-item-action rounded-1"
+                      href="#simple-list-punishments-data"
+                      >Дисциплинарные взыскания</a
+                    >
+                    <a
+                      class="list-group-item list-group-item-action rounded-1"
+                      href="#simple-list-positions-data"
+                      >Должности</a
+                    >
+                    <a
+                      class="list-group-item list-group-item-action rounded-1"
+                      href="#simple-list-specialities-data"
+                      >Специальности</a
+                    >
+                    <a
+                      class="list-group-item list-group-item-action rounded-1"
+                      href="#simple-list-marital-status-data"
+                      >Семейное положение</a
+                    >
+                  </div>
                 </div>
               </div>
             </div>
@@ -1093,7 +1124,6 @@ export default {
       options: [],
       selected: "",
       isLoading: true,
-      isError: false,
       currentCadetData: {
         is_preloaded_data: true,
         category: "",
@@ -1187,25 +1217,20 @@ export default {
   },
   methods: {
     async loadData(cadetId) {
-      const [cadet] = await Promise.all([this.getCadetData(cadetId)]).catch(
-        () => (this.isError = true),
-      )
-      this.currentCadetData = cadet
-    },
-    async getCadetData(cadetId) {
-      const res = await this.cadetAPIInstance.getItemData(cadetId)
-      return res.data
+      try {
+        const res = await this.cadetAPIInstance.getItemData(cadetId)
+        this.currentCadetData = await res.data
+      } catch (error) {
+      } finally {
+        this.isLoading = false
+      }
     },
     debouncedUpdate: debounce(async function () {
-      this.isLoading = true
       try {
         const { photo, attached_documents, ...rest } = this.currentCadetData
         await this.cadetAPIInstance.updateItem(rest)
       } catch (e) {
-        this.isError = true
-        console.log(e)
       } finally {
-        this.isLoading = false
       }
     }, 500),
     async uploadPhoto() {

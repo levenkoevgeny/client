@@ -1478,15 +1478,3 @@ export default {
   },
 }
 </script>
-
-<style>
-input,
-select,
-textarea {
-  --bs-bg-opacity: 1;
-  background-color: rgba(
-    var(--bs-body-bg-rgb),
-    var(--bs-bg-opacity)
-  ) !important;
-}
-</style>

@@ -2,32 +2,21 @@
   <div
     class="alert alert-danger"
     role="alert"
-    style="position: fixed; z-index: 99999999; top: 0; left: 0; width: 100%"
+    style="
+      position: fixed;
+      z-index: 99999999;
+      top: 0;
+      left: 0;
+      width: 100%;
+      opacity: 0.8;
+    "
     v-if="errorList.length"
   >
-    Что-то пошло не так!
-    <div>
-      <p class="d-inline-flex gap-1">
-        <a
-          class="btn btn-link"
-          data-bs-toggle="collapse"
-          href="#collapseExample"
-          role="button"
-          aria-expanded="false"
-          aria-controls="collapseExample"
-        >
-          Показать ошибки
-        </a>
-      </p>
-      <div class="collapse" id="collapseExample">
-        <div class="card card-body">
-          <p v-for="error in errorList">{{ error }}</p>
-        </div>
-      </div>
+    <h1>Ошибка приложения!</h1>
+    <div class="m-2" style="max-height: 50vh; overflow-y: auto">
+      <p v-for="error in errorList" class="">{{ error }}</p>
     </div>
   </div>
-
-  <div style="position: fixed; z-index: 9999; top: 0; left: 0">Main error</div>
 </template>
 
 <script>

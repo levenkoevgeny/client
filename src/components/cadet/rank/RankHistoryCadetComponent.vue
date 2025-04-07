@@ -189,10 +189,7 @@
   </div>
 
   <!--  main content-->
-  <div
-    class="shadow p-3 mb-3 bg-body-tertiary rounded"
-    id="simple-list-rank-data"
-  >
+  <div class="shadow p-3 mb-3 rounded" id="simple-list-rank-data">
     <base-list-layout-for-cadet-update
       :is-loading="isLoading"
       :main-list-length="orderedMainList.length"

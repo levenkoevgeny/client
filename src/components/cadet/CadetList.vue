@@ -390,19 +390,23 @@ export default {
   },
   methods: {
     async loadData() {
-      const listFunction = getLoadListFunction.bind(this)
       this.isLoading = true
-      this.isError = false
-      try {
-        const [cadets] = await Promise.all([
-          listFunction("cadet")(null, null, this.token),
-        ]).catch(() => (this.isError = true))
-        this.cadetList = cadets
-      } catch (e) {
-        this.isError = true
-      } finally {
-        this.isLoading = false
-      }
+      const response = await this.cadetAPIInstance.getItemsList()
+      this.cadetList = await response.data
+      this.isLoading = false
+
+      // const listFunction = getLoadListFunction.bind(this)
+      // this.isLoading = true
+      // this.isError = false
+      // try {
+      //   const [cadets] = await Promise.all([
+      //     listFunction("cadet")(null, null, this.token),
+      //   ]).catch(() => (this.isError = true))
+      //   this.cadetList = cadets
+      // } catch (e) {
+      // } finally {
+      //   this.isLoading = false
+      // }
     },
     async updatePaginator(url) {
       this.isLoading = true
@@ -537,4 +541,21 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+>>> {
+  --vs-controls-color: #664cc3;
+  --vs-border-color: #664cc3;
+
+  --vs-dropdown-bg: #282c34;
+  --vs-dropdown-color: #cc99cd;
+  --vs-dropdown-option-color: #cc99cd;
+
+  --vs-selected-bg: #664cc3;
+  --vs-selected-color: #eeeeee;
+
+  --vs-search-input-color: #eeeeee;
+
+  --vs-dropdown-option--active-bg: #664cc3;
+  --vs-dropdown-option--active-color: #eeeeee;
+}
+</style>

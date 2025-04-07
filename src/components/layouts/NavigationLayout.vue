@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="navbar navbar-expand-lg bg-body"
+    class="navbar navbar-expand-lg bg-body-secondary-phoenix"
     style="position: sticky; top: 0; z-index: 100000; height: 58px"
   >
     <div class="container-fluid">
@@ -10,25 +10,70 @@
       <slot name="menu"></slot>
       <ul
         class="navbar-nav ms-auto me-4 mb-2 mb-lg-0"
-        v-if="userData.get_display_name"
+        v-if="!userData.hasOwnProperty('is_preloaded_data')"
       >
-        <li class="nav-item dropdown dropstart">
+        <li class="nav-item dropstart">
           <a
-            class="nav-link dropdown-toggle"
+            class="nav-link"
             href="#"
             role="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            {{ userData.get_display_name }}
+            <img
+              v-if="userData.avatar"
+              :src="userData.avatar"
+              class="rounded-circle"
+              alt="..."
+              style="width: 40px"
+            />
+            <img
+              v-else
+              src="../../assets/without_photo.jpg"
+              class="rounded-circle"
+              alt="..."
+              style="width: 40px; height: 40px"
+            />
           </a>
-          <ul class="dropdown-menu">
-            <li>
-              <button class="dropdown-item" @click="logOut">
-                Выход из системы
+
+          <div
+            class="dropdown-menu my-4 bg-body-secondary-phoenix"
+            style="width: 230px"
+          >
+            <div class="d-flex justify-content-center align-items-center">
+              <img
+                v-if="userData.avatar"
+                :src="userData.avatar"
+                class="rounded-circle"
+                alt="..."
+                style="width: 60px; height: 60px"
+              />
+              <img
+                v-else
+                src="../../assets/without_photo.jpg"
+                class="rounded-circle"
+                alt="..."
+                style="width: 60px; height: 60px"
+              />
+            </div>
+            <div class="text-center">
+              <p class="my-2 fw-bold">{{ userData.get_display_name }}</p>
+            </div>
+            <div class="border-bottom border-1"></div>
+            <div class="d-flex justify-content-center align-items-center p-3">
+              <button
+                class="btn btn-secondary-phoenix text-center border-0"
+                @click="logOut"
+              >
+                <nobr
+                  ><font-awesome-icon
+                    :icon="['fas', 'arrow-right-from-bracket']"
+                  />
+                  Выход из системы</nobr
+                >
               </button>
-            </li>
-          </ul>
+            </div>
+          </div>
         </li>
       </ul>
 

@@ -8,7 +8,12 @@
     class="d-flex justify-content-center align-items-center container-fluid"
     style="height: calc(100vh - 57.8px)"
   >
-    <main class="form-signin w-100 m-auto">
+    <div v-if="isLoading">
+      <div class="spinner-grow" style="width: 3rem; height: 3rem" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    <main class="form-signin w-100 m-auto" v-else>
       <form @submit="submitHandler">
         <div class="text-start">
           <img
@@ -58,6 +63,7 @@ export default {
   components: { NavigationLayout },
   data() {
     return {
+      isLoading: false,
       auth_data: {
         username: "levenko",
         password: "1986",
@@ -73,11 +79,13 @@ export default {
     submitHandler(e) {
       e.preventDefault()
       e.stopPropagation()
+      this.isLoading = true
       this.$store
         .dispatch("auth/actionLogIn", { ...this.auth_data })
         .then(() => {
           this.$router.replace(this.$route.query.redirect || "/")
         })
+        .finally(() => (this.isLoading = false))
     },
   },
 }

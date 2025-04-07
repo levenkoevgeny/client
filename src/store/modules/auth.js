@@ -5,7 +5,7 @@ const state = () => ({
   token: null,
   isLoggedIn: false,
   isLogInError: null,
-  user: { is_staff: false },
+  user: { is_preloaded_data: true, is_staff: false },
 })
 
 // getters
@@ -37,9 +37,9 @@ const actions = {
         commit("setToken", token)
         commit("setLoggedIn", true)
         commit("setIsLogInError", false)
-        const response = await authApi.getUserData(token)
+        const response = await authApi.getUserData()
         const userData = await response.data
-        commit("setUserData", { ...userData })
+        commit("setUserData", userData)
       }
     } catch (error) {
       if (error.code !== "ERR_NETWORK") {
@@ -60,9 +60,9 @@ const actions = {
       }
       if (token) {
         try {
-          const response = await authApi.getUserData(token)
+          const response = await authApi.getUserData()
           const userData = await response.data
-          commit("setUserData", { ...userData })
+          commit("setUserData", userData)
           commit("setLoggedIn", true)
         } catch (error) {
           dispatch("actionRemoveLogIn")
@@ -77,7 +77,7 @@ const actions = {
     removeLocalToken()
     commit("setToken", null)
     commit("setLoggedIn", false)
-    commit("setUserData", {})
+    commit("setUserData", { is_preloaded_data: true, is_staff: false })
   },
 }
 
