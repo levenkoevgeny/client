@@ -1,7 +1,16 @@
 <template>
   <div class="container-fluid">
     <br />
-    <div v-if="isLoading">Загрузка данных ...</div>
+    <div
+      v-if="isLoading || isCommonLoading"
+      style="height: calc(100vh - 170px)"
+      class="d-flex justify-content-center align-items-center"
+    >
+      <div class="spinner-grow" style="width: 3rem; height: 3rem" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
     <div v-else>
       <h1 class="my-2 text-decoration-underline">
         Личное дело ({{ currentCadetData.last_name_rus }}
@@ -1298,6 +1307,7 @@ export default {
       graduationReasons: "graduationReasons/getList",
       passportIssueAuthorities: "passportAuthorities/getList",
       token: "auth/getToken",
+      isCommonLoading: "common/getIsCommonLoading",
     }),
   },
   watch: {

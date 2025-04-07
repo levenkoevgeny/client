@@ -30,7 +30,18 @@
         </div>
       </template>
     </navigation-layout>
-    <div class="container-fluid">
+
+    <div
+      v-if="isCommonLoading"
+      style="height: calc(100vh - 60px)"
+      class="d-flex justify-content-center align-items-center"
+    >
+      <div class="spinner-grow" style="width: 3rem; height: 3rem" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div class="container-fluid" v-else>
       <h2 class="mt-3">Словари</h2>
 
       <div class="row">
@@ -204,10 +215,16 @@
 
 <script>
 import NavigationLayout from "@/components/layouts/NavigationLayout.vue"
+import { mapGetters } from "vuex"
 
 export default {
   name: "DictionaryMainView",
   components: { NavigationLayout },
+  computed: {
+    ...mapGetters({
+      isCommonLoading: "common/getIsCommonLoading",
+    }),
+  },
 }
 </script>
 

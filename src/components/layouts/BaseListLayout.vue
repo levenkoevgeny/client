@@ -25,7 +25,7 @@
           </slot>
         </div>
         <div></div>
-        <div v-if="isLoading">Загрузка данных ...</div>
+        <div v-if="isLoading || isCommonLoading">Загрузка данных ...</div>
         <div v-else>
           <div v-if="mainListLength">
             <div class="mb-3 d-flex align-items-center justify-content-between">
@@ -87,6 +87,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex"
+
 export default {
   name: "base-list-layout",
   props: {
@@ -108,7 +110,11 @@ export default {
   },
   async created() {},
   methods: {},
-  computed: {},
+  computed: {
+    ...mapGetters({
+      isCommonLoading: "common/getIsCommonLoading",
+    }),
+  },
 }
 </script>
 

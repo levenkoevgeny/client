@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <div
-      v-if="isLoading"
+      v-if="isLoading || isCommonLoading"
       style="height: calc(100vh - 170px)"
       class="d-flex justify-content-center align-items-center"
     >
@@ -20,7 +20,11 @@
             >
           </h1>
         </div>
-        <div><button class="btn btn-primary">Сохранить мзменения</button></div>
+        <div>
+          <button class="btn btn-primary" @click="saveEntranceForm">
+            Сохранить мзменения
+          </button>
+        </div>
       </div>
       <div style="max-height: calc(100vh - 300px); overflow-y: auto">
         <div style="max-width: 99%">
@@ -200,7 +204,7 @@
                           :value="foreign_language.id"
                           v-for="foreign_language in orderedForeignLanguages"
                         >
-                          {{ foreign_language }}
+                          {{ foreign_language.foreign_language }}
                         </option>
                       </select>
                       <label for="floatingSelect">Иностранный язык (был)</label>
@@ -217,7 +221,7 @@
                           :value="foreign_language.id"
                           v-for="foreign_language in orderedForeignLanguages"
                         >
-                          {{ foreign_language }}
+                          {{ foreign_language.foreign_language }}
                         </option>
                       </select>
                       <label>Иностранный язык (будет)</label>
@@ -1457,8 +1461,13 @@ export default {
         attached_documents: response.data.attached_documents,
       }
     },
-    async saveEntranceForm(e) {
-      e.preventDefault()
+    async saveEntranceForm() {
+      try {
+        const { photo, attached_documents, ...rest } = this.currentCadetData
+        await this.cadetAPIInstance.updateItem(rest)
+      } catch (e) {
+      } finally {
+      }
     },
   },
   computed: {
@@ -1549,6 +1558,7 @@ export default {
       ppflCategories: "ppflCategories/getList",
       vpkCategories: "vpkCategories/getList",
       token: "auth/getToken",
+      isCommonLoading: "common/getIsCommonLoading",
     }),
   },
 }
