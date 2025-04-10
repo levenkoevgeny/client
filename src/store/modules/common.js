@@ -47,6 +47,7 @@ const actions = {
     await dispatch("privileges/actionGetList", null, { root: true })
     await dispatch("ppflCategories/actionGetList", null, { root: true })
     await dispatch("vpkCategories/actionGetList", null, { root: true })
+    await dispatch("medals/actionGetList", null, { root: true })
     await dispatch("educationalInstitutions/actionGetList", null, {
       root: true,
     })

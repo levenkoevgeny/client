@@ -1,7 +1,17 @@
 <template>
   <div class="container-fluid">
     <br />
-    <div>
+    <div
+      v-if="isLoading || isCommonLoading"
+      style="height: calc(100vh - 170px)"
+      class="d-flex justify-content-center align-items-center"
+    >
+      <div class="spinner-grow" style="width: 3rem; height: 3rem" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div v-else>
       <h1 class="my-2 text-decoration-underline">
         Личное дело ({{ currentEmployeeData.last_name_rus }}
         {{ currentEmployeeData.first_name_rus }})
@@ -20,7 +30,11 @@
             data-bs-smooth-scroll="true"
             class="scrollspy-example"
             tabindex="0"
-            style="height: 85vh; max-height: 85vh; overflow-y: scroll"
+            style="
+              height: calc(100vh - 270px);
+              max-height: calc(100vh - 270px);
+              overflow-y: scroll;
+            "
           >
             <div
               class="shadow p-3 mb-3 bg-body-tertiary rounded"
@@ -57,7 +71,6 @@
                       </div>
                     </div>
                     <div class="col-lg-8">
-                      <p>{{ getCadetStatus }}</p>
                       <div class="d-flex flex-column">
                         <h3 v-if="currentEmployeeData.date_of_birth">
                           Дата рождения -
@@ -439,64 +452,28 @@
           </div>
         </div>
         <div class="col-2">
-          <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
-            <div class="card">
-              <div class="card-body">
-                <div
-                  id="simple-list-example"
-                  class="d-flex flex-column gap-2 simple-list-example-scrollspy text-start"
-                >
-                  <a class="p-1 rounded" href="#simple-list-personal-data"
-                    >Личные данные</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-passport-data"
-                    >Пасспортные данные</a
-                  >
-
-                  <a class="p-1 rounded" href="#simple-list-rank-data"
-                    >Присвоение званий</a
-                  >
-
-                  <a class="p-1 rounded" href="#simple-list-education-data"
-                    >Образование</a
-                  >
-                  <a
-                    class="p-1 rounded"
-                    href="#simple-list-foreign-language-data"
-                    >Иностранные языки</a
-                  >
-                  <a
-                    class="p-1 rounded"
-                    href="#simple-list-scientific-works-data"
-                    >Научные труды и изобретения</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-job-data"
-                    >Трудовая деятельность</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-army-service-data"
-                    >Прохождение службы в ВС РБ</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-mvd-service-data"
-                    >Прохождение службы в МВД РБ</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-rewards-data"
-                    >Награды</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-encouragements-data"
-                    >Поощрения</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-punishments-data"
-                    >Дисциплинарные взыскания</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-positions-data"
-                    >Должности</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-specialities-data"
-                    >Специальности</a
-                  >
-                  <a class="p-1 rounded" href="#simple-list-marital-status-data"
-                    >Семейное положение</a
-                  >
+          <div
+            style="
+              height: calc(100vh - 270px);
+              max-height: calc(100vh - 270px);
+              overflow-y: scroll;
+            "
+          >
+            <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+              <div class="card">
+                <div class="card-body">
+                  <div class="list-group">
+                    <a
+                      class="list-group-item list-group-item-action rounded-1"
+                      href="#simple-list-personal-data"
+                      >Личные данные</a
+                    >
+                    <a
+                      class="list-group-item list-group-item-action rounded-1"
+                      href="#simple-list-passport-data"
+                      >Пасспортные данные</a
+                    >
+                  </div>
                 </div>
               </div>
             </div>
@@ -652,14 +629,13 @@ export default {
   },
   methods: {
     async loadData(employeeId) {
-      const [employee] = await Promise.all([
-        this.getEmployeeData(employeeId),
-      ]).catch(() => (this.isError = true))
-      this.currentEmployeeData = employee
-    },
-    async getEmployeeData(employeeId) {
-      const res = await this.employeeAPIInstance.getItemData(employeeId)
-      return res.data
+      try {
+        const res = await this.employeeAPIInstance.getItemData(employeeId)
+        this.currentEmployeeData = res.data
+      } catch (error) {
+      } finally {
+        this.isLoading = false
+      }
     },
   },
 
@@ -684,6 +660,7 @@ export default {
       orderOwners: "orderOwners/getList",
       categories: "personCategories/getList",
       passportIssueAuthorities: "passportAuthorities/getList",
+      isCommonLoading: "common/getIsCommonLoading",
     }),
   },
 }

@@ -112,6 +112,7 @@
                               maxlength="30"
                               required
                               id="id_id"
+                              disabled
                               v-model="currentCadetData.id"
                             />
                           </div>

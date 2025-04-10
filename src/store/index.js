@@ -36,6 +36,7 @@ import privileges from "@/store/modules/privileges"
 import ppflCategories from "@/store/modules/ppflCategories"
 import vpkCategories from "@/store/modules/vpkCategories"
 import errors from "@/store/modules/errors"
+import medals from "@/store/modules/medals"
 
 const store = createStore({
   modules: {
@@ -76,6 +77,7 @@ const store = createStore({
     ppflCategories,
     vpkCategories,
     errors,
+    medals,
   },
 })
 

@@ -20,10 +20,29 @@
             >
           </h1>
         </div>
-        <div>
-          <button class="btn btn-primary" @click="saveEntranceForm">
-            Сохранить мзменения
-          </button>
+        <div class="d-flex flex-row justify-content-end align-items-center">
+          <div
+            class="me-4 text-success fs-5"
+            v-if="isDataFromServerEqualChangedData"
+          >
+            &#8226; &nbsp;Данные сохранены
+          </div>
+          <div class="me-4 text-secondary fs-5" v-else-if="isDataSaving">
+            &#8226; &nbsp;Сохранение ...
+          </div>
+          <div class="me-4 text-warning fs-5" v-else>
+            &#8226; &nbsp;Несохраненные данные
+          </div>
+
+          <div>
+            <button
+              class="btn btn-primary"
+              @click="saveEntranceForm"
+              :disabled="isDataFromServerEqualChangedData || isDataSaving"
+            >
+              Сохранить изменения
+            </button>
+          </div>
         </div>
       </div>
       <div style="max-height: calc(100vh - 300px); overflow-y: auto">
@@ -480,8 +499,150 @@
                 aria-labelledby="nav-education-tab"
                 tabindex="0"
               >
-                <div>
-                  <div class="my-3"></div>
+                <div class="my-3">
+                  <div class="row">
+                    <div class="col-xl-3">
+                      <div class="form-floating mb-3">
+                        <select
+                          class="form-select"
+                          v-model="currentCadetData.education_kind"
+                        >
+                          <option value="">---------</option>
+                          <option
+                            :value="educationKind.id"
+                            v-for="educationKind in orderedEducationKinds"
+                          >
+                            {{ educationKind.education }}
+                          </option>
+                        </select>
+                        <label for="floatingSelect">Образование</label>
+                      </div>
+                    </div>
+                    <div class="col-xl-3">
+                      <div class="form-floating mb-3">
+                        <select
+                          class="form-select"
+                          v-model="currentCadetData.education_kind"
+                        >
+                          <option value="">---------</option>
+                          <option
+                            :value="educationLevel.id"
+                            v-for="educationLevel in orderedEducationLevels"
+                          >
+                            {{ educationLevel.education_level }}
+                          </option>
+                        </select>
+                        <label for="floatingSelect">Уровень образования</label>
+                      </div>
+                    </div>
+                    <div class="col-xl-3">
+                      <div class="form-floating mb-3">
+                        {{ currentCadetData.education_graduating_start_year }}
+                        <input
+                          type="number"
+                          name="education_graduating_start_year"
+                          class="form-control form-control-sm"
+                          placeholder="Год поступления"
+                          v-model="
+                            currentCadetData.education_graduating_start_year
+                          "
+                          @input="makeInputDefaultNullValueIfEmpty"
+                        />
+                        <label>Год поступления</label>
+                      </div>
+                    </div>
+                    <div class="col-xl-3">
+                      <div class="form-floating mb-3">
+                        <input
+                          type="number"
+                          name="education_graduating_end_year"
+                          class="form-control form-control-sm"
+                          placeholder="Год окончания"
+                          v-model="
+                            currentCadetData.education_graduating_end_year
+                          "
+                          @input="makeInputDefaultNullValueIfEmpty"
+                        />
+                        <label>Год окончания</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-xl-3">
+                      <div class="form-floating mb-3">
+                        <textarea
+                          rows="2"
+                          class="form-control form-control-sm"
+                          v-model="currentCadetData.education_graduated"
+                          placeholder="Наименование УО"
+                        ></textarea>
+                        <label>Наименование УО</label>
+                      </div>
+                    </div>
+                    <div class="col-xl-3">
+                      <div class="form-floating mb-3">
+                        <select
+                          class="form-select"
+                          v-model="currentCadetData.education_location_kind"
+                        >
+                          <option value="">---------</option>
+                          <option
+                            :value="educationLocalityKind.id"
+                            v-for="educationLocalityKind in orderedEducationLocalityKinds"
+                          >
+                            {{ educationLocalityKind.education_location_kind }}
+                          </option>
+                        </select>
+                        <label for="floatingSelect">Город/село</label>
+                      </div>
+                    </div>
+                    <div class="col-xl-3">
+                      <div class="form-floating mb-3">
+                        <input
+                          type="number"
+                          name="education_average_score"
+                          class="form-control form-control-sm"
+                          placeholder="Средний бал"
+                          v-model="currentCadetData.education_average_score"
+                          @input="makeInputDefaultNullValueIfEmpty"
+                        />
+                        <label>Средний бал</label>
+                      </div>
+                    </div>
+                    <div class="col-xl-3">
+                      <div class="form-floating mb-3">
+                        <select
+                          class="form-select"
+                          v-model="currentCadetData.medal"
+                        >
+                          <option value="">---------</option>
+                          <option
+                            :value="medal.id"
+                            v-for="medal in orderedMedals"
+                          >
+                            {{ medal.medal_kind }}
+                          </option>
+                        </select>
+                        <label for="floatingSelect">Медаль</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="form-check mb-3">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          v-model="currentCadetData.is_located_in_Minsk"
+                        />
+                        <label class="form-check-label">
+                          УО расположено в г. Минск
+                        </label>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div
@@ -510,7 +671,7 @@
                           <input
                             type="text"
                             class="form-control form-control-sm"
-                            placeholder="Фамилия"
+                            placeholder="Номер телефона"
                             v-model="currentCadetData.phone_number"
                           />
                           <label>Номер телефона</label>
@@ -1026,7 +1187,7 @@
                             "
                           />
                           <label class="form-check-label" for="checkDefault"
-                            >Дата прохожденияи мед. комиссии
+                            >Дата прохожденияи
                           </label>
                         </div>
                       </div>
@@ -1305,6 +1466,7 @@
 import NavigationLayout from "@/components/layouts/NavigationLayout.vue"
 import { globalCadetAPIForEntranceInstance } from "@/api/cadet/cadetAPI"
 import { debounce } from "lodash/function"
+import { isEqual } from "lodash"
 import { mapGetters } from "vuex"
 
 export default {
@@ -1314,9 +1476,13 @@ export default {
     return {
       currentTime: new Date(),
       isLoading: true,
+      isDataSaving: false,
       isError: false,
       currentCadetData: {
-        category: null,
+        id: "",
+        is_active: "",
+        category: "",
+        gender: "",
         last_name_rus: "",
         first_name_rus: "",
         patronymic_rus: "",
@@ -1327,7 +1493,6 @@ export default {
         first_name_en: "",
         patronymic_en: "",
         date_of_birth: "",
-        gender: "",
         place_of_birth: "",
         photo: "",
         address_residence: "",
@@ -1340,9 +1505,10 @@ export default {
         passport_validity_period: "",
         passport_issue_authority: "",
         identification_number: "",
-        comments_on_personal_file: "",
-        removed_from_military_registration: "",
-        military_commissariat_attitude: "",
+        subdivision: "",
+        current_rank: "",
+        current_position: "",
+        student_record_book_number: "",
         father_last_name: "",
         father_first_name: "",
         father_patronymic: "",
@@ -1357,9 +1523,9 @@ export default {
         mother_place_of_work: "",
         mother_phone_number: "",
         mother_address_residence: "",
+        removed_from_military_registration: "",
         foreign_language_was: "",
         foreign_language_will_be: "",
-        subdivision: "",
         group: "",
         academy_start_date: "",
         academy_end_date: "",
@@ -1368,20 +1534,39 @@ export default {
         graduation_extra_data: "",
         specialization: "",
         direction_ord: "",
+        current_speciality: "",
         component_organ: "",
         entrance_category: "",
-        educational_institution: "",
-        document_type: "",
-        privilege: "",
         arrived_from_go_rovd: "",
         social_status: "",
         region_for_medical_examination: "",
         military_office: "",
         military_office_extra_data: "",
         extra_data: "",
+        comments_on_personal_file: "",
+        educational_institution: "",
+        document_type: "",
+        privilege: "",
+        attached_documents: "",
+        military_organization: "",
+        military_service_start: "",
+        military_service_end: "",
+        military_position: "",
+        mvd_organization: "",
+        mvd_service_start: "",
+        mvd_service_end: "",
+        mvd_position: "",
+        education_kind: "",
+        education_level: "",
+        education_graduated: "",
+        education_graduating_start_year: "",
+        education_graduating_end_year: "",
+        education_average_score: "",
+        education_location_kind: "",
+        is_located_in_Minsk: "",
+        medal: "",
         vpk: "",
         vpk_data: "",
-        aims_to_graduate_with_honors: "",
         is_class_vpn: "",
         is_class_pn: "",
         is_class_other: "",
@@ -1390,10 +1575,9 @@ export default {
         health_group: "",
         ppfl_test: "",
         medical_age_group: "",
+        passed_medical_examination_extra_data: "",
         passed_medical_examination: "",
         passed_medical_examination_date: "",
-        passed_medical_examination_extra_data: "",
-        is_medical_examination_passed: false,
         needs_increased_attention: "",
         needs_psychological_support: "",
         is_risk_group: "",
@@ -1405,7 +1589,6 @@ export default {
         has_certificate_ideas_for_Belarus: "",
         has_certificate_kind_heart: "",
         is_employee: "",
-        attached_documents: "",
         is_law_class: "",
         is_law_enforcement: "",
         is_reserve: "",
@@ -1414,6 +1597,7 @@ export default {
         is_vv: "",
         is_fp: "",
       },
+      currentCadetDataFromServer: {},
       cadetAPIInstance: globalCadetAPIForEntranceInstance,
       BACKEND_PROTOCOL: process.env.VUE_APP_BACKEND_PROTOCOL,
       BACKEND_HOST: process.env.VUE_APP_BACKEND_HOST,
@@ -1428,6 +1612,17 @@ export default {
       try {
         const response = await this.cadetAPIInstance.getItemData(applicantId)
         this.currentCadetData = await response.data
+
+        // for (const key in this.currentCadetData) {
+        //   if (this.currentCadetData[key] === null) {
+        //     this.currentCadetData[key] = ""
+        //   }
+        // }
+
+        this.currentCadetDataFromServer = Object.assign(
+          {},
+          this.currentCadetData,
+        )
       } catch (error) {
       } finally {
         this.isLoading = false
@@ -1462,11 +1657,23 @@ export default {
       }
     },
     async saveEntranceForm() {
+      this.isDataSaving = true
       try {
         const { photo, attached_documents, ...rest } = this.currentCadetData
-        await this.cadetAPIInstance.updateItem(rest)
+        const updatedData = await this.cadetAPIInstance.updateItem(rest)
+        this.currentCadetData = updatedData.data
+        this.currentCadetDataFromServer = Object.assign(
+          {},
+          this.currentCadetData,
+        )
       } catch (e) {
       } finally {
+        this.isDataSaving = false
+      }
+    },
+    makeInputDefaultNullValueIfEmpty(event) {
+      if (event.target.value.trim().length === 0) {
+        this.currentCadetData[event.target.name] = null
       }
     },
   },
@@ -1537,6 +1744,26 @@ export default {
       return this.vpkCategories.results
     },
 
+    orderedEducationKinds() {
+      return this.educationKinds.results
+    },
+    orderedEducationLevels() {
+      return this.educationLevels.results
+    },
+    orderedEducationLocalityKinds() {
+      return this.educationLocalityKinds.results
+    },
+    orderedMedals() {
+      return this.medals.results
+    },
+
+    isDataFromServerEqualChangedData() {
+      const { photo1, attached_documents1, ...obj1 } = this.currentCadetData
+      const { photo2, attached_documents2, ...obj2 } =
+        this.currentCadetDataFromServer
+      return isEqual(obj1, obj2)
+    },
+
     ...mapGetters({
       groups: "groups/getList",
       ranks: "ranks/getList",
@@ -1559,6 +1786,10 @@ export default {
       vpkCategories: "vpkCategories/getList",
       token: "auth/getToken",
       isCommonLoading: "common/getIsCommonLoading",
+      educationKinds: "educationKind/getList",
+      educationLevels: "educationLevel/getList",
+      educationLocalityKinds: "educationLocalityKind/getList",
+      medals: "medals/getList",
     }),
   },
 }
